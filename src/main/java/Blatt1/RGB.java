@@ -17,6 +17,21 @@ public class RGB
         this.blue = blue;
     }
 
+    public int getRed()
+    {
+        return red;
+    }
+
+    public int getGreen()
+    {
+        return green;
+    }
+
+    public int getBlue()
+    {
+        return blue;
+    }
+
     @Override
     public String toString()
     {

@@ -8,6 +8,8 @@ import java.util.Scanner;
  * Created by Long Bui on 26.10.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
+
+// Ganze Klasse: Aufgabe 1a)
 public class RGBPicture
 {
     ArrayList<ArrayList<RGB>> picture;
@@ -20,6 +22,7 @@ public class RGBPicture
         this.strideWidth = 16;
     }
 
+    // Konstruktor mit InputStream parsing: Aufgabe 1b)
     public RGBPicture(InputStream is)
     {
         this();
