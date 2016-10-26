@@ -6,9 +6,9 @@ package Blatt1;
  */
 public class RGB
 {
-    int red;
-    int green;
-    int blue;
+    private int red;
+    private int green;
+    private int blue;
 
     public RGB(int red, int green, int blue)
     {
@@ -30,6 +30,15 @@ public class RGB
     public int getBlue()
     {
         return blue;
+    }
+
+    public double[] getAsArray()
+    {
+        double[] rgbArray = new double[3];
+        rgbArray[0] = this.getRed();
+        rgbArray[1] = this.getGreen();
+        rgbArray[2] = this.getBlue();
+        return rgbArray;
     }
 
     @Override

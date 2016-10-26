@@ -14,12 +14,8 @@ public class Test
     {
         try
         {
-            RGBPicture testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")));
-            System.out.println(testPicture.toString());
-            System.out.println(testPicture.getWidth());
-            System.out.println(testPicture.getHeight());
-            System.out.println(testPicture.getHeightSpan());
-            System.out.println(testPicture.getWidthSpan());
+            RGBPicture testPicture = new RGBPicture(new FileInputStream(new File("test2.ppm")));
+            System.out.println(ColorChannels.RGBToYCbCr(testPicture).toString());
         }
         catch (FileNotFoundException e)
         {
