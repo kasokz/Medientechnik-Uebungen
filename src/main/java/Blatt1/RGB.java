@@ -9,4 +9,17 @@ public class RGB
     int red;
     int green;
     int blue;
+
+    public RGB(int red, int green, int blue)
+    {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.red + "," + this.green + "," + this.blue;
+    }
 }
