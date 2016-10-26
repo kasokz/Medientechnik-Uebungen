@@ -1,4 +1,4 @@
-package Blatt1;
+package Blatt1.colors.rgb;
 
 /**
  * Created by Long Bui on 26.10.16.

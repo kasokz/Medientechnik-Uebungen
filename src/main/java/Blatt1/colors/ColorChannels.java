@@ -1,5 +1,9 @@
-package Blatt1;
+package Blatt1.colors;
 
+import Blatt1.colors.rgb.RGB;
+import Blatt1.colors.rgb.RGBPicture;
+import Blatt1.colors.ycbcr.YCbCr;
+import Blatt1.colors.ycbcr.YCbCrPicture;
 import org.jblas.DoubleMatrix;
 
 import java.util.ArrayList;

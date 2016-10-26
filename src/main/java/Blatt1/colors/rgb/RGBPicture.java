@@ -1,4 +1,4 @@
-package Blatt1;
+package Blatt1.colors.rgb;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ import java.util.Scanner;
 // Ganze Klasse: Aufgabe 1a)
 public class RGBPicture
 {
-    ArrayList<ArrayList<RGB>> picture;
-    int strideWidth;
-    int strideHeight;
+    private ArrayList<ArrayList<RGB>> picture;
+    private int strideWidth;
+    private int strideHeight;
 
-    public RGBPicture()
+    private RGBPicture()
     {
         this.strideHeight = 16;
         this.strideWidth = 16;
@@ -128,7 +128,7 @@ public class RGBPicture
         {
             for (RGB pixel : line)
             {
-                sb.append(pixel.toString() + " ");
+                sb.append(pixel.toString()).append(" ");
             }
             sb.append("\n");
         }

@@ -1,11 +1,12 @@
 package Blatt1;
 
-import org.jblas.DoubleMatrix;
+import Blatt1.colors.ColorChannels;
+import Blatt1.colors.rgb.RGBPicture;
+import Blatt1.colors.ycbcr.YCbCrPicture;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -31,7 +32,7 @@ public class Test
             {
                 for (int j = 0; j < yCbCrPicture.getWidth(); j++)
                 {
-                    pixels[j + i * yCbCrPicture.getWidth()] = (byte) yCbCrPicture.getPixelAt(j, i).luminanceChannel;
+                    pixels[j + i * yCbCrPicture.getWidth()] = (byte) yCbCrPicture.getPixelAt(j, i).getLuminanceChannel();
                 }
             }
             File outputfile = new File("saved.png");

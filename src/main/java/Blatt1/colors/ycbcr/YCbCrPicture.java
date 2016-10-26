@@ -1,4 +1,4 @@
-package Blatt1;
+package Blatt1.colors.ycbcr;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class YCbCrPicture
 {
-    ArrayList<ArrayList<YCbCr>> picture;
+    private ArrayList<ArrayList<YCbCr>> picture;
 
     public YCbCrPicture(ArrayList<ArrayList<YCbCr>> picture)
     {
@@ -38,7 +38,8 @@ public class YCbCrPicture
         {
             for (YCbCr pixel : line)
             {
-                sb.append(pixel.toString() + " ");
+                sb.append(pixel.toString())
+                  .append(" ");
             }
             sb.append("\n");
         }

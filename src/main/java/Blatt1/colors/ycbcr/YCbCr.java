@@ -1,4 +1,4 @@
-package Blatt1;
+package Blatt1.colors.ycbcr;
 
 /**
  * Created by Long Bui on 26.10.16.
@@ -6,9 +6,9 @@ package Blatt1;
  */
 public class YCbCr
 {
-    int luminanceChannel;
-    int cbChannel;
-    int crChannel;
+    private int luminanceChannel;
+    private int cbChannel;
+    private int crChannel;
 
     public YCbCr(int luminanceChannel, int cb, int crChannel)
     {
