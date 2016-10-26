@@ -15,6 +15,21 @@ public class YCbCrPicture
         this.picture = picture;
     }
 
+    public int getHeight()
+    {
+        return picture.size();
+    }
+
+    public int getWidth()
+    {
+        return picture.get(0).size();
+    }
+
+    public YCbCr getPixelAt(int x, int y)
+    {
+        return picture.get(y).get(x);
+    }
+
     @Override
     public String toString()
     {

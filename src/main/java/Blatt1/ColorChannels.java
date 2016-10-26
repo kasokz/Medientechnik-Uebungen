@@ -25,7 +25,7 @@ public class ColorChannels
                                 .add(convertRGBToYCbCr(rgbPicture.getRGBAt(pixelColumn, pixelRow)));
             }
         }
-        return new YCbCrPicture(new ArrayList<ArrayList<YCbCr>>());
+        return new YCbCrPicture(newPictureValues);
     }
 
     public static YCbCr convertRGBToYCbCr(RGB pixel)
@@ -35,12 +35,11 @@ public class ColorChannels
         });
         DoubleMatrix conversionMatrix = new DoubleMatrix(new double[][]{
                 {0.299, 0.587, 0.114},
-                {-0.1687, -0.3312, 0.5},
-                {0.5, -0.4186, -0.0813}
+                {-0.168736, -0.331264, 0.5},
+                {0.5, -0.418688, -0.081312}
         });
         DoubleMatrix rgbMatrix = new DoubleMatrix(pixel.getAsArray());
-        DoubleMatrix resultMatrix = prefixMatrix.add((conversionMatrix.mulColumnVector(rgbMatrix)));
-        resultMatrix.print();
+        DoubleMatrix resultMatrix = prefixMatrix.add((conversionMatrix.mmul(rgbMatrix)));
         return new YCbCr((int) resultMatrix.get(0), (int) resultMatrix.get(1), (int) resultMatrix.get(2));
     }
 }

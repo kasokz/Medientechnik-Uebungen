@@ -75,7 +75,7 @@ public class RGBPicture
         }
         else
         {
-            result = picture.get(x).get(y);
+            result = picture.get(y).get(x);
         }
         return result;
     }
