@@ -16,6 +16,7 @@ public class ColorChannels
 {
     public static YCbCrPicture RGBToYCbCr(RGBPicture rgbPicture)
     {
+        long start = System.currentTimeMillis();
         ArrayList<ArrayList<YCbCr>> newPictureValues = new ArrayList<ArrayList<YCbCr>>(rgbPicture.getHeight());
         for (int i = 0; i < rgbPicture.getHeight(); i++)
         {
@@ -29,6 +30,9 @@ public class ColorChannels
                                 .add(convertRGBToYCbCr(rgbPicture.getRGBAt(pixelColumn, pixelRow)));
             }
         }
+        System.out.println("Finished RGB to YCbCr conversion in "
+                                   + ((System.currentTimeMillis() - start) / 1000d)
+                                   + " seconds");
         return new YCbCrPicture(newPictureValues);
     }
 
