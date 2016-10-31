@@ -32,7 +32,7 @@ public class TestApplication extends Application
 
     public void start(Stage primaryStage) throws Exception
     {
-        BufferedImage img = readPpm();
+        BufferedImage img = readPpmAndRender();
         Image image = SwingFXUtils.toFXImage(img, null);
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
@@ -79,12 +79,13 @@ public class TestApplication extends Application
     }
 
     // Aufgabe 1d) Demo
-    private BufferedImage readPpm()
+    private BufferedImage readPpmAndRender()
     {
         RGBPicture testPicture = null;
         try
         {
-            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")), 4, 1, 8);
+//            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")));
+            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")), 2, 2, 2);
         }
         catch (FileNotFoundException e)
         {

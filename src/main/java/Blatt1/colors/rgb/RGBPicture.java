@@ -48,7 +48,6 @@ public class RGBPicture
                                    + " seconds");
     }
 
-    // Aufgabe 1d)
     public RGBPicture(InputStream is, int factorRed, int factorGreen, int factorBlue)
     {
         this();
