@@ -15,9 +15,7 @@ import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 
 /**
  * Created by Long Bui on 26.10.16.
@@ -32,7 +30,7 @@ public class TestApplication extends Application
 
     public void start(Stage primaryStage) throws Exception
     {
-        BufferedImage img = readPpmAndRender();
+        BufferedImage img = readPpmAndConvertToYcbcr();
         Image image = SwingFXUtils.toFXImage(img, null);
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
@@ -50,7 +48,7 @@ public class TestApplication extends Application
         RGBPicture testPicture = null;
         try
         {
-            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")));
+            testPicture = new RGBPicture(new FileInputStream(new File("mini.ppm")));
         }
         catch (FileNotFoundException e)
         {
@@ -70,7 +68,9 @@ public class TestApplication extends Application
                 pixels[j + i * yCbCrPicture.getWidth()] = pixel.getLuminanceChannel() << 16
                         | pixel.getCbChannel() << 8
                         | pixel.getCrChannel();
+                System.out.print(pixel + " ");
             }
+            System.out.println();
         }
         System.out.println("Built image in "
                                    + ((System.currentTimeMillis() - start) / 1000d)
@@ -84,8 +84,7 @@ public class TestApplication extends Application
         RGBPicture testPicture = null;
         try
         {
-//            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")));
-            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")), 2, 2, 2);
+            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")), 0, 0, 6);
         }
         catch (FileNotFoundException e)
         {

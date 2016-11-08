@@ -6,30 +6,28 @@ package Blatt1.colors.rgb;
  */
 public class RGB
 {
-    private int red;
-    private int green;
-    private int blue;
+    private int rgb = 0;
 
     public RGB(int red, int green, int blue)
     {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
+        this.rgb = red;
+        this.rgb = (this.rgb << 8) + green;
+        this.rgb = (this.rgb << 8) + blue;
     }
 
     public int getRed()
     {
-        return red;
+        return (this.rgb >> 16) & 255;
     }
 
     public int getGreen()
     {
-        return green;
+        return (this.rgb >> 8) & 255;
     }
 
     public int getBlue()
     {
-        return blue;
+        return this.rgb & 255;
     }
 
     public double[] getAsArray()
@@ -44,6 +42,6 @@ public class RGB
     @Override
     public String toString()
     {
-        return this.red + "," + this.green + "," + this.blue;
+        return this.getRed() + "," + this.getGreen() + "," + this.getBlue();
     }
 }

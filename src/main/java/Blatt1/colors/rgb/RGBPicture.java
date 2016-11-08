@@ -28,24 +28,7 @@ public class RGBPicture
     // Konstruktor mit InputStream parsing: Aufgabe 1b)
     public RGBPicture(InputStream is)
     {
-        this();
-        long start = System.currentTimeMillis();
-        Scanner sc = new Scanner(is);
-        extractMetaInformation(sc);
-        initPicture();
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                int r = Integer.parseInt(sc.next());
-                int g = Integer.parseInt(sc.next());
-                int b = Integer.parseInt(sc.next());
-                picture.get(i).add(new RGB(r, g, b));
-            }
-        }
-        System.out.println("Finished reading PPM in "
-                                   + ((System.currentTimeMillis() - start) / 1000d)
-                                   + " seconds");
+        this(is, 0, 0, 0);
     }
 
     public RGBPicture(InputStream is, int factorRed, int factorGreen, int factorBlue)
@@ -66,11 +49,12 @@ public class RGBPicture
         int counterBlue = 0;
         for (int i = 0; i < this.height; i++)
         {
+            ArrayList<RGB> currentRow = picture.get(i);
             for (int j = 0; j < this.width; j++)
             {
                 if (counterRed++ % factorRedPower == 0)
                 {
-                    red = Integer.parseInt(sc.next());
+                    red = sc.nextInt();
                 }
                 else
                 {
@@ -78,7 +62,7 @@ public class RGBPicture
                 }
                 if (counterGreen++ % factorGreenPower == 0)
                 {
-                    green = Integer.parseInt(sc.next());
+                    green = sc.nextInt();
                 }
                 else
                 {
@@ -92,7 +76,7 @@ public class RGBPicture
                 {
                     sc.next();
                 }
-                picture.get(i).add(new RGB(red, green, blue));
+                currentRow.add(new RGB(red, green, blue));
             }
         }
         System.out.println("Finished reading PPM in "
@@ -151,12 +135,12 @@ public class RGBPicture
 
     public int getHeight()
     {
-        return picture.size();
+        return this.height;
     }
 
     public int getWidth()
     {
-        return picture.get(0).size();
+        return this.width;
     }
 
     public void setStrideWidth(int stride)
