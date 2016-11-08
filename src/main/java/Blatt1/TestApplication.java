@@ -30,7 +30,7 @@ public class TestApplication extends Application
 
     public void start(Stage primaryStage) throws Exception
     {
-        BufferedImage img = readPpmAndConvertToYcbcr();
+        BufferedImage img = readPpmAndRender();
         Image image = SwingFXUtils.toFXImage(img, null);
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);

@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 // Ganze Klasse: Aufgabe 1a)
 public class RGBPicture
 {
-    private ArrayList<ArrayList<RGB>> picture;
+    private ArrayList<RGB> picture;
     private int width;
     private int height;
     private int strideWidth;
@@ -35,49 +35,46 @@ public class RGBPicture
     {
         this();
         long start = System.currentTimeMillis();
-        Scanner sc = new Scanner(is);
-        extractMetaInformation(sc);
-        initPicture();
-        int factorRedPower = (int) Math.pow(2, factorRed);
-        int factorGreenPower = (int) Math.pow(2, factorGreen);
-        int factorBluePower = (int) Math.pow(2, factorBlue);
-        int red = 0;
-        int green = 0;
-        int blue = 0;
-        int counterRed = 0;
-        int counterGreen = 0;
-        int counterBlue = 0;
-        for (int i = 0; i < this.height; i++)
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        try
         {
-            ArrayList<RGB> currentRow = picture.get(i);
-            for (int j = 0; j < this.width; j++)
+            extractMetaInformation(br);
+            initPicture();
+            int factorRedPower = (int) Math.pow(2, factorRed);
+            int factorGreenPower = (int) Math.pow(2, factorGreen);
+            int factorBluePower = (int) Math.pow(2, factorBlue);
+            int red = 0;
+            int green = 0;
+            int blue = 0;
+            int counterRed = 0;
+            int counterGreen = 0;
+            int counterBlue = 0;
+            String currentLine;
+            while (br.ready())
             {
-                if (counterRed++ % factorRedPower == 0)
+                currentLine = br.readLine();
+                String[] splitLine = currentLine.split(" ");
+                for (int i = 0; i < splitLine.length; i = i + 3)
                 {
-                    red = sc.nextInt();
+                    if (counterRed++ % factorRedPower == 0)
+                    {
+                        red = Short.parseShort(splitLine[i]);
+                    }
+                    if (counterGreen++ % factorGreenPower == 0)
+                    {
+                        green = Short.parseShort(splitLine[i + 1]);
+                    }
+                    if (counterBlue++ % factorBluePower == 0)
+                    {
+                        blue = Short.parseShort(splitLine[i + 2]);
+                    }
+                    picture.add(new RGB(red, green, blue));
                 }
-                else
-                {
-                    sc.next();
-                }
-                if (counterGreen++ % factorGreenPower == 0)
-                {
-                    green = sc.nextInt();
-                }
-                else
-                {
-                    sc.next();
-                }
-                if (counterBlue++ % factorBluePower == 0)
-                {
-                    blue = Integer.parseInt(sc.next());
-                }
-                else
-                {
-                    sc.next();
-                }
-                currentRow.add(new RGB(red, green, blue));
             }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
         System.out.println("Finished reading PPM in "
                                    + ((System.currentTimeMillis() - start) / 1000d)
@@ -86,28 +83,24 @@ public class RGBPicture
 
     private void initPicture()
     {
-        picture = new ArrayList<ArrayList<RGB>>(height);
-        for (int i = 0; i < height; i++)
-        {
-            picture.add(new ArrayList<RGB>(width));
-        }
+        picture = new ArrayList<RGB>(height * width);
     }
 
-    private void extractMetaInformation(Scanner sc)
+    private void extractMetaInformation(BufferedReader br) throws IOException
     {
-        skipLine(sc);
-        String metaInformation = sc.nextLine();
+        skipLine(br);
+        String metaInformation = br.readLine();
         String[] splitMeta = metaInformation.split(" ");
         this.width = Integer.parseInt(splitMeta[0]);
         this.height = Integer.parseInt(splitMeta[1]);
-        skipLine(sc);
+        skipLine(br);
     }
 
-    private void skipLine(Scanner sc)
+    private void skipLine(BufferedReader br) throws IOException
     {
-        if (sc.hasNextLine())
+        if (br.ready())
         {
-            sc.nextLine();
+            br.readLine();
         }
     }
 
@@ -116,19 +109,19 @@ public class RGBPicture
         RGB result;
         if (x > this.getWidth() && y > this.getHeight())
         {
-            result = picture.get(this.getHeight() - 1).get(this.getWidth() - 1);
+            result = picture.get((width - 1) + (height - 1) * width);
         }
         else if (x > this.getWidth())
         {
-            result = picture.get(y).get(this.getWidth() - 1);
+            result = picture.get((width - 1) + y * width);
         }
         else if (y > this.getHeight())
         {
-            result = picture.get(this.getHeight() - 1).get(x);
+            result = picture.get(x + (height - 1) * width);
         }
         else
         {
-            result = picture.get(y).get(x);
+            result = picture.get(x + y * width);
         }
         return result;
     }
@@ -177,13 +170,14 @@ public class RGBPicture
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        for (ArrayList<RGB> line : picture)
+        long pixelCount = 0;
+        for (RGB rgb : picture)
         {
-            for (RGB pixel : line)
+            sb.append(rgb.toString()).append(" ");
+            if ((pixelCount + 1) % width == 0)
             {
-                sb.append(pixel.toString()).append(" ");
+                sb.append("\n");
             }
-            sb.append("\n");
         }
         return sb.toString();
     }

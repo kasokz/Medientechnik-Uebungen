@@ -15,6 +15,21 @@ public class RGB
         this.rgb = (this.rgb << 8) + blue;
     }
 
+    public void setRed(int red)
+    {
+        this.rgb = (rgb & 0xFFFF) + (red << 16);
+    }
+
+    public void setGreen(int green)
+    {
+        this.rgb = (rgb & 0xFF00FF) + (green << 8);
+    }
+
+    public void setBlue(int blue)
+    {
+        this.rgb = (rgb & 0xFFFF00) + blue;
+    }
+
     public int getRed()
     {
         return (this.rgb >> 16) & 255;
