@@ -6,35 +6,34 @@ package Blatt1.colors.ycbcr;
  */
 public class YCbCr
 {
-    private int luminanceChannel;
-    private int cbChannel;
-    private int crChannel;
+    private int ycbcr = 0;
 
-    public YCbCr(int luminanceChannel, int cb, int crChannel)
+    public YCbCr(int luminanceChannel, int cb, int cr)
     {
-        this.luminanceChannel = luminanceChannel;
-        this.cbChannel = cb;
-        this.crChannel = crChannel;
+
+        this.ycbcr = luminanceChannel;
+        this.ycbcr = (this.ycbcr << 8) + cb;
+        this.ycbcr = (this.ycbcr << 8) + cr;
     }
 
     public int getLuminanceChannel()
     {
-        return luminanceChannel;
+        return (ycbcr >> 16) & 255;
     }
 
     public int getCbChannel()
     {
-        return cbChannel;
+        return (ycbcr >> 8) & 255;
     }
 
     public int getCrChannel()
     {
-        return crChannel;
+        return ycbcr & 255;
     }
 
     @Override
     public String toString()
     {
-        return this.luminanceChannel + "," + this.cbChannel + "," + this.crChannel;
+        return this.getLuminanceChannel() + "," + this.getCbChannel() + "," + this.getCrChannel();
     }
 }

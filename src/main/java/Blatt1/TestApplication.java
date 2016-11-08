@@ -48,7 +48,7 @@ public class TestApplication extends Application
         RGBPicture testPicture = null;
         try
         {
-            testPicture = new RGBPicture(new FileInputStream(new File("mini.ppm")));
+            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")));
         }
         catch (FileNotFoundException e)
         {
@@ -84,7 +84,7 @@ public class TestApplication extends Application
         RGBPicture testPicture = null;
         try
         {
-            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")), 0, 0, 6);
+            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")), 0, 0, 0);
         }
         catch (FileNotFoundException e)
         {
