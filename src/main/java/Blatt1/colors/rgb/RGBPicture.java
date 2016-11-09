@@ -2,8 +2,6 @@ package Blatt1.colors.rgb;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.logging.Logger;
 
 /**
  * Created by Long Bui on 26.10.16.
@@ -28,11 +26,6 @@ public class RGBPicture
     // Konstruktor mit InputStream parsing: Aufgabe 1b)
     public RGBPicture(InputStream is)
     {
-        this(is, 0, 0, 0);
-    }
-
-    public RGBPicture(InputStream is, int factorRed, int factorGreen, int factorBlue)
-    {
         this();
         long start = System.currentTimeMillis();
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -40,38 +33,23 @@ public class RGBPicture
         {
             extractMetaInformation(br);
             initPicture();
-            int factorRedPower = (int) Math.pow(2, factorRed);
-            int factorGreenPower = (int) Math.pow(2, factorGreen);
-            int factorBluePower = (int) Math.pow(2, factorBlue);
-            int red = 0;
-            int green = 0;
-            int blue = 0;
-            int counterRed = 0;
-            int counterGreen = 0;
-            int counterBlue = 0;
             String currentLine;
+            int red;
+            int green;
+            int blue;
             while (br.ready())
             {
                 currentLine = br.readLine().replaceAll(" +", " ");
                 String[] splitLine = currentLine.split(" ");
-                if(splitLine.length % 3 != 0)
+                if (splitLine.length % 3 != 0)
                 {
                     continue;
                 }
                 for (int i = 0; i < splitLine.length; i = i + 3)
                 {
-                    if (counterRed++ % factorRedPower == 0)
-                    {
-                        red = Short.parseShort(splitLine[i]);
-                    }
-                    if (counterGreen++ % factorGreenPower == 0)
-                    {
-                        green = Short.parseShort(splitLine[i + 1]);
-                    }
-                    if (counterBlue++ % factorBluePower == 0)
-                    {
-                        blue = Short.parseShort(splitLine[i + 2]);
-                    }
+                    red = Short.parseShort(splitLine[i]);
+                    green = Short.parseShort(splitLine[i + 1]);
+                    blue = Short.parseShort(splitLine[i + 2]);
                     picture.add(new RGB(red, green, blue));
                 }
             }

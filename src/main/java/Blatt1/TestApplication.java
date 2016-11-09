@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.awt.image.DataBufferInt;
 import java.io.*;
 
@@ -30,7 +31,7 @@ public class TestApplication extends Application
 
     public void start(Stage primaryStage) throws Exception
     {
-        BufferedImage img = readPpmAndRender();
+        BufferedImage img = readPpmAndConvertToYcbcr();
         Image image = SwingFXUtils.toFXImage(img, null);
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
@@ -55,22 +56,19 @@ public class TestApplication extends Application
             e.printStackTrace();
         }
         YCbCrPicture yCbCrPicture = ColorChannels.RGBToYCbCr(testPicture);
+        yCbCrPicture.reduce(4, 4, 4);
         long start = System.currentTimeMillis();
         BufferedImage img = new BufferedImage(yCbCrPicture.getWidth(),
                                               yCbCrPicture.getHeight(),
-                                              BufferedImage.TYPE_INT_RGB);
-        int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+                                              BufferedImage.TYPE_BYTE_GRAY);
+        byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
         for (int i = 0; i < yCbCrPicture.getHeight(); i++)
         {
             for (int j = 0; j < yCbCrPicture.getWidth(); j++)
             {
-                YCbCr pixel = yCbCrPicture.getPixelAt(j, i);
-                pixels[j + i * yCbCrPicture.getWidth()] = pixel.getLuminanceChannel() << 16
-                        | pixel.getCbChannel() << 8
-                        | pixel.getCrChannel();
-//                System.out.print(pixel + " ");
+                YCbCr pixel = yCbCrPicture.getPixelAt(i, j);
+                pixels[j + i * yCbCrPicture.getWidth()] = (byte) pixel.getLuminanceChannel();
             }
-//            System.out.println();
         }
         System.out.println("Built image in "
                                    + ((System.currentTimeMillis() - start) / 1000d)
@@ -84,7 +82,7 @@ public class TestApplication extends Application
         RGBPicture testPicture = null;
         try
         {
-            testPicture = new RGBPicture(new FileInputStream(new File("1080.ppm")), 0, 0, 0);
+            testPicture = new RGBPicture(new FileInputStream(new File("1080.ppm")));
         }
         catch (FileNotFoundException e)
         {
