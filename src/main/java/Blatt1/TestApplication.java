@@ -68,9 +68,9 @@ public class TestApplication extends Application
                 pixels[j + i * yCbCrPicture.getWidth()] = pixel.getLuminanceChannel() << 16
                         | pixel.getCbChannel() << 8
                         | pixel.getCrChannel();
-                System.out.print(pixel + " ");
+//                System.out.print(pixel + " ");
             }
-            System.out.println();
+//            System.out.println();
         }
         System.out.println("Built image in "
                                    + ((System.currentTimeMillis() - start) / 1000d)
@@ -84,7 +84,7 @@ public class TestApplication extends Application
         RGBPicture testPicture = null;
         try
         {
-            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")), 0, 0, 0);
+            testPicture = new RGBPicture(new FileInputStream(new File("1080.ppm")), 0, 0, 0);
         }
         catch (FileNotFoundException e)
         {

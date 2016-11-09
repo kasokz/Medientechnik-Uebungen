@@ -52,8 +52,12 @@ public class RGBPicture
             String currentLine;
             while (br.ready())
             {
-                currentLine = br.readLine();
+                currentLine = br.readLine().replaceAll(" +", " ");
                 String[] splitLine = currentLine.split(" ");
+                if(splitLine.length % 3 != 0)
+                {
+                    continue;
+                }
                 for (int i = 0; i < splitLine.length; i = i + 3)
                 {
                     if (counterRed++ % factorRedPower == 0)
@@ -107,6 +111,10 @@ public class RGBPicture
     public RGB getRGBAt(int x, int y)
     {
         RGB result;
+        if (x > this.getStrideWidth() || y > this.getStrideHeight())
+        {
+            throw new IllegalArgumentException();
+        }
         if (x > this.getWidth() && y > this.getHeight())
         {
             result = picture.get((width - 1) + (height - 1) * width);
