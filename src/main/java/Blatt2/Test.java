@@ -24,12 +24,10 @@ public class Test
         {
             BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
             long overall = System.currentTimeMillis();
-            APP0Writer app0Writer = new APP0Writer(bos);
-            initAPP0(app0Writer);
-//            app0Writer.writeSegment();
-            SOF0Writer sof0Writer = new SOF0Writer(bos);
-            initSOF0(sof0Writer);
-            sof0Writer.writeSegment();
+            for(int i= 0; i < 100000000; i++)
+            {
+                bos.write(1);
+            }
             bos.close();
             System.out.println("Finished writing in " + (System.currentTimeMillis() - overall) / 1000d);
             long readStart = System.currentTimeMillis();
@@ -38,13 +36,9 @@ public class Test
             int counter = 0;
             while ((read = bis.read()) != -1)
             {
-                if (counter++ % 8 == 0)
-                {
-                    System.out.print(" ");
-                }
-                System.out.print(read);
+                counter++;
             }
-            System.out.println();
+            System.out.println(counter);
             System.out.println("Finished reading in " + (System.currentTimeMillis() - readStart) / 1000d);
             System.out.println("Finished both in " + (System.currentTimeMillis() - overall) / 1000d);
 
