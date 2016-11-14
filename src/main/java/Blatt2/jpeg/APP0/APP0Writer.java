@@ -1,5 +1,6 @@
-package Blatt2.jpeg;
+package Blatt2.jpeg.APP0;
 
+import Blatt2.jpeg.SegmentWriter;
 import Blatt2.streams.BitOutputStream;
 
 import java.io.IOException;

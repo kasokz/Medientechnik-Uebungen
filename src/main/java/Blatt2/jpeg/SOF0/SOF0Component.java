@@ -1,4 +1,4 @@
-package Blatt2.jpeg;
+package Blatt2.jpeg.SOF0;
 
 import Blatt2.streams.BitOutputStream;
 
