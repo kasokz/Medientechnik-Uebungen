@@ -11,7 +11,7 @@ public class BitInputStream extends InputStream
 {
     private InputStream is;
     private int byteBuffer;
-    int counter = 0;
+    private short counter = 0;
 
     public BitInputStream(InputStream is)
     {

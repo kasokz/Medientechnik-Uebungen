@@ -1,5 +1,6 @@
 package Blatt2;
 
+import Blatt2.jpeg.APP0Writer;
 import Blatt2.streams.BitInputStream;
 import Blatt2.streams.BitOutputStream;
 
@@ -20,10 +21,8 @@ public class Test
         {
             BitOutputStream bos = new BitOutputStream(new FileOutputStream("bytes.dat"));
             long overall = System.currentTimeMillis();
-            for (int i = 0; i < 10000000; i++)
-            {
-                bos.write((int) (Math.random() * 2));
-            }
+            APP0Writer app0Writer = new APP0Writer(bos);
+            app0Writer.writeMarker();
             bos.close();
             System.out.println("Finished writing in " + (System.currentTimeMillis() - overall) / 1000d);
             long readStart = System.currentTimeMillis();
@@ -31,8 +30,9 @@ public class Test
             int read;
             while ((read = bis.read()) != -1)
             {
-//                System.out.print(read);
+                System.out.print(read);
             }
+            System.out.println();
             System.out.println("Finished reading in " + (System.currentTimeMillis() - readStart) / 1000d);
             System.out.println("Finished both in " + (System.currentTimeMillis() - overall) / 1000d);
 
