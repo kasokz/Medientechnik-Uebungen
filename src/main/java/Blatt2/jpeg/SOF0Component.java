@@ -24,6 +24,7 @@ public class SOF0Component
         this.quantNum = quantNum;
     }
 
+    // Method for writing SOF0Component to given String
     public void writeToStream(OutputStream os) throws IOException
     {
         BitOutputStream.writeByte(os, id);
