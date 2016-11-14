@@ -1,7 +1,11 @@
 package Blatt2.jpeg;
 
+import Blatt2.streams.BitOutputStream;
+
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Long Bui on 14.11.16.
@@ -10,16 +14,19 @@ import java.io.OutputStream;
 public class APP0Writer extends SegmentWriter
 {
     public static int APP0MARKER = 224;
+    public static int[] JFIF_STRING = {74, 70, 73, 70, 0};
 
     private int length = 16;
     private int major = 1;
     private int minor = 1;
-    private int pixelSize = 0;
-    private int xDensity;
-    private int yDensity;
-    private int xPreview = 0;
-    private int yPreview = 0;
-
+    private int pixelUnit = 0;
+    private int xDensityLow;
+    private int xDensityHigh;
+    private int yDensityLow;
+    private int yDensityHigh;
+    private int xThumb = 0;
+    private int yThumb = 0;
+    private List<Byte> thumbnail = new ArrayList<Byte>();
 
     public APP0Writer(OutputStream os)
     {
@@ -54,7 +61,8 @@ public class APP0Writer extends SegmentWriter
     {
         if (xDensity > 0 && xDensity < 65536)
         {
-            this.xDensity = xDensity;
+            this.xDensityHigh = xDensity & 0xFF00;
+            this.xDensityLow = xDensity & 0x00FF;
         }
         else
         {
@@ -66,7 +74,8 @@ public class APP0Writer extends SegmentWriter
     {
         if (yDensity > 0 && yDensity < 65536)
         {
-            this.yDensity = yDensity;
+            this.yDensityHigh = yDensity & 0xFF00;
+            this.yDensityLow = yDensity & 0x00FF;
         }
         else
         {
@@ -74,13 +83,14 @@ public class APP0Writer extends SegmentWriter
         }
     }
 
-    public void setPreview(int xPreview, int yPreview)
+    public void setThumbnail(int xThumb, int yThumb, List<Byte> thumbnail)
     {
-        if (xPreview >= 0 && xPreview <= 255 && yPreview >= 0 && yPreview <= 255)
+        if (xThumb >= 0 && xThumb <= 255 && yThumb >= 0 && yThumb <= 255)
         {
-            this.yPreview = yPreview;
-            this.xPreview = xPreview;
-            this.length = 16 + (xPreview * yPreview * 3);
+            this.yThumb = yThumb;
+            this.xThumb = xThumb;
+            this.length = 16 + (xThumb * yThumb * 3);
+            this.thumbnail = thumbnail;
         }
         else
         {
@@ -90,6 +100,26 @@ public class APP0Writer extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        
+        BitOutputStream.writeByte(os, 255);
+        BitOutputStream.writeByte(os, APP0MARKER);
+        BitOutputStream.writeByte(os, length & 0xFF00);
+        BitOutputStream.writeByte(os, length & 0x00FF);
+        for (int i = 0; i < JFIF_STRING.length; i++)
+        {
+            BitOutputStream.writeByte(os, JFIF_STRING[i]);
+        }
+        BitOutputStream.writeByte(os, major);
+        BitOutputStream.writeByte(os, minor);
+        BitOutputStream.writeByte(os, pixelUnit);
+        BitOutputStream.writeByte(os, xDensityHigh);
+        BitOutputStream.writeByte(os, xDensityLow);
+        BitOutputStream.writeByte(os, yDensityHigh);
+        BitOutputStream.writeByte(os, yDensityLow);
+        BitOutputStream.writeByte(os, xThumb);
+        BitOutputStream.writeByte(os, yThumb);
+        for (Byte thumbnailByte : thumbnail)
+        {
+            BitOutputStream.writeByte(os, thumbnailByte);
+        }
     }
 }

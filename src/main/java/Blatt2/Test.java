@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Long Bui on 09.11.16.
@@ -22,14 +23,20 @@ public class Test
             BitOutputStream bos = new BitOutputStream(new FileOutputStream("bytes.dat"));
             long overall = System.currentTimeMillis();
             APP0Writer app0Writer = new APP0Writer(bos);
-            app0Writer.writeMarker();
+            initAPP0(app0Writer);
+            app0Writer.writeSegment();
             bos.close();
             System.out.println("Finished writing in " + (System.currentTimeMillis() - overall) / 1000d);
             long readStart = System.currentTimeMillis();
             BitInputStream bis = new BitInputStream(new FileInputStream("bytes.dat"));
             int read;
+            int counter = 0;
             while ((read = bis.read()) != -1)
             {
+                if (counter++ % 8 == 0)
+                {
+                    System.out.print(" ");
+                }
                 System.out.print(read);
             }
             System.out.println();
@@ -45,5 +52,14 @@ public class Test
         {
             e.printStackTrace();
         }
+    }
+
+    public static void initAPP0(APP0Writer writer)
+    {
+        writer.setMajor(1);
+        writer.setMinor(1);
+        writer.setXDensity(300);
+        writer.setyDensity(300);
+        writer.setThumbnail(0, 0, new ArrayList<Byte>());
     }
 }

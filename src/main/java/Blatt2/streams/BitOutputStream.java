@@ -42,4 +42,13 @@ public class BitOutputStream extends OutputStream
         }
         os.close();
     }
+
+    public static void writeByte(OutputStream os, int byteToWrite) throws IOException
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            os.write((byteToWrite & 128) >> 7);
+            byteToWrite = byteToWrite << 1;
+        }
+    }
 }

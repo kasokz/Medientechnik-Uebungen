@@ -1,5 +1,6 @@
 package Blatt2.jpeg;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -13,7 +14,7 @@ public class SOF0Writer extends SegmentWriter
         super(os);
     }
 
-    public void writeMarker()
+    public void writeSegment() throws IOException
     {
 
     }
