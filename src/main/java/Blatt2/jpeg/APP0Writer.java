@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class APP0Writer extends SegmentWriter
 {
-    public static int APP0MARKER = 224;
+    public static int APP0MARKER = 0xe0;
     public static int[] JFIF_STRING = {74, 70, 73, 70, 0};
 
     private int length = 16;
@@ -59,7 +59,7 @@ public class APP0Writer extends SegmentWriter
 
     public void setXDensity(int xDensity)
     {
-        if (xDensity > 0 && xDensity < 65536)
+        if (xDensity > 0 && xDensity <= 0xFFFF)
         {
             this.xDensityHigh = (xDensity & 0xFF00) >> 8;
             this.xDensityLow = xDensity & 0x00FF;
@@ -72,7 +72,7 @@ public class APP0Writer extends SegmentWriter
 
     public void setyDensity(int yDensity)
     {
-        if (yDensity > 0 && yDensity < 65536)
+        if (yDensity > 0 && yDensity <= 0xFFFF)
         {
             this.yDensityHigh = (yDensity & 0xFF00) >> 8;
             this.yDensityLow = yDensity & 0x00FF;
