@@ -20,7 +20,7 @@ public class Test
     {
         try
         {
-            BitOutputStream bos = new BitOutputStream(new FileOutputStream("bytes.dat"));
+            BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
             long overall = System.currentTimeMillis();
             APP0Writer app0Writer = new APP0Writer(bos);
             initAPP0(app0Writer);
@@ -28,7 +28,7 @@ public class Test
             bos.close();
             System.out.println("Finished writing in " + (System.currentTimeMillis() - overall) / 1000d);
             long readStart = System.currentTimeMillis();
-            BitInputStream bis = new BitInputStream(new FileInputStream("bytes.dat"));
+            BitInputStream bis = new BitInputStream(new FileInputStream("testImage.jpg"));
             int read;
             int counter = 0;
             while ((read = bis.read()) != -1)

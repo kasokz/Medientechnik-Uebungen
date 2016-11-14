@@ -61,7 +61,7 @@ public class APP0Writer extends SegmentWriter
     {
         if (xDensity > 0 && xDensity < 65536)
         {
-            this.xDensityHigh = xDensity & 0xFF00;
+            this.xDensityHigh = (xDensity & 0xFF00) >> 8;
             this.xDensityLow = xDensity & 0x00FF;
         }
         else
@@ -74,7 +74,7 @@ public class APP0Writer extends SegmentWriter
     {
         if (yDensity > 0 && yDensity < 65536)
         {
-            this.yDensityHigh = yDensity & 0xFF00;
+            this.yDensityHigh = (yDensity & 0xFF00) >> 8;
             this.yDensityLow = yDensity & 0x00FF;
         }
         else
@@ -102,7 +102,7 @@ public class APP0Writer extends SegmentWriter
     {
         BitOutputStream.writeByte(os, 255);
         BitOutputStream.writeByte(os, APP0MARKER);
-        BitOutputStream.writeByte(os, length & 0xFF00);
+        BitOutputStream.writeByte(os, (length & 0xFF00) >> 8);
         BitOutputStream.writeByte(os, length & 0x00FF);
         for (int i = 0; i < JFIF_STRING.length; i++)
         {
