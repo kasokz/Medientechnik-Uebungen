@@ -20,17 +20,17 @@ public class BitInputStream extends InputStream
 
     public int read() throws IOException
     {
-        if ((counter % 8) == 0)
+        if ((counter % 8) == 0)// counter = 8 or 0
         {
             counter = 0;
-            this.byteBuffer = is.read();
+            this.byteBuffer = is.read();// read byte
             if (this.byteBuffer == -1)
             {
                 return -1;
             }
         }
-        int result = (this.byteBuffer & 128) >> 7;
-        this.byteBuffer = byteBuffer << 1;
+        int result = (this.byteBuffer & 128) >> 7; // 11110000 * 1000000 = 10000000 -> 1
+        this.byteBuffer = byteBuffer << 1; // shift bytebuffer left -> 11100000
         counter++;
         return result;
     }
