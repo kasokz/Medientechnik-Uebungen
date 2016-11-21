@@ -34,7 +34,10 @@ public class BitOutputStream extends OutputStream
         {
             throw new IllegalArgumentException();
         }
-        byteBuffer = (byte) ((byteBuffer << 1) + b);
+        // bitweise rechts nach links
+//        byteBuffer = (byte) ((byteBuffer << 1) + b);
+        // bitweise links nach rechts
+        byteBuffer = (byte) (byteBuffer + (b << (7 - counter)));
         counter++;
         if (counter == 8)
         {

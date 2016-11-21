@@ -15,7 +15,7 @@ import java.util.List;
 public class APP0Writer extends SegmentWriter
 {
     public static int APP0MARKER = 0xe0;
-    public static int[] JFIF_STRING = {74, 70, 73, 70, 0};
+    public static int[] JFIF_STRING = {0x4A, 0x46, 0x49, 0x46, 0x00};
 
     private int length = 16;
     private int major = 1;
@@ -36,7 +36,7 @@ public class APP0Writer extends SegmentWriter
 
     public void setMajor(int major)
     {
-        if (major <= 255 && major >= 1)
+        if (major > 0 && major <= 0xFF)
         {
             this.major = major;
         }
@@ -48,7 +48,7 @@ public class APP0Writer extends SegmentWriter
 
     public void setMinor(int minor)
     {
-        if (minor <= 255 && minor >= 0)
+        if (minor >= 0 && minor <= 0xFF)
         {
             this.minor = minor;
         }
@@ -63,7 +63,7 @@ public class APP0Writer extends SegmentWriter
         if (xDensity > 0 && xDensity <= 0xFFFF)
         {
             this.xDensityHigh = (xDensity & 0xFF00) >> 8;
-            this.xDensityLow = xDensity & 0x00FF;
+            this.xDensityLow = xDensity & 0xFF;
         }
         else
         {
@@ -76,7 +76,7 @@ public class APP0Writer extends SegmentWriter
         if (yDensity > 0 && yDensity <= 0xFFFF)
         {
             this.yDensityHigh = (yDensity & 0xFF00) >> 8;
-            this.yDensityLow = yDensity & 0x00FF;
+            this.yDensityLow = yDensity & 0xFF;
         }
         else
         {
@@ -86,7 +86,7 @@ public class APP0Writer extends SegmentWriter
 
     public void setThumbnail(int xThumb, int yThumb, List<Byte> thumbnail)
     {
-        if (xThumb >= 0 && xThumb <= 255 && yThumb >= 0 && yThumb <= 255)
+        if (xThumb >= 0 && xThumb <= 0xFF && yThumb >= 0 && yThumb <= 0xFF)
         {
             this.yThumb = yThumb;
             this.xThumb = xThumb;
@@ -101,10 +101,10 @@ public class APP0Writer extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        BitOutputStream.writeByte(os, 255);
+        BitOutputStream.writeByte(os, 0xFF);
         BitOutputStream.writeByte(os, APP0MARKER);
         BitOutputStream.writeByte(os, (length & 0xFF00) >> 8);
-        BitOutputStream.writeByte(os, length & 0x00FF);
+        BitOutputStream.writeByte(os, length & 0xFF);
         for (int i = 0; i < JFIF_STRING.length; i++)
         {
             BitOutputStream.writeByte(os, JFIF_STRING[i]);
