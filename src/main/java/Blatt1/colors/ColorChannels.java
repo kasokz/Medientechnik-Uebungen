@@ -1,9 +1,9 @@
 package Blatt1.colors;
 
 import Blatt1.colors.rgb.RGB;
-import Blatt1.colors.rgb.RGBPicture;
+import Blatt1.colors.rgb.RGBImage;
 import Blatt1.colors.ycbcr.YCbCr;
-import Blatt1.colors.ycbcr.YCbCrPicture;
+import Blatt1.colors.ycbcr.YCbCrImage;
 import org.jblas.DoubleMatrix;
 
 import java.util.ArrayList;
@@ -14,26 +14,26 @@ import java.util.ArrayList;
  */
 public class ColorChannels
 {
-    public static YCbCrPicture RGBToYCbCr(RGBPicture rgbPicture)
+    public static YCbCrImage RGBToYCbCr(RGBImage rgbImage)
     {
         long start = System.currentTimeMillis();
-        ArrayList<ArrayList<YCbCr>> newPictureValues = new ArrayList<ArrayList<YCbCr>>(rgbPicture.getHeight());
-        for (int i = 0; i < rgbPicture.getHeight(); i++)
+        ArrayList<ArrayList<YCbCr>> newPictureValues = new ArrayList<ArrayList<YCbCr>>(rgbImage.getHeight());
+        for (int i = 0; i < rgbImage.getHeight(); i++)
         {
-            newPictureValues.add(new ArrayList<YCbCr>(rgbPicture.getWidth()));
+            newPictureValues.add(new ArrayList<YCbCr>(rgbImage.getWidth()));
         }
-        for (int pixelRow = 0; pixelRow < rgbPicture.getHeight(); pixelRow++)
+        for (int pixelRow = 0; pixelRow < rgbImage.getHeight(); pixelRow++)
         {
-            for (int pixelColumn = 0; pixelColumn < rgbPicture.getWidth(); pixelColumn++)
+            for (int pixelColumn = 0; pixelColumn < rgbImage.getWidth(); pixelColumn++)
             {
                 newPictureValues.get(pixelRow)
-                                .add(convertRGBToYCbCr(rgbPicture.getRGBAt(pixelColumn, pixelRow)));
+                                .add(convertRGBToYCbCr(rgbImage.getRGBAt(pixelColumn, pixelRow)));
             }
         }
         System.out.println("Finished RGB to YCbCr conversion in "
                                    + ((System.currentTimeMillis() - start) / 1000d)
                                    + " seconds");
-        return new YCbCrPicture(newPictureValues);
+        return new YCbCrImage(newPictureValues);
     }
 
     public static YCbCr convertRGBToYCbCr(RGB pixel)

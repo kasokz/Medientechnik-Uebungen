@@ -2,9 +2,9 @@ package Blatt1;
 
 import Blatt1.colors.ColorChannels;
 import Blatt1.colors.rgb.RGB;
-import Blatt1.colors.rgb.RGBPicture;
+import Blatt1.colors.rgb.RGBImage;
 import Blatt1.colors.ycbcr.YCbCr;
-import Blatt1.colors.ycbcr.YCbCrPicture;
+import Blatt1.colors.ycbcr.YCbCrImage;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
@@ -46,28 +46,28 @@ public class TestApplication extends Application
 
     private BufferedImage readPpmAndConvertToYcbcr()
     {
-        RGBPicture testPicture = null;
+        RGBImage testPicture = null;
         try
         {
-            testPicture = new RGBPicture(new FileInputStream(new File("test-pic.ppm")));
+            testPicture = new RGBImage(new FileInputStream(new File("test-pic.ppm")));
         }
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
-        YCbCrPicture yCbCrPicture = ColorChannels.RGBToYCbCr(testPicture);
-        yCbCrPicture.reduce(4, 4, 4);
+        YCbCrImage yCbCrImage = ColorChannels.RGBToYCbCr(testPicture);
+        yCbCrImage.reduce(4, 4, 4);
         long start = System.currentTimeMillis();
-        BufferedImage img = new BufferedImage(yCbCrPicture.getWidth(),
-                                              yCbCrPicture.getHeight(),
+        BufferedImage img = new BufferedImage(yCbCrImage.getWidth(),
+                                              yCbCrImage.getHeight(),
                                               BufferedImage.TYPE_BYTE_GRAY);
         byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
-        for (int i = 0; i < yCbCrPicture.getHeight(); i++)
+        for (int i = 0; i < yCbCrImage.getHeight(); i++)
         {
-            for (int j = 0; j < yCbCrPicture.getWidth(); j++)
+            for (int j = 0; j < yCbCrImage.getWidth(); j++)
             {
-                YCbCr pixel = yCbCrPicture.getPixelAt(i, j);
-                pixels[j + i * yCbCrPicture.getWidth()] = (byte) pixel.getLuminanceChannel();
+                YCbCr pixel = yCbCrImage.getPixelAt(i, j);
+                pixels[j + i * yCbCrImage.getWidth()] = (byte) pixel.getLuminanceChannel();
             }
         }
         System.out.println("Built image in "
@@ -79,10 +79,10 @@ public class TestApplication extends Application
     // Aufgabe 1d) Demo
     private BufferedImage readPpmAndRender()
     {
-        RGBPicture testPicture = null;
+        RGBImage testPicture = null;
         try
         {
-            testPicture = new RGBPicture(new FileInputStream(new File("1080.ppm")));
+            testPicture = new RGBImage(new FileInputStream(new File("1080.ppm")));
         }
         catch (FileNotFoundException e)
         {

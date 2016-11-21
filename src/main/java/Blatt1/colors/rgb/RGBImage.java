@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 
 // Ganze Klasse: Aufgabe 1a)
-public class RGBPicture
+public class RGBImage
 {
     private ArrayList<RGB> picture;
     private int width;
@@ -17,14 +17,14 @@ public class RGBPicture
     private int strideWidth;
     private int strideHeight;
 
-    private RGBPicture()
+    private RGBImage()
     {
         this.strideHeight = 16;
         this.strideWidth = 16;
     }
 
     // Konstruktor mit InputStream parsing: Aufgabe 1b)
-    public RGBPicture(InputStream is)
+    public RGBImage(InputStream is)
     {
         this();
         long start = System.currentTimeMillis();
