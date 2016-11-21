@@ -22,6 +22,8 @@ public class Test
     {
         try
         {
+
+            //to be optimized
             BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
             long overall = System.currentTimeMillis();
             APP0Writer app0Writer = new APP0Writer(bos);
@@ -71,7 +73,7 @@ public class Test
         writer.setMajor(1);
         writer.setMinor(1);
         writer.setXDensity(300);
-        writer.setyDensity(300);
+        writer.setYDensity(300);
         writer.setThumbnail(0, 0, new ArrayList<Byte>());
     }
 }

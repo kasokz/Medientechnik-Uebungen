@@ -24,6 +24,8 @@ public class BitOutputStream extends OutputStream
         {
             throw new IllegalArgumentException();
         }
+
+        //was passiert hier?
         byteBuffer = (byte) ((byteBuffer << 1) + b);
         counter++;
         if (counter == 8)
