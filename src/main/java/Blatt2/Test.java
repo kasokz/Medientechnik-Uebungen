@@ -1,8 +1,7 @@
 package Blatt2;
 
-import Blatt2.jpeg.APP0Writer;
-import Blatt2.jpeg.SOF0Component;
-import Blatt2.jpeg.SOF0Writer;
+import Blatt2.jpeg.SOF0.SOF0Component;
+import Blatt2.jpeg.SOF0.SOF0Writer;
 import Blatt2.streams.BitInputStream;
 import Blatt2.streams.BitOutputStream;
 
