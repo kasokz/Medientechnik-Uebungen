@@ -106,7 +106,7 @@ public class APP0Writer extends SegmentWriter
         BitOutputStream.writeByte(os, APP0MARKER);
         BitOutputStream.writeByte(os, (length & 0xFF00) >> 8);
         BitOutputStream.writeByte(os, length & 0xFF);
-        for (int i = 0; i < JFIF_STRING.length; i++)
+        for (int i = 0; i < JFIF_STRING.length; i++) //test
         {
             BitOutputStream.writeByte(os, JFIF_STRING[i]);
         }
