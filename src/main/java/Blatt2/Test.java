@@ -24,12 +24,15 @@ public class Test
         {
             BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
             long overall = System.currentTimeMillis();
-            APP0Writer app0Writer = new APP0Writer(bos);
-            initAPP0(app0Writer);
-//            app0Writer.writeSegment();
+            APP0Writer app0Writer = APP0Writer.newBuilder(bos, 300, 300)
+                                              .withMajor(1)
+                                              .withMinor(1)
+                                              .withThumbnail(0, 0, new ArrayList<Byte>())
+                                              .build();
+            app0Writer.writeSegment();
             SOF0Writer sof0Writer = new SOF0Writer(bos);
             initSOF0(sof0Writer);
-            sof0Writer.writeSegment();
+//            sof0Writer.writeSegment();
             bos.close();
             System.out.println("Finished writing in " + (System.currentTimeMillis() - overall) / 1000d);
             long readStart = System.currentTimeMillis();
@@ -64,14 +67,5 @@ public class Test
         writer.setXImgSize(800);
         writer.setYImgSize(600);
         writer.setComponents(1, new SOF0Component(1, 1, 1, 1));
-    }
-
-    public static void initAPP0(APP0Writer writer)
-    {
-        writer.setMajor(1);
-        writer.setMinor(1);
-        writer.setXDensity(300);
-        writer.setyDensity(300);
-        writer.setThumbnail(0, 0, new ArrayList<Byte>());
     }
 }
