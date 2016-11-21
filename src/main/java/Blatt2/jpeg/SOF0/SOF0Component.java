@@ -27,9 +27,7 @@ public class SOF0Component
     public void writeToStream(OutputStream os) throws IOException
     {
         BitOutputStream.writeByte(os, id);
-
-        //korrigiert??
-        int subsamplingFactor = (subSamplingFactorVertical << 4) + subSamplingFactorHorizontal;
+        int subsamplingFactor = (subSamplingFactorHorizontal << 4) + subSamplingFactorVertical;
         BitOutputStream.writeByte(os, subsamplingFactor);
         BitOutputStream.writeByte(os, quantNum);
     }
