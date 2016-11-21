@@ -24,7 +24,7 @@ public class Test
         {
             BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
             long overall = System.currentTimeMillis();
-            for(int i= 0; i < 100000000; i++)
+            for (int i = 0; i < 100000000; i++)
             {
                 bos.write(1);
             }
@@ -58,14 +58,5 @@ public class Test
         writer.setXImgSize(800);
         writer.setYImgSize(600);
         writer.setComponents(1, new SOF0Component(1, 1, 1, 1));
-    }
-
-    public static void initAPP0(APP0Writer writer)
-    {
-        writer.setMajor(1);
-        writer.setMinor(1);
-        writer.setXDensity(300);
-        writer.setyDensity(300);
-        writer.setThumbnail(0, 0, new ArrayList<Byte>());
     }
 }
