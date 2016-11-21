@@ -10,7 +10,7 @@ import java.io.InputStream;
 public class BitInputStream extends InputStream
 {
     private InputStream is;
-    private int byteBuffer;
+    private int bitBuffer;
     private short counter = 0;
 
     public BitInputStream(InputStream is)
@@ -23,14 +23,15 @@ public class BitInputStream extends InputStream
         if ((counter % 8) == 0)
         {
             counter = 0;
-            this.byteBuffer = is.read();
-            if (this.byteBuffer == -1)
+            this.bitBuffer = is.read();
+            // End of File check
+            if (this.bitBuffer == -1)
             {
                 return -1;
             }
         }
-        int result = (this.byteBuffer & 128) >> 7;
-        this.byteBuffer = byteBuffer << 1;
+        int result = (this.bitBuffer & 128) >> 7;
+        this.bitBuffer = bitBuffer << 1;
         counter++;
         return result;
     }
