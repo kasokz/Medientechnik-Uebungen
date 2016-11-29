@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Long Bui on 26.10.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class YCbCrPicture
+public class YCbCrImage
 {
     private DoubleMatrix luminance;
     private DoubleMatrix cbChannel;
@@ -16,7 +16,7 @@ public class YCbCrPicture
     private int height;
     private int width;
 
-    public YCbCrPicture(ArrayList<ArrayList<YCbCr>> picture)
+    public YCbCrImage(ArrayList<ArrayList<YCbCr>> picture)
     {
         this.height = picture.size();
         this.width = picture.get(0).size();
