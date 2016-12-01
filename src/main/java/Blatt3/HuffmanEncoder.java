@@ -1,7 +1,9 @@
 package Blatt3;
 
-import Blatt1.colors.ycbcr.YCbCr;
-import Blatt1.colors.ycbcr.YCbCrImage;
+import Blatt3.HuffmanTree.HuffmanTree;
+import Blatt3.HuffmanTree.HuffmanTreeComponent;
+import Blatt3.HuffmanTree.HuffmanTreeLeaf;
+import Blatt3.HuffmanTree.HuffmanTreeNode;
 
 import java.util.*;
 
@@ -18,7 +20,7 @@ public class HuffmanEncoder
         frequencies = new HashMap<Integer, Integer>();
     }
 
-    public List<HuffmanTreeNode> huffmanInit(int[] symbols)
+    List<HuffmanTreeComponent> huffmanInit(int[] symbols)
     {
         int totalSymbols = symbols.length;
         for (int symbol : symbols)
@@ -32,7 +34,7 @@ public class HuffmanEncoder
                 frequencies.put(symbol, 1);
             }
         }
-        List<HuffmanTreeNode> leafs = new ArrayList<HuffmanTreeNode>();
+        List<HuffmanTreeComponent> leafs = new ArrayList<HuffmanTreeComponent>();
         for (Map.Entry<Integer, Integer> frequency : frequencies.entrySet())
         {
             leafs.add(new HuffmanTreeLeaf(frequency.getKey(), frequency.getValue() / (double) totalSymbols));
@@ -41,13 +43,17 @@ public class HuffmanEncoder
         return leafs;
     }
 
-    public HuffmanTree createHuffmanTree(List<HuffmanTreeNode> nodes)
+    HuffmanTree createHuffmanTree(List<HuffmanTreeComponent> nodes)
     {
+        // Alternativ Symbol mit höchster Wahrscheinlichkeit entfernen und allein an linker Stelle
+        // HuffmanTreeNode mostFrequentNode = nodes.get(nodes.size() - 1);
+        // nodes.remove(nodes.size() - 1);
         createHuffmanTreeNodes(nodes);
+//        return new HuffmanTree(new HuffmanTreeNode(mostFrequentNode, nodes.get(0)));
         return new HuffmanTree(nodes.get(0));
     }
 
-    public void createHuffmanTreeNodes(List<HuffmanTreeNode> nodes)
+    private void createHuffmanTreeNodes(List<HuffmanTreeComponent> nodes)
     {
         if (nodes.size() > 1)
         {
@@ -55,7 +61,6 @@ public class HuffmanEncoder
             nodes.remove(0);
             nodes.remove(0);
             nodes.add(huffmanTreeNode);
-            Collections.sort(nodes);
             createHuffmanTreeNodes(nodes);
         }
     }

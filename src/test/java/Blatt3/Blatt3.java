@@ -1,5 +1,8 @@
 package Blatt3;
 
+import Blatt3.HuffmanTree.HuffmanTree;
+import Blatt3.HuffmanTree.HuffmanTreeComponent;
+import Blatt3.HuffmanTree.HuffmanTreeNode;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,9 +28,9 @@ public class Blatt3
         huffmanEncoder = new HuffmanEncoder();
         double[] expectedValues = {0.1111, 0.1111, 0.1666, 0.1666, 0.1944, 0.25};
         double errorMargin = 0.001;
-        List<HuffmanTreeNode> frequencies = huffmanEncoder.huffmanInit(symbols);
+        List<HuffmanTreeComponent> frequencies = huffmanEncoder.huffmanInit(symbols);
         int i = 0;
-        for (HuffmanTreeNode frequency : frequencies)
+        for (HuffmanTreeComponent frequency : frequencies)
         {
             Assert.assertEquals(expectedValues[i++], frequency.getFrequency(), errorMargin);
         }
@@ -37,6 +40,7 @@ public class Blatt3
     public void testHuffmanTree()
     {
         HuffmanTree huffmanTree = huffmanEncoder.createHuffmanTree(huffmanEncoder.huffmanInit(symbols));
+        huffmanTree.replaceMostRight();
         System.out.println(huffmanTree.toString());
     }
 }
