@@ -42,5 +42,6 @@ public class Blatt3
         HuffmanTree huffmanTree = huffmanEncoder.createHuffmanTree(huffmanEncoder.huffmanInit(symbols));
         huffmanTree.replaceMostRight();
         System.out.println(huffmanTree.toString());
+        huffmanTree.printCodes();
     }
 }

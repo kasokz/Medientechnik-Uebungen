@@ -16,6 +16,8 @@ public abstract class HuffmanTreeComponent implements Comparable<HuffmanTreeComp
 
     public abstract HuffmanTreeComponent getRight();
 
+    public abstract void printCode(String currentCode);
+
     public int compareTo(HuffmanTreeComponent o)
     {
         return Double.valueOf(this.getFrequency()).compareTo(o.getFrequency());

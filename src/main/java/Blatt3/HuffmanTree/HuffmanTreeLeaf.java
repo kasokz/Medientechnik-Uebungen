@@ -38,6 +38,11 @@ public class HuffmanTreeLeaf extends HuffmanTreeComponent
         return null;
     }
 
+    public void printCode(String currentCode)
+    {
+        System.out.println(symbol + ": " + currentCode);
+    }
+
     public String toString()
     {
         return String.valueOf(symbol);

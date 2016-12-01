@@ -46,6 +46,15 @@ public class HuffmanTreeNode extends HuffmanTreeComponent
         return right;
     }
 
+    public void printCode(String currentCode)
+    {
+        left.printCode(currentCode + "0");
+        if (right != null)
+        {
+            right.printCode(currentCode + "1");
+        }
+    }
+
     public String toString()
     {
         String result = "Node(";

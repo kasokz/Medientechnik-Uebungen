@@ -25,6 +25,11 @@ public class HuffmanTree
         previousNode.setRight(new HuffmanTreeNode(currentNode, null));
     }
 
+    public void printCodes()
+    {
+        root.printCode("");
+    }
+
     public String toString()
     {
         return root.toString();
