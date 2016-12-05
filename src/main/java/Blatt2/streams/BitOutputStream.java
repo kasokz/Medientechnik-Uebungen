@@ -16,15 +16,15 @@ public class BitOutputStream extends OutputStream
     private static int BUFFER_CAPACITY = 1000000;
 
     private OutputStream os;
-    private byte byteBuffer;
+    private byte bitBuffer;
     private short counter;
-    private List<Byte> byteArrayBuffer;
+    private List<Byte> byteBuffer;
 
     public BitOutputStream(OutputStream os)
     {
         this.os = os;
-        this.byteArrayBuffer = new ArrayList<Byte>(BUFFER_CAPACITY);
-        this.byteBuffer = 0;
+        this.byteBuffer = new ArrayList<Byte>(BUFFER_CAPACITY);
+        this.bitBuffer = 0;
         this.counter = 0;
     }
 
@@ -34,17 +34,18 @@ public class BitOutputStream extends OutputStream
         {
             throw new IllegalArgumentException();
         }
-
-        //was passiert hier?
-        byteBuffer = (byte) ((byteBuffer << 1) + b);
+        // bitweise rechts nach links
+//        bitBuffer = (byte) ((bitBuffer << 1) + b);
+        // bitweise links nach rechts
+        bitBuffer = (byte) (bitBuffer + (b << (7 - counter)));
         counter++;
         if (counter == 8)
         {
-            byteArrayBuffer.add(byteBuffer);
+            byteBuffer.add(bitBuffer);
             counter = 0;
-            byteBuffer = 0;
+            bitBuffer = 0;
         }
-        if (byteArrayBuffer.size() == BUFFER_CAPACITY)
+        if (byteBuffer.size() == BUFFER_CAPACITY)
         {
             this.flush();
         }
@@ -60,16 +61,18 @@ public class BitOutputStream extends OutputStream
     {
         if (counter != 0)
         {
-            byteArrayBuffer.add(byteBuffer);
+            byteBuffer.add(bitBuffer);
         }
-        Byte[] writeOut = byteArrayBuffer.toArray(new Byte[byteArrayBuffer.size()]);
+        // ByteArrayBuffer zu Array konvertieren
+        Byte[] writeOut = byteBuffer.toArray(new Byte[byteBuffer.size()]);
         os.write(ArrayUtils.toPrimitive(writeOut));
-        byteArrayBuffer = new ArrayList<Byte>(BUFFER_CAPACITY);
-        byteArrayBuffer.clear();
+        byteBuffer = new ArrayList<Byte>(BUFFER_CAPACITY);
+        byteBuffer.clear();
         counter = 0;
-        byteBuffer = 0;
+        bitBuffer = 0;
     }
 
+    // Hilfsmethode Aufgabe 2
     public static void writeByte(OutputStream os, int byteToWrite) throws IOException
     {
         for (int i = 0; i < 8; i++)

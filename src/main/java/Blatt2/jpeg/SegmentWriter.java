@@ -7,6 +7,8 @@ import java.io.OutputStream;
  * Created by Long Bui on 09.11.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
+
+// Für JPEG-Pipeline später
 public abstract class SegmentWriter
 {
     protected OutputStream os;

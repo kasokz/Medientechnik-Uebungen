@@ -62,7 +62,6 @@ public class APP0Writer extends SegmentWriter
     {
         if (xDensity > 0 && xDensity <= 0xFFFF)
         {
-            //wieso wird rest 0 wenn '&'?
             this.xDensityHigh = (xDensity & 0xFF00) >> 8;
             this.xDensityLow = xDensity & 0xFF;
         }
@@ -72,7 +71,7 @@ public class APP0Writer extends SegmentWriter
         }
     }
 
-    public void setYDensity(int yDensity)
+    public void setyDensity(int yDensity)
     {
         if (yDensity > 0 && yDensity <= 0xFFFF)
         {
@@ -106,7 +105,7 @@ public class APP0Writer extends SegmentWriter
         BitOutputStream.writeByte(os, APP0MARKER);
         BitOutputStream.writeByte(os, (length & 0xFF00) >> 8);
         BitOutputStream.writeByte(os, length & 0xFF);
-        for (int i = 0; i < JFIF_STRING.length; i++) //test
+        for (int i = 0; i < JFIF_STRING.length; i++)
         {
             BitOutputStream.writeByte(os, JFIF_STRING[i]);
         }
