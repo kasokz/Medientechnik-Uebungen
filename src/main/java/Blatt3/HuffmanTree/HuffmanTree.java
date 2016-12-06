@@ -18,6 +18,12 @@ public class HuffmanTree
     public void makeCanonical()
     {
         Map<Integer, List<HuffmanTreeComponent>> tree = new HashMap<Integer, List<HuffmanTreeComponent>>();
+        layerTreeAndSortNodesByDepth(tree);
+        recompositeTree(tree);
+    }
+
+    private void layerTreeAndSortNodesByDepth(Map<Integer, List<HuffmanTreeComponent>> tree)
+    {
         List<HuffmanTreeComponent> nodesOfCurrentLevel = new ArrayList<HuffmanTreeComponent>();
         nodesOfCurrentLevel.add(root);
         for (int i = 0; i <= this.getDepth(); i++)
@@ -39,6 +45,11 @@ public class HuffmanTree
             Collections.sort(nodesOfNextLevel, new DepthComparator());
             nodesOfCurrentLevel = nodesOfNextLevel;
         }
+    }
+
+    private void recompositeTree(Map<Integer, List<HuffmanTreeComponent>> tree)
+    {
+        List<HuffmanTreeComponent> nodesOfCurrentLevel;
         for (int i = tree.size() - 1; i > 0; i--)
         {
             nodesOfCurrentLevel = tree.get(i);
