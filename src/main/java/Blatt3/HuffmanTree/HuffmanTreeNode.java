@@ -23,7 +23,8 @@ public class HuffmanTreeNode extends HuffmanTreeComponent
 
     public double getFrequency()
     {
-        return left.getFrequency() + right.getFrequency();
+        return ((left != null) ? left.getFrequency() : 0) +
+                ((right != null) ? right.getFrequency() : 0);
     }
 
     public void setLeft(HuffmanTreeComponent newLeft)
@@ -38,12 +39,26 @@ public class HuffmanTreeNode extends HuffmanTreeComponent
 
     public HuffmanTreeComponent getLeft()
     {
-        return left;
+        if (left != null)
+        {
+            return left;
+        }
+        return null;
     }
 
     public HuffmanTreeComponent getRight()
     {
-        return right;
+        if (right != null)
+        {
+            return right;
+        }
+        return null;
+    }
+
+    public int getDepth(int currentDepth)
+    {
+        return Math.max((left != null) ? left.getDepth(currentDepth) : currentDepth,
+                        (right != null) ? right.getDepth(currentDepth) : currentDepth) + 1;
     }
 
     public void printCode(String currentCode)

@@ -38,6 +38,11 @@ public class HuffmanTreeLeaf extends HuffmanTreeComponent
         return null;
     }
 
+    public int getDepth(int currentDepth)
+    {
+        return currentDepth;
+    }
+
     public void printCode(String currentCode)
     {
         System.out.println(symbol + ": " + currentCode);

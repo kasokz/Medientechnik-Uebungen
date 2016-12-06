@@ -16,6 +16,8 @@ public abstract class HuffmanTreeComponent implements Comparable<HuffmanTreeComp
 
     public abstract HuffmanTreeComponent getRight();
 
+    public abstract int getDepth(int currentDepth);
+
     public abstract void printCode(String currentCode);
 
     public int compareTo(HuffmanTreeComponent o)
