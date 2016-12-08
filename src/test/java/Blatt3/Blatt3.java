@@ -2,7 +2,7 @@ package Blatt3;
 
 import Blatt3.HuffmanTree.HuffmanTree;
 import Blatt3.HuffmanTree.HuffmanTreeComponent;
-import Blatt3.HuffmanTree.HuffmanTreeNode;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,8 +40,23 @@ public class Blatt3
     public void testHuffmanTree()
     {
         HuffmanTree huffmanTree = huffmanEncoder.createHuffmanTree(huffmanEncoder.huffmanInit(symbols));
+        huffmanTree.printCodes();
+    }
+
+    @Test
+    public void testHuffmanTreeCanonical()
+    {
+        HuffmanTree huffmanTree = huffmanEncoder.createHuffmanTree(huffmanEncoder.huffmanInit(symbols));
+        huffmanTree.makeCanonical();
+        huffmanTree.printCodes();
+    }
+
+    @Test
+    public void testHuffmanTreeFullBitcode()
+    {
+        HuffmanTree huffmanTree = huffmanEncoder.createHuffmanTree(huffmanEncoder.huffmanInit(symbols));
+        huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
-        System.out.println(huffmanTree.toString());
         huffmanTree.printCodes();
     }
 }

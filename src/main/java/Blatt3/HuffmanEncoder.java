@@ -45,11 +45,7 @@ public class HuffmanEncoder
 
     HuffmanTree createHuffmanTree(List<HuffmanTreeComponent> nodes)
     {
-        // Alternativ Symbol mit höchster Wahrscheinlichkeit entfernen und allein an linker Stelle
-        // HuffmanTreeNode mostFrequentNode = nodes.get(nodes.size() - 1);
-        // nodes.remove(nodes.size() - 1);
         createHuffmanTreeNodes(nodes);
-//        return new HuffmanTree(new HuffmanTreeNode(mostFrequentNode, nodes.get(0)));
         return new HuffmanTree(nodes.get(0));
     }
 
@@ -57,10 +53,11 @@ public class HuffmanEncoder
     {
         if (nodes.size() > 1)
         {
-            HuffmanTreeNode huffmanTreeNode = new HuffmanTreeNode(nodes.get(0), nodes.get(1));
+            HuffmanTreeNode huffmanTreeNode = new HuffmanTreeNode(nodes.get(1), nodes.get(0));
             nodes.remove(0);
             nodes.remove(0);
             nodes.add(huffmanTreeNode);
+            Collections.sort(nodes);
             createHuffmanTreeNodes(nodes);
         }
     }
