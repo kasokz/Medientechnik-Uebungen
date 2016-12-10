@@ -28,6 +28,11 @@ public class HuffmanTreeLeaf extends HuffmanTreeComponent
     {
     }
 
+    public int getSymbol()
+    {
+        return this.symbol;
+    }
+
     public HuffmanTreeComponent getLeft()
     {
         return null;
@@ -53,4 +58,26 @@ public class HuffmanTreeLeaf extends HuffmanTreeComponent
         return String.valueOf(symbol);
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        HuffmanTreeLeaf that = (HuffmanTreeLeaf) o;
+
+        return symbol == that.symbol;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return symbol;
+    }
 }
