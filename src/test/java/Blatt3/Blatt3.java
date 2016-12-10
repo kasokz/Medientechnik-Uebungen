@@ -67,23 +67,7 @@ public class Blatt3
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testRestrictionValidation()
-    {
-        huffmanTree.makeCanonical();
-        huffmanTree.replaceMostRight();
-        huffmanTree.validateRestriction(0);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testRestrictionValidation1()
-    {
-        huffmanTree.makeCanonical();
-        huffmanTree.replaceMostRight();
-        huffmanTree.validateRestriction(1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testRestrictionValidation2()
+    public void testRestrictionValidationLowerThanMinHeight()
     {
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
@@ -91,15 +75,23 @@ public class Blatt3
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testRestrictionValidation3()
+    public void testRestrictionValidationEqualsCurrentHeight()
     {
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
         huffmanTree.validateRestriction(4);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testRestrictionValidationHigherThanCurrentHeight()
+    {
+        huffmanTree.makeCanonical();
+        huffmanTree.replaceMostRight();
+        huffmanTree.validateRestriction(5);
+    }
+
     @Test
-    public void testRestrictionValidation4()
+    public void testRestrictionValidationValidRestriction()
     {
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
