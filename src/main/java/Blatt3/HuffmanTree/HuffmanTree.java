@@ -81,6 +81,7 @@ public class HuffmanTree
             }
             previousNode.setRight(new HuffmanTreeNode(currentNode, new HuffmanTreeNullLeaf()));
             symbols.add(new HuffmanTreeNullLeaf());
+            fullBitEliminated = true;
         }
     }
 
@@ -91,33 +92,41 @@ public class HuffmanTree
             Map<Integer, List<HuffmanTreeComponent>> coinDrawers = initCoinDrawers(restriction);
             packageMerge(restriction, coinDrawers);
             Map<HuffmanTreeLeaf, Integer> codeWordLengths = evaluate(restriction, coinDrawers);
-            createLengthLimitedTree(codeWordLengths, restriction);
+            this.root = createLengthLimitedTree(codeWordLengths, restriction);
         }
     }
 
-    private void createLengthLimitedTree(Map<HuffmanTreeLeaf, Integer> codeWordLengths, int restriction)
+    private Map<Integer, List<HuffmanTreeComponent>> initCoinDrawers(int restriction)
     {
-        Map<Integer, List<HuffmanTreeComponent>> tree = new HashMap<Integer, List<HuffmanTreeComponent>>();
-        for (int i = 0; i <= restriction; i++)
+        Map<Integer, List<HuffmanTreeComponent>> coinDrawer = new HashMap<Integer, List<HuffmanTreeComponent>>();
+        coinDrawer.put(0, new ArrayList<HuffmanTreeComponent>());
+        for (int i = -restriction; i < 0; i++)
         {
-            tree.put(i, new ArrayList<HuffmanTreeComponent>());
-        }
-        for (Map.Entry<HuffmanTreeLeaf, Integer> entry : codeWordLengths.entrySet())
-        {
-            tree.get(entry.getValue()).add(entry.getKey());
-        }
-        for (int i = restriction; i > 0; i--)
-        {
-            List<HuffmanTreeComponent> currentLevel = tree.get(i);
-            List<HuffmanTreeComponent> nextLevel = tree.get(i - 1);
-            Collections.sort(currentLevel, new DepthComparator());
-            for (int j = currentLevel.size() - 1; j > 0; j = j - 2)
+            coinDrawer.put(i, new ArrayList<HuffmanTreeComponent>());
+            for (HuffmanTreeLeaf leaf : symbols)
             {
-                HuffmanTreeComponent newNode = new HuffmanTreeNode(currentLevel.get(j - 1), currentLevel.get(j));
-                nextLevel.add(newNode);
+                coinDrawer.get(i).add(leaf);
             }
         }
-        this.root = tree.get(0).get(0);
+        return coinDrawer;
+    }
+
+    private void packageMerge(int restriction, Map<Integer, List<HuffmanTreeComponent>> coinDrawers)
+    {
+        for (int denominationPower = -restriction; denominationPower < 0; denominationPower++)
+        {
+            List<HuffmanTreeComponent> currentDrawer = coinDrawers.get(denominationPower);
+            Collections.sort(currentDrawer);
+            for (int i = 0; i < currentDrawer.size() / 2; i++)
+            {
+                coinDrawers.get(denominationPower + 1)
+                           .add(new HuffmanTreeNode(currentDrawer.get(i + i), currentDrawer.get(i + i + 1)));
+            }
+            if ((currentDrawer.size() % 2) != 0)
+            {
+                removeNodeAndItsChildren(coinDrawers, currentDrawer, denominationPower);
+            }
+        }
     }
 
     private Map<HuffmanTreeLeaf, Integer> evaluate(int restriction,
@@ -146,20 +155,43 @@ public class HuffmanTree
         return codeWordLengths;
     }
 
-    private void packageMerge(int restriction, Map<Integer, List<HuffmanTreeComponent>> coinDrawers)
+    private HuffmanTreeComponent createLengthLimitedTree(Map<HuffmanTreeLeaf, Integer> codeWordLengths, int restriction)
     {
-        for (int denominationPower = -restriction; denominationPower < 0; denominationPower++)
+        Map<Integer, List<HuffmanTreeComponent>> tree = new HashMap<Integer, List<HuffmanTreeComponent>>();
+        prepareLevels(restriction, tree);
+        fillLevelsWithInitialNodes(codeWordLengths, tree);
+        recreateTree(restriction, tree);
+        return tree.get(0).get(0);
+    }
+
+    private void prepareLevels(int restriction, Map<Integer, List<HuffmanTreeComponent>> tree)
+    {
+        for (int i = 0; i <= restriction; i++)
         {
-            List<HuffmanTreeComponent> currentDrawer = coinDrawers.get(denominationPower);
-            Collections.sort(currentDrawer);
-            for (int i = 0; i < currentDrawer.size() / 2; i++)
+            tree.put(i, new ArrayList<HuffmanTreeComponent>());
+        }
+    }
+
+    private void fillLevelsWithInitialNodes(Map<HuffmanTreeLeaf, Integer> codeWordLengths,
+                                            Map<Integer, List<HuffmanTreeComponent>> tree)
+    {
+        for (Map.Entry<HuffmanTreeLeaf, Integer> entry : codeWordLengths.entrySet())
+        {
+            tree.get(entry.getValue()).add(entry.getKey());
+        }
+    }
+
+    private void recreateTree(int restriction, Map<Integer, List<HuffmanTreeComponent>> tree)
+    {
+        for (int i = restriction; i > 0; i--)
+        {
+            List<HuffmanTreeComponent> currentLevel = tree.get(i);
+            List<HuffmanTreeComponent> nextLevel = tree.get(i - 1);
+            Collections.sort(currentLevel, new DepthComparator());
+            for (int j = currentLevel.size() - 1; j > 0; j = j - 2)
             {
-                coinDrawers.get(denominationPower + 1)
-                           .add(new HuffmanTreeNode(currentDrawer.get(i + i), currentDrawer.get(i + i + 1)));
-            }
-            if ((currentDrawer.size() % 2) != 0)
-            {
-                removeNodeAndItsChildren(coinDrawers, currentDrawer, denominationPower);
+                HuffmanTreeComponent newNode = new HuffmanTreeNode(currentLevel.get(j - 1), currentLevel.get(j));
+                nextLevel.add(newNode);
             }
         }
     }
@@ -177,21 +209,6 @@ public class HuffmanTree
         }
         // lösche aktueller Knoten
         currentDrawer.remove(currentDrawer.size() - 1);
-    }
-
-    private Map<Integer, List<HuffmanTreeComponent>> initCoinDrawers(int restriction)
-    {
-        Map<Integer, List<HuffmanTreeComponent>> coinDrawer = new HashMap<Integer, List<HuffmanTreeComponent>>();
-        coinDrawer.put(0, new ArrayList<HuffmanTreeComponent>());
-        for (int i = -restriction; i < 0; i++)
-        {
-            coinDrawer.put(i, new ArrayList<HuffmanTreeComponent>());
-            for (HuffmanTreeLeaf leaf : symbols)
-            {
-                coinDrawer.get(i).add(leaf);
-            }
-        }
-        return coinDrawer;
     }
 
     public boolean validateRestriction(int restriction)
