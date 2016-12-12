@@ -142,6 +142,6 @@ public class Blatt3
         huffmanTree.restrictToLength(16);
         dhtWriter.setCodeBook(huffmanTree.getCodeBook());
         dhtWriter.writeSegment();
-
+        bos.close();
     }
 }
