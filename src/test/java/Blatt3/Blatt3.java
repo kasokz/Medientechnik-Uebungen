@@ -3,6 +3,7 @@ package Blatt3;
 import Blatt3.DHT.DHTWriter;
 import Blatt3.HuffmanTree.HuffmanTree;
 import Blatt3.HuffmanTree.HuffmanTreeComponent;
+import jpegencoder.jpeg.streams.BitOutputStream;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -134,7 +135,7 @@ public class Blatt3
     @Test
     public void testDHTWriter() throws IOException
     {
-        DHTWriter dhtWriter = new DHTWriter(new FileOutputStream("testImage.jpg"));
+        DHTWriter dhtWriter = new DHTWriter(new BitOutputStream(new FileOutputStream("testImage.jpg")));
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
         huffmanTree.restrictToLength(16);
