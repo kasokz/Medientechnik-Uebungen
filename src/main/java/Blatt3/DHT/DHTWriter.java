@@ -23,6 +23,7 @@ public class DHTWriter extends SegmentWriter
     private List<CodeWord> codeBook;
     private int tableClass = 0;
     private int huffmanTableIdentifier = 0;
+    private int numOfTables = 1;
 
     public DHTWriter(OutputStream os)
     {
@@ -32,11 +33,16 @@ public class DHTWriter extends SegmentWriter
     public int getLength()
     {
         int sum = 0;
-        for (int i = 0; i < codeBook.size(); i++)
+        for (int i = 0; i < numOfTables; i++)
         {
             sum += (17 + codeBook.size());
         }
         return 2 + sum;
+    }
+
+    public void setNumOfTables(int numOfTables)
+    {
+        this.numOfTables = numOfTables;
     }
 
     public void setCodeBook(List<CodeWord> codeBook)
@@ -87,17 +93,7 @@ public class DHTWriter extends SegmentWriter
         for (int i = 0; i < codeBook.size(); i++)
         {
             CodeWord codeWord = codeBook.get(i);
-            // write codeWord
-            BitOutputStream.writeByte(os, codeWord.getCode());
+            BitOutputStream.writeByte(os, codeWord.getSymbol());
         }
-//        CodeWord lastCodeWord = codeBook.get(codeBook.size() - 1);
-//        for (int i = lastCodeWord.getLength() - 1; i >= 0; i--)
-//        {
-//            os.write((lastCodeWord.getCode() >> i) & 0x01);
-//        }
-//        for (int j = 0; j < 8 - lastCodeWord.getLength(); j++)
-//        {
-//            os.write(1);
-//        }
     }
 }
