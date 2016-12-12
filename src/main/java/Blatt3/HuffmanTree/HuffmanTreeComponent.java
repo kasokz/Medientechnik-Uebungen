@@ -1,5 +1,9 @@
 package Blatt3.HuffmanTree;
 
+import Blatt3.CodeWord;
+
+import java.util.List;
+
 /**
  * Created by Long Bui on 01.12.16.
  * E-Mail: giaolong.bui@student.fhws.de
@@ -17,6 +21,8 @@ public abstract class HuffmanTreeComponent implements Comparable<HuffmanTreeComp
     public abstract HuffmanTreeComponent getRight();
 
     public abstract int getDepth(int currentDepth);
+
+    public abstract void fillCodeBook(List<CodeWord> codeWords, int currentCode, int currentLength);
 
     public abstract void printCode(String currentCode);
 

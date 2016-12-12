@@ -1,4 +1,4 @@
-package Blatt1.colors.rgb;
+package jpegencoder.ppm.colors.rgb;
 
 import java.io.*;
 import java.util.ArrayList;

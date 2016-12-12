@@ -1,10 +1,10 @@
-package Blatt1;
+package jpegencoder.jpeg.image;
 
-import Blatt1.colors.ColorChannels;
-import Blatt1.colors.rgb.RGB;
-import Blatt1.colors.rgb.RGBImage;
-import Blatt1.colors.ycbcr.YCbCr;
-import Blatt1.colors.ycbcr.YCbCrImage;
+import jpegencoder.jpeg.image.colors.ColorChannels;
+import jpegencoder.jpeg.image.colors.rgb.RGB;
+import jpegencoder.jpeg.image.colors.rgb.RGBImage;
+import jpegencoder.jpeg.image.colors.ycbcr.YCbCr;
+import jpegencoder.jpeg.image.colors.ycbcr.YCbCrImage;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;

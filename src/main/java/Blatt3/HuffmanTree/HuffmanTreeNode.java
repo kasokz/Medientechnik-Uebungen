@@ -1,5 +1,9 @@
 package Blatt3.HuffmanTree;
 
+import Blatt3.CodeWord;
+
+import java.util.List;
+
 /**
  * Created by Long Bui on 29.11.16.
  * E-Mail: giaolong.bui@student.fhws.de
@@ -23,8 +27,8 @@ public class HuffmanTreeNode extends HuffmanTreeComponent
 
     public double getFrequency()
     {
-        return ((left != null) ? left.getFrequency() : 0) +
-                ((right != null) ? right.getFrequency() : 0);
+        return left.getFrequency() +
+                right.getFrequency();
     }
 
     public void setLeft(HuffmanTreeComponent newLeft)
@@ -39,42 +43,37 @@ public class HuffmanTreeNode extends HuffmanTreeComponent
 
     public HuffmanTreeComponent getLeft()
     {
-        if (left != null)
-        {
-            return left;
-        }
-        return null;
+        return left;
     }
 
     public HuffmanTreeComponent getRight()
     {
-        if (right != null)
-        {
-            return right;
-        }
-        return null;
+        return right;
     }
 
     public int getDepth(int currentDepth)
     {
-        return Math.max((left != null) ? left.getDepth(currentDepth) : currentDepth,
-                        (right != null) ? right.getDepth(currentDepth) : currentDepth) + 1;
+        return Math.max(left.getDepth(currentDepth + 1),
+                        (right.getDepth(currentDepth + 1)));
+    }
+
+    public void fillCodeBook(List<CodeWord> codeWords, int currentCode, int currentLength)
+    {
+        left.fillCodeBook(codeWords, (currentCode << 1) + 0, currentLength + 1);
+        right.fillCodeBook(codeWords, (currentCode << 1) + 1, currentLength + 1);
     }
 
     public void printCode(String currentCode)
     {
         left.printCode(currentCode + "0");
-        if (right != null)
-        {
-            right.printCode(currentCode + "1");
-        }
+        right.printCode(currentCode + "1");
     }
 
     public String toString()
     {
         String result = "Node(";
-        result += (left != null) ? left.toString() + "," : "null";
-        result += (right != null) ? right.toString() : "null";
+        result += left.toString() + ",";
+        result += right.toString();
         return result + ")";
     }
 }

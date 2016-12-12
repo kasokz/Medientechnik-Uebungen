@@ -1,5 +1,9 @@
 package Blatt3.HuffmanTree;
 
+import Blatt3.CodeWord;
+
+import java.util.List;
+
 /**
  * Created by Long Bui on 29.11.16.
  * E-Mail: giaolong.bui@student.fhws.de
@@ -28,6 +32,11 @@ public class HuffmanTreeLeaf extends HuffmanTreeComponent
     {
     }
 
+    public int getSymbol()
+    {
+        return this.symbol;
+    }
+
     public HuffmanTreeComponent getLeft()
     {
         return null;
@@ -43,6 +52,11 @@ public class HuffmanTreeLeaf extends HuffmanTreeComponent
         return currentDepth;
     }
 
+    public void fillCodeBook(List<CodeWord> codeWords, int currentCode, int currentLength)
+    {
+        codeWords.add(new CodeWord(symbol, currentCode, currentLength));
+    }
+
     public void printCode(String currentCode)
     {
         System.out.println(symbol + ": " + currentCode);
@@ -53,4 +67,26 @@ public class HuffmanTreeLeaf extends HuffmanTreeComponent
         return String.valueOf(symbol);
     }
 
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        HuffmanTreeLeaf that = (HuffmanTreeLeaf) o;
+
+        return symbol == that.symbol;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return symbol;
+    }
 }

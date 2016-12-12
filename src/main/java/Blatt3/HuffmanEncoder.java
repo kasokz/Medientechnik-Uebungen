@@ -43,10 +43,15 @@ public class HuffmanEncoder
         return leafs;
     }
 
-    HuffmanTree createHuffmanTree(List<HuffmanTreeComponent> nodes)
+    public HuffmanTree createHuffmanTree(List<HuffmanTreeComponent> nodes)
     {
+        List<HuffmanTreeLeaf> symbols = new ArrayList<HuffmanTreeLeaf>();
+        for(HuffmanTreeComponent node: nodes)
+        {
+            symbols.add((HuffmanTreeLeaf) node);
+        }
         createHuffmanTreeNodes(nodes);
-        return new HuffmanTree(nodes.get(0));
+        return new HuffmanTree(nodes.get(0), symbols);
     }
 
     private void createHuffmanTreeNodes(List<HuffmanTreeComponent> nodes)
