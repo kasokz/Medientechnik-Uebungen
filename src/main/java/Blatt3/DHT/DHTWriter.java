@@ -84,29 +84,20 @@ public class DHTWriter extends SegmentWriter
         {
             BitOutputStream.writeByte(os, codeWordLengthMap.get(i));
         }
-        for (int i = 0; i < codeBook.size() - 1; i++)
+        for (int i = 0; i < codeBook.size(); i++)
         {
             CodeWord codeWord = codeBook.get(i);
-            int code = codeWord.getCode();
             // write codeWord
-            for (int j = codeWord.getLength() - 1; j >= 0; j--)
-            {
-                os.write((code >> i) & 0x01);
-            }
-            // fill with '0' bits
-            for (int j = 0; j < 8 - codeWord.getLength(); j++)
-            {
-                os.write(0);
-            }
+            BitOutputStream.writeByte(os, codeWord.getCode());
         }
-        CodeWord lastCodeWord = codeBook.get(codeBook.size() - 1);
-        for (int i = lastCodeWord.getLength() - 1; i >= 0; i--)
-        {
-            os.write((lastCodeWord.getCode() >> i) & 0x01);
-        }
-        for (int j = 0; j < 8 - lastCodeWord.getLength(); j++)
-        {
-            os.write(1);
-        }
+//        CodeWord lastCodeWord = codeBook.get(codeBook.size() - 1);
+//        for (int i = lastCodeWord.getLength() - 1; i >= 0; i--)
+//        {
+//            os.write((lastCodeWord.getCode() >> i) & 0x01);
+//        }
+//        for (int j = 0; j < 8 - lastCodeWord.getLength(); j++)
+//        {
+//            os.write(1);
+//        }
     }
 }
