@@ -11,6 +11,9 @@ import java.util.*;
  * Created by Long Bui on 29.11.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
+
+//Erstelle Huffman Tree von Liste aus Symbolen, Teilaufgabe a
+
 public class HuffmanEncoder
 {
     private Map<Integer, Integer> frequencies;
@@ -43,6 +46,7 @@ public class HuffmanEncoder
         return leafs;
     }
 
+    //Baum aufspannen
     public HuffmanTree createHuffmanTree(List<HuffmanTreeComponent> nodes)
     {
         List<HuffmanTreeLeaf> symbols = new ArrayList<HuffmanTreeLeaf>();

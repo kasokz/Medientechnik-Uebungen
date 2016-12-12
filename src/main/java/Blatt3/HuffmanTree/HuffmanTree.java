@@ -12,7 +12,7 @@ public class HuffmanTree
 {
     private HuffmanTreeComponent root;
     private List<HuffmanTreeLeaf> symbols;
-    private boolean fullBitEliminated = false;
+    private boolean fullBitEliminated = false; //Teilaufgabe c
 
     public HuffmanTree(HuffmanTreeComponent root, List<HuffmanTreeLeaf> symbols)
     {
@@ -20,7 +20,7 @@ public class HuffmanTree
         this.symbols = symbols;
     }
 
-    //Mach das es streng in eine Richtung wächst (nach rechts), Teilaufgabe b (Baum exisitiert schon)
+    //Mach dass Baum streng in eine Richtung wächst (nach rechts), Teilaufgabe b (Baum exisitiert schon)
     public void makeCanonical()
     {
         //Integer = Schicht, List = Nodes in der Schicht
@@ -29,20 +29,19 @@ public class HuffmanTree
         recompositeTree(tree);
     }
 
-    //Den Tree in Schichten unterteilen und Nodes aufsteigend nach Tiefe sortieren, Teilaufgabe b
+    //Den Baum in Schichten unterteilen und Nodes aufsteigend nach Tiefe sortieren, Teilaufgabe b
     private void layerTreeAndSortNodesByDepth(Map<Integer, List<HuffmanTreeComponent>> tree)
     {
-        //Initialisierung
         List<HuffmanTreeComponent> nodesOfCurrentLevel = new ArrayList<HuffmanTreeComponent>();
         nodesOfCurrentLevel.add(root);
 
-        //Jede Schicht
+        //Fuer jede Schicht
         for (int i = 0; i <= this.getDepth(); i++)
         {
             List<HuffmanTreeComponent> nodesOfNextLevel = new ArrayList<HuffmanTreeComponent>();
             tree.put(i, new ArrayList<HuffmanTreeComponent>());
 
-            //Fuer jede Node in Level i
+            //Fuer jede Node in Schicht i
             for (HuffmanTreeComponent currentNode : nodesOfCurrentLevel)
             {
                 tree.get(i).add(currentNode);
@@ -60,6 +59,8 @@ public class HuffmanTree
         }
     }
 
+    //Baum aufspannen, Teilaufgabe b
+    //Integer = Schicht, List = Nodes auf jeweiliger Schicht
     private void recompositeTree(Map<Integer, List<HuffmanTreeComponent>> tree)
     {
         List<HuffmanTreeComponent> nodesOfCurrentLevel;
@@ -68,6 +69,8 @@ public class HuffmanTree
             nodesOfCurrentLevel = tree.get(i);
             List<HuffmanTreeComponent> nodesOfPreviousLevel = tree.get(i - 1);
             int finishedNodes = 0;
+
+            //Verteile die zwei ersten Elemente (kleinsten) auf die kleinste darüberliegende Node
             for (int j = nodesOfCurrentLevel.size() - 1; j > 0; j = j - 2)
             {
                 HuffmanTreeComponent lastUnusedNode =
@@ -96,6 +99,7 @@ public class HuffmanTree
         }
     }
 
+    //Auf bestimmte Codelänge beschränken, Teilaufgabe d
     public void restrictToLength(int restriction)
     {
         if (validateRestriction(restriction))
@@ -107,6 +111,7 @@ public class HuffmanTree
         }
     }
 
+    //Coin Drawers initialisieren, Teilaufgabe d
     private Map<Integer, List<HuffmanTreeComponent>> initCoinDrawers(int restriction)
     {
         Map<Integer, List<HuffmanTreeComponent>> coinDrawer = new HashMap<Integer, List<HuffmanTreeComponent>>();
@@ -122,17 +127,23 @@ public class HuffmanTree
         return coinDrawer;
     }
 
+    //Package Merge Algorithmus, Teilaufgabe d
     private void packageMerge(int restriction, Map<Integer, List<HuffmanTreeComponent>> coinDrawers)
     {
+        //denomination power = potenz von 2 => face value einer muenze
         for (int denominationPower = -restriction; denominationPower < 0; denominationPower++)
         {
             List<HuffmanTreeComponent> currentDrawer = coinDrawers.get(denominationPower);
             Collections.sort(currentDrawer);
+
+            //Verpacke coins in pakete und schiebe sie zur nächsten drawer
             for (int i = 0; i < currentDrawer.size() / 2; i++)
             {
                 coinDrawers.get(denominationPower + 1)
                            .add(new HuffmanTreeNode(currentDrawer.get(i + i), currentDrawer.get(i + i + 1)));
             }
+
+            //Falls es nicht aufgeht...
             if ((currentDrawer.size() % 2) != 0)
             {
                 removeNodeAndItsChildren(coinDrawers, currentDrawer, denominationPower);
@@ -140,6 +151,7 @@ public class HuffmanTree
         }
     }
 
+    //Bestimme, wie häufig eine Münze (Symbol) über alle Schubladen vorkommt fuer ideale Codeword Length
     private Map<HuffmanTreeLeaf, Integer> evaluate(int restriction,
                                                    Map<Integer, List<HuffmanTreeComponent>> coinDrawers)
     {
@@ -166,6 +178,7 @@ public class HuffmanTree
         return codeWordLengths;
     }
 
+    //Spanne begrenzten Baum auf, Teilaufgabe d
     private HuffmanTreeComponent createLengthLimitedTree(Map<HuffmanTreeLeaf, Integer> codeWordLengths, int restriction)
     {
         Map<Integer, List<HuffmanTreeComponent>> tree = new HashMap<Integer, List<HuffmanTreeComponent>>();
@@ -175,6 +188,7 @@ public class HuffmanTree
         return tree.get(0).get(0);
     }
 
+    //Initialisiere Schichten für createLengthLimitedTree
     private void prepareLevels(int restriction, Map<Integer, List<HuffmanTreeComponent>> tree)
     {
         for (int i = 0; i <= restriction; i++)
@@ -192,6 +206,7 @@ public class HuffmanTree
         }
     }
 
+    //Nach der Beschränkung der Tiefe, Baum neu aufspannen, Teilaufgabe d
     private void recreateTree(int restriction, Map<Integer, List<HuffmanTreeComponent>> tree)
     {
         for (int i = restriction; i > 0; i--)
@@ -218,10 +233,11 @@ public class HuffmanTree
             removeNodeAndItsChildren(coinDrawers, previousDrawer, currentDenominationPower - 1);
             removeNodeAndItsChildren(coinDrawers, previousDrawer, currentDenominationPower - 1);
         }
-        // lösche aktueller Knoten
+        // lösche aktuellen Knoten
         currentDrawer.remove(currentDrawer.size() - 1);
     }
 
+    //Prüfe, ob Beschränkung sinnvoll ist, Teilaufgabe d
     public boolean validateRestriction(int restriction)
     {
         boolean result = true;
