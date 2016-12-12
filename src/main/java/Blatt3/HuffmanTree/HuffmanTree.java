@@ -20,21 +20,29 @@ public class HuffmanTree
         this.symbols = symbols;
     }
 
+    //Mach das es streng in eine Richtung wächst (nach rechts), Teilaufgabe b (Baum exisitiert schon)
     public void makeCanonical()
     {
+        //Integer = Schicht, List = Nodes in der Schicht
         Map<Integer, List<HuffmanTreeComponent>> tree = new HashMap<Integer, List<HuffmanTreeComponent>>();
         layerTreeAndSortNodesByDepth(tree);
         recompositeTree(tree);
     }
 
+    //Den Tree in Schichten unterteilen und Nodes aufsteigend nach Tiefe sortieren, Teilaufgabe b
     private void layerTreeAndSortNodesByDepth(Map<Integer, List<HuffmanTreeComponent>> tree)
     {
+        //Initialisierung
         List<HuffmanTreeComponent> nodesOfCurrentLevel = new ArrayList<HuffmanTreeComponent>();
         nodesOfCurrentLevel.add(root);
+
+        //Jede Schicht
         for (int i = 0; i <= this.getDepth(); i++)
         {
             List<HuffmanTreeComponent> nodesOfNextLevel = new ArrayList<HuffmanTreeComponent>();
             tree.put(i, new ArrayList<HuffmanTreeComponent>());
+
+            //Fuer jede Node in Level i
             for (HuffmanTreeComponent currentNode : nodesOfCurrentLevel)
             {
                 tree.get(i).add(currentNode);
@@ -70,6 +78,7 @@ public class HuffmanTree
         }
     }
 
+    //Teilaufgabe c
     public void replaceMostRight()
     {
         if (!fullBitEliminated)

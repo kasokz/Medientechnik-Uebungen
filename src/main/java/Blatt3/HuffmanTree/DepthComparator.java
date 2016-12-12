@@ -11,6 +11,7 @@ public class DepthComparator implements Comparator<HuffmanTreeComponent>
     public int compare(HuffmanTreeComponent o1, HuffmanTreeComponent o2)
     {
         int result;
+        //Fallunterscheidung, damit c garantiert wird (kleinstes ganz rechts)
         if (o1.getDepth(0) == o2.getDepth(0))
         {
             result = -new Double(o1.getFrequency()).compareTo(o2.getFrequency());

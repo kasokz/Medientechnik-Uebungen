@@ -6,6 +6,9 @@ import java.io.OutputStream;
  * Created by Long Bui on 12.12.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
+
+// Wird benoetigt fuer das Code Word Book, Teilaufgabe e
+
 public class CodeWord
 {
     private int symbol;
