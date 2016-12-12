@@ -1,9 +1,9 @@
-package Blatt1.colors;
+package jpegencoder.ppm.colors;
 
-import Blatt1.colors.rgb.RGB;
-import Blatt1.colors.rgb.RGBImage;
-import Blatt1.colors.ycbcr.YCbCr;
-import Blatt1.colors.ycbcr.YCbCrImage;
+import jpegencoder.ppm.colors.rgb.RGB;
+import jpegencoder.ppm.colors.rgb.RGBImage;
+import jpegencoder.ppm.colors.ycbcr.YCbCr;
+import jpegencoder.ppm.colors.ycbcr.YCbCrImage;
 import org.jblas.DoubleMatrix;
 
 import java.util.ArrayList;

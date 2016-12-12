@@ -1,5 +1,6 @@
 package Blatt3;
 
+import Blatt3.DHT.DHTWriter;
 import Blatt3.HuffmanTree.HuffmanTree;
 import Blatt3.HuffmanTree.HuffmanTreeComponent;
 import org.junit.After;
@@ -7,6 +8,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -72,28 +76,28 @@ public class Blatt3
         huffmanTree.printCodes();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRestrictionValidationLowerThanMinHeight()
     {
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
-        huffmanTree.validateRestriction(2);
+        Assert.assertEquals(false, huffmanTree.validateRestriction(2));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRestrictionValidationEqualsCurrentHeight()
     {
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
-        huffmanTree.validateRestriction(4);
+        Assert.assertEquals(false, huffmanTree.validateRestriction(4));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testRestrictionValidationHigherThanCurrentHeight()
     {
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
-        huffmanTree.validateRestriction(5);
+        Assert.assertEquals(false, huffmanTree.validateRestriction(5));
     }
 
     @Test
@@ -105,11 +109,36 @@ public class Blatt3
     }
 
     @Test
-    public void testRestriction()
+    public void testCodeBook()
+    {
+        huffmanTree.makeCanonical();
+        huffmanTree.replaceMostRight();
+        for (CodeWord code : huffmanTree.getCodeBook())
+        {
+            System.out.println(code.toString());
+        }
+    }
+
+    @Test
+    public void testCodeBookWithLengthRestriction()
     {
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
         huffmanTree.restrictToLength(3);
-        huffmanTree.printCodes();
+        for (CodeWord codeWord : huffmanTree.getCodeBook())
+        {
+            Assert.assertNotEquals(4, codeWord.getLength());
+        }
+    }
+
+    @Test
+    public void testDHTWriter() throws IOException
+    {
+        DHTWriter dhtWriter = new DHTWriter(new FileOutputStream("testImage.jpg"));
+        huffmanTree.makeCanonical();
+        huffmanTree.replaceMostRight();
+        huffmanTree.restrictToLength(16);
+        dhtWriter.setCodeBook(huffmanTree.getCodeBook());
+        dhtWriter.writeSegment();
     }
 }

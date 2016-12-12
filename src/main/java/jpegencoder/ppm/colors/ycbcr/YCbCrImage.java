@@ -1,4 +1,4 @@
-package Blatt1.colors.ycbcr;
+package jpegencoder.ppm.colors.ycbcr;
 
 import org.jblas.DoubleMatrix;
 

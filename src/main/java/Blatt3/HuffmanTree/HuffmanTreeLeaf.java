@@ -1,5 +1,9 @@
 package Blatt3.HuffmanTree;
 
+import Blatt3.CodeWord;
+
+import java.util.List;
+
 /**
  * Created by Long Bui on 29.11.16.
  * E-Mail: giaolong.bui@student.fhws.de
@@ -46,6 +50,11 @@ public class HuffmanTreeLeaf extends HuffmanTreeComponent
     public int getDepth(int currentDepth)
     {
         return currentDepth;
+    }
+
+    public void fillCodeBook(List<CodeWord> codeWords, int currentCode, int currentLength)
+    {
+        codeWords.add(new CodeWord(symbol, currentCode, currentLength));
     }
 
     public void printCode(String currentCode)

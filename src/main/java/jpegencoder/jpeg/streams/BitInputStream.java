@@ -1,4 +1,4 @@
-package Blatt2.streams;
+package jpegencoder.jpeg.streams;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,7 +1,7 @@
-package Blatt2.jpeg.SOF0;
+package jpegencoder.jpeg.SOF0;
 
-import Blatt2.jpeg.SegmentWriter;
-import Blatt2.streams.BitOutputStream;
+import jpegencoder.jpeg.SegmentWriter;
+import jpegencoder.jpeg.streams.BitOutputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;

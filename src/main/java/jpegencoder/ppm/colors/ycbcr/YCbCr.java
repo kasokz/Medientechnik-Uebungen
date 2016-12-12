@@ -1,4 +1,4 @@
-package Blatt1.colors.ycbcr;
+package jpegencoder.ppm.colors.ycbcr;
 
 /**
  * Created by Long Bui on 26.10.16.

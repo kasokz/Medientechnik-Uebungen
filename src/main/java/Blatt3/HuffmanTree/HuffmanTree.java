@@ -1,5 +1,7 @@
 package Blatt3.HuffmanTree;
 
+import Blatt3.CodeWord;
+
 import java.util.*;
 
 /**
@@ -213,15 +215,23 @@ public class HuffmanTree
 
     public boolean validateRestriction(int restriction)
     {
+        boolean result = true;
         if (this.getDepth() <= restriction)
         {
-            throw new IllegalArgumentException("Baum ist bereits auf gewünschter Höhe oder besser!");
+            result = false;
         }
         if (Math.ceil(Math.log(getNumOfSymbols()) / Math.log(2)) > restriction)
         {
-            throw new IllegalArgumentException("Restriktion unmöglich!");
+            result = false;
         }
-        return true;
+        return result;
+    }
+
+    public List<CodeWord> getCodeBook()
+    {
+        List<CodeWord> codeWords = new ArrayList<CodeWord>((int) Math.pow(2, this.getDepth()));
+        root.fillCodeBook(codeWords, 0, 0);
+        return codeWords;
     }
 
     public int getNumOfSymbols()

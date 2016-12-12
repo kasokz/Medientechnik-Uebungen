@@ -1,7 +1,7 @@
-package Blatt2.jpeg.APP0;
+package jpegencoder.jpeg.APP0;
 
-import Blatt2.jpeg.SegmentWriter;
-import Blatt2.streams.BitOutputStream;
+import jpegencoder.jpeg.SegmentWriter;
+import jpegencoder.jpeg.streams.BitOutputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;

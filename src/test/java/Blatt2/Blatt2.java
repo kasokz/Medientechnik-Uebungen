@@ -1,16 +1,14 @@
 package Blatt2;
 
-import Blatt2.jpeg.APP0.APP0Writer;
-import Blatt2.jpeg.SOF0.SOF0Component;
-import Blatt2.jpeg.SOF0.SOF0Writer;
-import Blatt2.streams.BitInputStream;
-import Blatt2.streams.BitOutputStream;
+import jpegencoder.jpeg.APP0.APP0Writer;
+import jpegencoder.jpeg.SOF0.SOF0Component;
+import jpegencoder.jpeg.SOF0.SOF0Writer;
+import jpegencoder.jpeg.streams.BitInputStream;
+import jpegencoder.jpeg.streams.BitOutputStream;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;

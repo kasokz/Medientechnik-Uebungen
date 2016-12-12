@@ -1,10 +1,5 @@
-package Blatt1;
+package jpegencoder.ppm;
 
-import Blatt1.colors.ColorChannels;
-import Blatt1.colors.rgb.RGB;
-import Blatt1.colors.rgb.RGBImage;
-import Blatt1.colors.ycbcr.YCbCr;
-import Blatt1.colors.ycbcr.YCbCrImage;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
@@ -12,6 +7,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import jpegencoder.ppm.colors.ColorChannels;
+import jpegencoder.ppm.colors.rgb.RGB;
+import jpegencoder.ppm.colors.rgb.RGBImage;
+import jpegencoder.ppm.colors.ycbcr.YCbCr;
+import jpegencoder.ppm.colors.ycbcr.YCbCrImage;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
