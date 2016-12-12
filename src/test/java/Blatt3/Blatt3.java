@@ -135,11 +135,13 @@ public class Blatt3
     @Test
     public void testDHTWriter() throws IOException
     {
-        DHTWriter dhtWriter = new DHTWriter(new BitOutputStream(new FileOutputStream("testImage.jpg")));
+        BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
+        DHTWriter dhtWriter = new DHTWriter(bos);
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
         huffmanTree.restrictToLength(16);
         dhtWriter.setCodeBook(huffmanTree.getCodeBook());
         dhtWriter.writeSegment();
+
     }
 }
