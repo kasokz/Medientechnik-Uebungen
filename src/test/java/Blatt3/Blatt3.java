@@ -40,12 +40,6 @@ public class Blatt3
     public void testHuffmanInit()
     {
         huffmanEncoder = new HuffmanEncoder();
-        int[] symbols = {1, 1, 1, 1,
-                         2, 2, 2, 2,
-                         3, 3, 3, 3, 3, 3,
-                         4, 4, 4, 4, 4, 4,
-                         5, 5, 5, 5, 5, 5, 5,
-                         6, 6, 6, 6, 6, 6, 6, 6, 6};
         double[] expectedValues = {0.1111, 0.1111, 0.1666, 0.1666, 0.1944, 0.25};
         double errorMargin = 0.001;
         List<HuffmanTreeComponent> frequencies = huffmanEncoder.huffmanInit(symbols);

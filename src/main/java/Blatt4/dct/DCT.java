@@ -6,15 +6,15 @@ import org.jblas.DoubleMatrix;
  * Created by Long Bui on 14.12.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class DCT
+class DCT
 {
-    public static DoubleMatrix C = new DoubleMatrix(new double[]
+    private static DoubleMatrix C = new DoubleMatrix(new double[]
                                                             {
                                                                     1d / Math.sqrt(2),
                                                                     1, 1, 1, 1, 1, 1, 1
                                                             });
-    public static DoubleMatrix A;
-    public static DoubleMatrix A_T;
+    private static DoubleMatrix A;
+    private static DoubleMatrix A_T;
 
     static
     {
@@ -30,7 +30,7 @@ public class DCT
         A_T = A.transpose();
     }
 
-    public static DoubleMatrix direct(DoubleMatrix X)
+    static DoubleMatrix direct(DoubleMatrix X)
     {
         int N = X.getRows();
         DoubleMatrix Y = new DoubleMatrix(N, N);
@@ -55,9 +55,33 @@ public class DCT
         return Y;
     }
 
-    public static DoubleMatrix separated(DoubleMatrix x)
+    static DoubleMatrix separated(DoubleMatrix X)
     {
-        DoubleMatrix AX = A.mmul(x);
+        DoubleMatrix AX = A.mmul(X);
         return AX.mmul(A_T);
+    }
+
+    static DoubleMatrix invert(DoubleMatrix Y)
+    {
+        int N = Y.getRows();
+        DoubleMatrix X = new DoubleMatrix(N, N);
+        for (int y = 0; y < N; y++)
+        {
+            for (int x = 0; x < N; x++)
+            {
+                double X_x_y = 0;
+                for (int i = 0; i < N; i++)
+                {
+                    for (int j = 0; j < N; j++)
+                    {
+                        X_x_y += (2d / N) * C.get(i) * C.get(j) * Y.get(j, i)
+                                * Math.cos(((2 * x + 1) * i * Math.PI) / (2d * N))
+                                * Math.cos(((2 * y + 1) * j * Math.PI) / (2d * N));
+                    }
+                }
+                X.put(y, x, X_x_y);
+            }
+        }
+        return X;
     }
 }

@@ -6,7 +6,7 @@ import org.jblas.DoubleMatrix;
  * Created by Long Bui on 14.12.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class Arai
+class Arai
 {
     private static DoubleMatrix C = new DoubleMatrix(new double[]
                                                              {
@@ -40,7 +40,7 @@ public class Arai
                                                                      1d / (4 * C.get(7))
                                                              });
 
-    public static DoubleMatrix calc(DoubleMatrix x)
+    static DoubleMatrix calc(DoubleMatrix x)
     {
         DoubleMatrix y = new DoubleMatrix(8);
         araiStep1(x, y);
@@ -99,8 +99,8 @@ public class Arai
         double araiStep4Temp = ((x.get(4) + x.get(6)) * A.get(5));
         y.put(2, x.get(2) * A.get(1));
         y.put(4, -(x.get(4) * A.get(2)) + -araiStep4Temp);
-        y.put(5, x.get(5) * x.get(3));
-        y.put(6, (x.get(6) * x.get(4)) + -(araiStep4Temp));
+        y.put(5, x.get(5) * A.get(3));
+        y.put(6, (x.get(6) * A.get(4)) + -(araiStep4Temp));
         updateInputMatrix(x, y);
     }
 

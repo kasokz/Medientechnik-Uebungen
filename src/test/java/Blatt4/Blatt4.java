@@ -1,13 +1,10 @@
 package Blatt4;
 
-import Blatt4.dct.CosinusTransformation;
+import Blatt4.dct.CosineTransformation;
 import org.jblas.DoubleMatrix;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import static Blatt4.dct.DCT.A;
-import static Blatt4.dct.DCT.A_T;
 
 /**
  * Created by Long Bui on 14.12.16.
@@ -41,29 +38,14 @@ public class Blatt4
                                                     {-17, 9, 7, -23, -3, -10, 5, 3},
                                                     {4, 9, -4, -5, 2, 2, -7, 3},
                                                     {-9, 7, 8, -6, 5, 12, 2, -5},
-                                                    {-9, -4, -2, -3, 6, 1, -1, -1},
-                                                    });
+                                                    {-9, -4, -2, -3, 6, 1, -1, -1}
+                                            });
     }
 
     @Test
     public void testArai()
     {
-        DoubleMatrix x = new DoubleMatrix(new double[]{1, 1, 1, 1, 1, 1, 1, 1});
-        DoubleMatrix y = CosinusTransformation.arai(x);
-        Assert.assertEquals(4d / Math.sqrt(2), y.get(0), 0.001);
-        Assert.assertEquals(0, y.get(1), 0.001);
-        Assert.assertEquals(0, y.get(2), 0.001);
-        Assert.assertEquals(0, y.get(3), 0.001);
-        Assert.assertEquals(0, y.get(4), 0.001);
-        Assert.assertEquals(0, y.get(5), 0.001);
-        Assert.assertEquals(0, y.get(6), 0.001);
-        Assert.assertEquals(0, y.get(7), 0.001);
-    }
-
-    @Test
-    public void testDirectDCT()
-    {
-        DoubleMatrix y = CosinusTransformation.direct(x);
+        DoubleMatrix y = CosineTransformation.arai(x);
         for (int i = 0; i < y.getRows(); i++)
         {
             for (int j = 0; j < y.getColumns(); j++)
@@ -71,20 +53,83 @@ public class Blatt4
                 Assert.assertEquals((int) expected.get(i, j),
                                     (int) Math.signum(y.get(i, j)) * Math.round(Math.abs(y.get(i, j))));
             }
-            System.out.println();
         }
     }
 
     @Test
-    public void testSeparatedDCT()
+    public void testDirectDCT()
     {
-        DoubleMatrix y = CosinusTransformation.separated(x);
+        DoubleMatrix y = CosineTransformation.direct(x);
         for (int i = 0; i < y.getRows(); i++)
         {
             for (int j = 0; j < y.getColumns(); j++)
             {
                 Assert.assertEquals((int) expected.get(i, j),
                                     (int) Math.signum(y.get(i, j)) * Math.round(Math.abs(y.get(i, j))));
+            }
+        }
+    }
+
+    @Test
+    public void testSeparatedDCT()
+    {
+        DoubleMatrix y = CosineTransformation.separated(x);
+        for (int i = 0; i < y.getRows(); i++)
+        {
+            for (int j = 0; j < y.getColumns(); j++)
+            {
+                Assert.assertEquals((int) expected.get(i, j),
+                                    (int) Math.signum(y.get(i, j)) * Math.round(Math.abs(y.get(i, j))));
+            }
+        }
+    }
+
+    @Test
+    public void testInverseDCTDirect()
+    {
+        DoubleMatrix y = CosineTransformation.direct(x);
+        DoubleMatrix testResult = CosineTransformation.invert(y);
+        for (int i = 0; i < y.getRows(); i++)
+        {
+            for (int j = 0; j < y.getColumns(); j++)
+            {
+                Assert.assertEquals((int) x.get(i, j),
+                                    (int) Math.signum(testResult.get(i, j)) * Math.round(Math.abs(testResult.get(i,
+                                                                                                                 j))));
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void testInverseDCTSeparate()
+    {
+        DoubleMatrix y = CosineTransformation.separated(x);
+        DoubleMatrix testResult = CosineTransformation.invert(y);
+        for (int i = 0; i < y.getRows(); i++)
+        {
+            for (int j = 0; j < y.getColumns(); j++)
+            {
+                Assert.assertEquals((int) x.get(i, j),
+                                    (int) Math.signum(testResult.get(i, j)) * Math.round(Math.abs(testResult.get(i,
+                                                                                                                 j))));
+            }
+            System.out.println();
+        }
+    }
+
+    @Test
+    public void testInverseDCTArai()
+    {
+        DoubleMatrix y = CosineTransformation.arai(x);
+        DoubleMatrix testResult = CosineTransformation.invert(y);
+        for (int i = 0; i < y.getRows(); i++)
+        {
+            for (int j = 0; j < y.getColumns(); j++)
+            {
+                Assert.assertEquals((int) x.get(i, j),
+                                    (int) Math.signum(testResult.get(i, j)) * Math.round(Math.abs(testResult.get(i,
+                                                                                                                 j))));
             }
             System.out.println();
         }
