@@ -1,4 +1,4 @@
-package jpegencoder.jpeg;
+package jpegencoder.jpeg.segments;
 
 import java.io.IOException;
 import java.io.OutputStream;

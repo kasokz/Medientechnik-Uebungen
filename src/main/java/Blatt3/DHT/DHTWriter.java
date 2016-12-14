@@ -1,12 +1,11 @@
 package Blatt3.DHT;
 
 import Blatt3.CodeWord;
-import jpegencoder.jpeg.SegmentWriter;
+import jpegencoder.jpeg.segments.SegmentWriter;
 import jpegencoder.jpeg.streams.BitOutputStream;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

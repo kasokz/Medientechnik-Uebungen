@@ -1,4 +1,4 @@
-package jpegencoder.jpeg.SOF0;
+package jpegencoder.jpeg.segments.SOF0;
 
 import jpegencoder.jpeg.streams.BitOutputStream;
 

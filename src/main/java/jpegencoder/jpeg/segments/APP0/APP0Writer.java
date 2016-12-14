@@ -1,6 +1,6 @@
-package jpegencoder.jpeg.APP0;
+package jpegencoder.jpeg.segments.APP0;
 
-import jpegencoder.jpeg.SegmentWriter;
+import jpegencoder.jpeg.segments.SegmentWriter;
 import jpegencoder.jpeg.streams.BitOutputStream;
 
 import java.io.IOException;

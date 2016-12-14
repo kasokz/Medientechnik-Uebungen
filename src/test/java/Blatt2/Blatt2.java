@@ -1,8 +1,8 @@
 package Blatt2;
 
-import jpegencoder.jpeg.APP0.APP0Writer;
-import jpegencoder.jpeg.SOF0.SOF0Component;
-import jpegencoder.jpeg.SOF0.SOF0Writer;
+import jpegencoder.jpeg.segments.APP0.APP0Writer;
+import jpegencoder.jpeg.segments.SOF0.SOF0Component;
+import jpegencoder.jpeg.segments.SOF0.SOF0Writer;
 import jpegencoder.jpeg.streams.BitInputStream;
 import jpegencoder.jpeg.streams.BitOutputStream;
 import org.junit.Assert;

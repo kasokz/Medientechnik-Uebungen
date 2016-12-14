@@ -119,14 +119,14 @@ public class HuffmanTree
         {
             List<HuffmanTreeComponent> currentDrawer = coinDrawers.get(denominationPower);
             Collections.sort(currentDrawer);
-            for (int i = 0; i < currentDrawer.size() / 2; i++)
-            {
-                coinDrawers.get(denominationPower + 1)
-                           .add(new HuffmanTreeNode(currentDrawer.get(i + i), currentDrawer.get(i + i + 1)));
-            }
             if ((currentDrawer.size() % 2) != 0)
             {
                 removeNodeAndItsChildren(coinDrawers, currentDrawer, denominationPower);
+            }
+            for (int i = 0; i < currentDrawer.size(); i = i + 2)
+            {
+                coinDrawers.get(denominationPower + 1)
+                           .add(new HuffmanTreeNode(currentDrawer.get(i), currentDrawer.get(i + 1)));
             }
         }
     }
@@ -232,6 +232,16 @@ public class HuffmanTree
         List<CodeWord> codeWords = new ArrayList<CodeWord>((int) Math.pow(2, this.getDepth()));
         root.fillCodeBook(codeWords, 0, 0);
         return codeWords;
+    }
+
+    public Map<Integer, CodeWord> getCodeBookAsMap()
+    {
+        Map<Integer, CodeWord> codeWordMap = new HashMap<Integer, CodeWord>();
+        for (CodeWord codeWord : getCodeBook())
+        {
+            codeWordMap.put(codeWord.getSymbol(), codeWord);
+        }
+        return codeWordMap;
     }
 
     public int getNumOfSymbols()
