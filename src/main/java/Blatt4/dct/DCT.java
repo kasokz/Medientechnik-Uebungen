@@ -24,7 +24,7 @@ public class DCT
             for (int k = 0; k < 8; k++)
             {
                 double a_k_n = C.get(k) * Math.sqrt(2d / 8) * Math.cos((2 * n + 1) * ((k * Math.PI) / (2 * 8)));
-                A.put(n, k, a_k_n);
+                A.put(k, n, a_k_n);
             }
         }
         A_T = A.transpose();
