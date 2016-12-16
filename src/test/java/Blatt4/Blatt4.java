@@ -12,8 +12,8 @@ import org.junit.Test;
  */
 public class Blatt4
 {
-    DoubleMatrix x;
-    DoubleMatrix expected;
+    private DoubleMatrix x;
+    private DoubleMatrix expected;
 
     @Before
     public void init()
