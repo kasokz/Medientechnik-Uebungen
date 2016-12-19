@@ -8,7 +8,6 @@ import org.jblas.DoubleMatrix;
  */
 public class CosineTransformation
 {
-
     public static DoubleMatrix arai(DoubleMatrix x)
     {
         DoubleMatrix y = new DoubleMatrix(8, 8);

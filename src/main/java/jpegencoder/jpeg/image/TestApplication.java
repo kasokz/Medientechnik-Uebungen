@@ -24,10 +24,10 @@ import java.io.*;
  */
 public class TestApplication extends Application
 {
-    public static void main(String[] args)
-    {
-        launch();
-    }
+//    public static void main(String[] args)
+//    {
+//        launch();
+//    }
 
     public void start(Stage primaryStage) throws Exception
     {

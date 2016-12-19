@@ -1,9 +1,9 @@
 package Blatt3;
 
-import Blatt3.HuffmanTree.HuffmanTree;
-import Blatt3.HuffmanTree.HuffmanTreeComponent;
-import Blatt3.HuffmanTree.HuffmanTreeLeaf;
-import Blatt3.HuffmanTree.HuffmanTreeNode;
+import Blatt3.huffman.HuffmanTree;
+import Blatt3.huffman.HuffmanTreeComponent;
+import Blatt3.huffman.HuffmanTreeLeaf;
+import Blatt3.huffman.HuffmanTreeNode;
 
 import java.util.*;
 

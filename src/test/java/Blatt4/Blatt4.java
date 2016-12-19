@@ -12,13 +12,13 @@ import org.junit.Test;
  */
 public class Blatt4
 {
-    private DoubleMatrix x;
+    private DoubleMatrix X;
     private DoubleMatrix expected;
 
     @Before
     public void init()
     {
-        x = new DoubleMatrix(new double[][]
+        X = new DoubleMatrix(new double[][]
                                      {
                                              {47, 18, 13, 16, 41, 90, 47, 27},
                                              {62, 42, 35, 39, 66, 90, 41, 26},
@@ -45,91 +45,107 @@ public class Blatt4
     @Test
     public void testArai()
     {
-        DoubleMatrix y = CosineTransformation.arai(x);
-        for (int i = 0; i < y.getRows(); i++)
+        DoubleMatrix Y = CosineTransformation.arai(X);
+        for (int i = 0; i < Y.getRows(); i++)
         {
-            for (int j = 0; j < y.getColumns(); j++)
+            for (int j = 0; j < Y.getColumns(); j++)
             {
                 Assert.assertEquals((int) expected.get(i, j),
-                                    (int) Math.signum(y.get(i, j)) * Math.round(Math.abs(y.get(i, j))));
+                                    (int) Math.signum(Y.get(i, j)) * Math.round(Math.abs(Y.get(i, j))));
             }
         }
+        printMatrix(Y);
     }
 
     @Test
     public void testDirectDCT()
     {
-        DoubleMatrix y = CosineTransformation.direct(x);
-        for (int i = 0; i < y.getRows(); i++)
+        DoubleMatrix Y = CosineTransformation.direct(X);
+        for (int i = 0; i < Y.getRows(); i++)
         {
-            for (int j = 0; j < y.getColumns(); j++)
+            for (int j = 0; j < Y.getColumns(); j++)
             {
                 Assert.assertEquals((int) expected.get(i, j),
-                                    (int) Math.signum(y.get(i, j)) * Math.round(Math.abs(y.get(i, j))));
+                                    (int) Math.signum(Y.get(i, j)) * Math.round(Math.abs(Y.get(i, j))));
             }
         }
+        printMatrix(Y);
     }
 
     @Test
     public void testSeparatedDCT()
     {
-        DoubleMatrix y = CosineTransformation.separated(x);
-        for (int i = 0; i < y.getRows(); i++)
+        DoubleMatrix Y = CosineTransformation.separated(X);
+        for (int i = 0; i < Y.getRows(); i++)
         {
-            for (int j = 0; j < y.getColumns(); j++)
+            for (int j = 0; j < Y.getColumns(); j++)
             {
                 Assert.assertEquals((int) expected.get(i, j),
-                                    (int) Math.signum(y.get(i, j)) * Math.round(Math.abs(y.get(i, j))));
+                                    (int) Math.signum(Y.get(i, j)) * Math.round(Math.abs(Y.get(i, j))));
             }
         }
+        printMatrix(Y);
     }
 
     @Test
     public void testInverseDCTDirect()
     {
-        DoubleMatrix y = CosineTransformation.direct(x);
-        DoubleMatrix testResult = CosineTransformation.invert(y);
-        for (int i = 0; i < y.getRows(); i++)
+        DoubleMatrix Y = CosineTransformation.direct(X);
+        DoubleMatrix testResult = CosineTransformation.invert(Y);
+        for (int i = 0; i < Y.getRows(); i++)
         {
-            for (int j = 0; j < y.getColumns(); j++)
+            for (int j = 0; j < Y.getColumns(); j++)
             {
-                Assert.assertEquals((int) x.get(i, j),
+                Assert.assertEquals((int) X.get(i, j),
                                     (int) Math.signum(testResult.get(i, j)) * Math.round(Math.abs(testResult.get(i,
                                                                                                                  j))));
             }
-            System.out.println();
         }
+        printMatrix(testResult);
     }
 
     @Test
     public void testInverseDCTSeparate()
     {
-        DoubleMatrix y = CosineTransformation.separated(x);
-        DoubleMatrix testResult = CosineTransformation.invert(y);
-        for (int i = 0; i < y.getRows(); i++)
+        DoubleMatrix Y = CosineTransformation.separated(X);
+        DoubleMatrix testResult = CosineTransformation.invert(Y);
+        for (int i = 0; i < Y.getRows(); i++)
         {
-            for (int j = 0; j < y.getColumns(); j++)
+            for (int j = 0; j < Y.getColumns(); j++)
             {
-                Assert.assertEquals((int) x.get(i, j),
+                Assert.assertEquals((int) X.get(i, j),
                                     (int) Math.signum(testResult.get(i, j)) * Math.round(Math.abs(testResult.get(i,
                                                                                                                  j))));
             }
-            System.out.println();
         }
+        printMatrix(testResult);
     }
 
     @Test
     public void testInverseDCTArai()
     {
-        DoubleMatrix y = CosineTransformation.arai(x);
-        DoubleMatrix testResult = CosineTransformation.invert(y);
-        for (int i = 0; i < y.getRows(); i++)
+        DoubleMatrix Y = CosineTransformation.arai(X);
+        DoubleMatrix testResult = CosineTransformation.invert(Y);
+        for (int i = 0; i < Y.getRows(); i++)
         {
-            for (int j = 0; j < y.getColumns(); j++)
+            for (int j = 0; j < Y.getColumns(); j++)
             {
-                Assert.assertEquals((int) x.get(i, j),
-                                    (int) Math.signum(testResult.get(i, j)) * Math.round(Math.abs(testResult.get(i,
-                                                                                                                 j))));
+                Assert.assertEquals((int) X.get(i, j),
+                                    (int) Math.signum(testResult.get(i, j))
+                                            * Math.round(Math.abs(testResult.get(i, j))));
+            }
+        }
+        printMatrix(testResult);
+    }
+
+    private void printMatrix(DoubleMatrix matrix)
+    {
+        for (int i = 0; i < matrix.getRows(); i++)
+        {
+            for (int j = 0; j < matrix.getColumns(); j++)
+            {
+                System.out.print((int) Math.signum(matrix.get(i, j))
+                                         * Math.round(Math.abs(matrix.get(i, j))) + " ");
             }
             System.out.println();
         }

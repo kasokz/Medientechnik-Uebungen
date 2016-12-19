@@ -1,15 +1,13 @@
 package Blatt3;
 
-import Blatt3.DHT.DHTWriter;
-import Blatt3.HuffmanTree.HuffmanTree;
-import Blatt3.HuffmanTree.HuffmanTreeComponent;
+import Blatt3.dht.DHTWriter;
+import Blatt3.huffman.HuffmanTree;
+import Blatt3.huffman.HuffmanTreeComponent;
 import jpegencoder.jpeg.streams.BitOutputStream;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;

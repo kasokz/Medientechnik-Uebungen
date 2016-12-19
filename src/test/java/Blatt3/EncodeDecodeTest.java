@@ -1,6 +1,6 @@
 package Blatt3;
 
-import Blatt3.HuffmanTree.HuffmanTree;
+import Blatt3.huffman.HuffmanTree;
 import jpegencoder.jpeg.streams.BitInputStream;
 import jpegencoder.jpeg.streams.BitOutputStream;
 import org.junit.Assert;

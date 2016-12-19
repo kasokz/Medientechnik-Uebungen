@@ -1,4 +1,4 @@
-package Blatt3.DHT;
+package Blatt3.dht;
 
 import Blatt3.CodeWord;
 import jpegencoder.jpeg.segments.SegmentWriter;

@@ -1,4 +1,4 @@
-package Blatt3.HuffmanTree;
+package Blatt3.huffman;
 
 import Blatt3.CodeWord;
 
