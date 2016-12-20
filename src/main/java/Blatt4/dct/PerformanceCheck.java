@@ -75,25 +75,13 @@ public class PerformanceCheck
         int count = 0;
         while (System.currentTimeMillis() < end)
         {
-            for (DoubleMatrix block : blocks)
-            {
-                CosineTransformation.direct(block);
-            }
-            count++;
-        }
-        System.out.println("Direct DCT managed " + count + " images in 10 seconds");
-        start = System.currentTimeMillis();
-        end = start + 10000;
-        count = 0;
-        while (System.currentTimeMillis() < end)
-        {
-            threads[0] = new Thread(new SeparatedTask(blocks.subList(0, 255)));
+            threads[0] = new Thread(new DirectDCTTask(blocks.subList(0, 255)));
             threads[0].start();
-            threads[1] = new Thread(new SeparatedTask(blocks.subList(256, 511)));
+            threads[1] = new Thread(new DirectDCTTask(blocks.subList(256, 511)));
             threads[1].start();
-            threads[2] = new Thread(new SeparatedTask(blocks.subList(512, 767)));
+            threads[2] = new Thread(new DirectDCTTask(blocks.subList(512, 767)));
             threads[2].start();
-            threads[3] = new Thread(new SeparatedTask(blocks.subList(768, 1023)));
+            threads[3] = new Thread(new DirectDCTTask(blocks.subList(768, 1023)));
             threads[3].start();
             for (Thread thread : threads)
             {
@@ -101,7 +89,27 @@ public class PerformanceCheck
             }
             count++;
         }
-        System.out.println("Separated DCT managed " + count + " images in 10 seconds");
+        System.out.println("Direct DCT takes " + 10000d / count + " ms/image");
+        start = System.currentTimeMillis();
+        end = start + 10000;
+        count = 0;
+        while (System.currentTimeMillis() < end)
+        {
+            threads[0] = new Thread(new SeparatedDCTTask(blocks.subList(0, 255)));
+            threads[0].start();
+            threads[1] = new Thread(new SeparatedDCTTask(blocks.subList(256, 511)));
+            threads[1].start();
+            threads[2] = new Thread(new SeparatedDCTTask(blocks.subList(512, 767)));
+            threads[2].start();
+            threads[3] = new Thread(new SeparatedDCTTask(blocks.subList(768, 1023)));
+            threads[3].start();
+            for (Thread thread : threads)
+            {
+                thread.join();
+            }
+            count++;
+        }
+        System.out.println("Separated DCT takes " + 10000d / count + " ms/image");
         start = System.currentTimeMillis();
         end = start + 10000;
         count = 0;
@@ -121,6 +129,6 @@ public class PerformanceCheck
             }
             count++;
         }
-        System.out.println("Arai took " + count + " images in 10 seconds");
+        System.out.println("Arai takes " + 10000d / count + " ms/image");
     }
 }
