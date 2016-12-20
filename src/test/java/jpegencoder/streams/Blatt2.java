@@ -3,8 +3,6 @@ package jpegencoder.streams;
 import jpegencoder.segments.APP0.APP0Writer;
 import jpegencoder.segments.SOF0.SOF0Component;
 import jpegencoder.segments.SOF0.SOF0Writer;
-import jpegencoder.streams.BitInputStream;
-import jpegencoder.streams.BitOutputStream;
 import org.junit.Assert;
 import org.junit.Test;
 
