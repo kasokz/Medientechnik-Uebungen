@@ -61,10 +61,11 @@ public class PerformanceCheck
         }
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws InterruptedException
     {
         PerformanceCheck performanceCheck = new PerformanceCheck();
         List<DoubleMatrix> blocks = new ArrayList<DoubleMatrix>();
+        Thread[] threads = new Thread[4];
         for (int i = 0; i < 1024; i++)
         {
             blocks.add(performanceCheck.getBlock(i));
@@ -80,30 +81,46 @@ public class PerformanceCheck
             }
             count++;
         }
-        System.out.println("Direct DCT took " + 10000d / count + "ms per image");
+        System.out.println("Direct DCT managed " + count + " images in 10 seconds");
         start = System.currentTimeMillis();
         end = start + 10000;
         count = 0;
         while (System.currentTimeMillis() < end)
         {
-            for (DoubleMatrix block : blocks)
+            threads[0] = new Thread(new SeparatedTask(blocks.subList(0, 255)));
+            threads[0].start();
+            threads[1] = new Thread(new SeparatedTask(blocks.subList(256, 511)));
+            threads[1].start();
+            threads[2] = new Thread(new SeparatedTask(blocks.subList(512, 767)));
+            threads[2].start();
+            threads[3] = new Thread(new SeparatedTask(blocks.subList(768, 1023)));
+            threads[3].start();
+            for (Thread thread : threads)
             {
-                CosineTransformation.separated(block);
+                thread.join();
             }
             count++;
         }
-        System.out.println("Separated DCT took " + 10000d / count + "ms per image");
+        System.out.println("Separated DCT managed " + count + " images in 10 seconds");
         start = System.currentTimeMillis();
         end = start + 10000;
         count = 0;
         while (System.currentTimeMillis() < end)
         {
-            for (DoubleMatrix block : blocks)
+            threads[0] = new Thread(new AraiTask(blocks.subList(0, 255)));
+            threads[0].start();
+            threads[1] = new Thread(new AraiTask(blocks.subList(256, 511)));
+            threads[1].start();
+            threads[2] = new Thread(new AraiTask(blocks.subList(512, 767)));
+            threads[2].start();
+            threads[3] = new Thread(new AraiTask(blocks.subList(768, 1023)));
+            threads[3].start();
+            for (Thread thread : threads)
             {
-                CosineTransformation.arai(block);
+                thread.join();
             }
             count++;
         }
-        System.out.println("Arai took " + 10000d / count + "ms per image");
+        System.out.println("Arai took " + count + " images in 10 seconds");
     }
 }
