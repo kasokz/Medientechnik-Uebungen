@@ -80,7 +80,7 @@ public class PerformanceCheck
             }
             count++;
         }
-        System.out.println(count);
+        System.out.println("Direct DCT took " + 10000d / count + "ms per image");
         start = System.currentTimeMillis();
         end = start + 10000;
         count = 0;
@@ -92,7 +92,7 @@ public class PerformanceCheck
             }
             count++;
         }
-        System.out.println(count);
+        System.out.println("Separated DCT took " + 10000d / count + "ms per image");
         start = System.currentTimeMillis();
         end = start + 10000;
         count = 0;
@@ -104,6 +104,6 @@ public class PerformanceCheck
             }
             count++;
         }
-        System.out.println(count);
+        System.out.println("Arai took " + 10000d / count + "ms per image");
     }
 }

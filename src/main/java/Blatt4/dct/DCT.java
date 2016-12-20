@@ -8,11 +8,11 @@ import org.jblas.DoubleMatrix;
  */
 class DCT
 {
-    private static DoubleMatrix C = new DoubleMatrix(new double[]
-                                                            {
-                                                                    1d / Math.sqrt(2),
-                                                                    1, 1, 1, 1, 1, 1, 1
-                                                            });
+    private static final DoubleMatrix C = new DoubleMatrix(new double[]
+                                                                   {
+                                                                           1d / Math.sqrt(2),
+                                                                           1, 1, 1, 1, 1, 1, 1
+                                                                   });
     private static DoubleMatrix A;
     private static DoubleMatrix A_T;
 

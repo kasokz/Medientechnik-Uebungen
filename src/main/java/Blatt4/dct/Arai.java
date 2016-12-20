@@ -8,7 +8,7 @@ import org.jblas.DoubleMatrix;
  */
 class Arai
 {
-    private static DoubleMatrix C = new DoubleMatrix(new double[]
+    private static final DoubleMatrix C = new DoubleMatrix(new double[]
                                                              {
                                                                      1,
                                                                      Math.cos((1 * Math.PI) / 16),
@@ -19,7 +19,7 @@ class Arai
                                                                      Math.cos((6 * Math.PI) / 16),
                                                                      Math.cos((7 * Math.PI) / 16)
                                                              });
-    private static DoubleMatrix A = new DoubleMatrix(new double[]
+    private static final DoubleMatrix A = new DoubleMatrix(new double[]
                                                              {
                                                                      1,
                                                                      C.get(4),
@@ -28,7 +28,7 @@ class Arai
                                                                      C.get(6) + C.get(2),
                                                                      C.get(6)
                                                              });
-    private static DoubleMatrix S = new DoubleMatrix(new double[]
+    private static final DoubleMatrix S = new DoubleMatrix(new double[]
                                                              {
                                                                      1d / (2 * Math.sqrt(2)),
                                                                      1d / (4 * C.get(1)),
