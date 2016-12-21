@@ -45,16 +45,17 @@ public class Blatt4
     @Test
     public void testArai()
     {
-        DoubleMatrix Y = CosineTransformation.arai(X);
-        for (int i = 0; i < Y.getRows(); i++)
+        DoubleMatrix input = X.dup();
+        CosineTransformation.arai(input);
+        for (int i = 0; i < input.getRows(); i++)
         {
-            for (int j = 0; j < Y.getColumns(); j++)
+            for (int j = 0; j < input.getColumns(); j++)
             {
                 Assert.assertEquals((int) expected.get(i, j),
-                                    (int) Math.signum(Y.get(i, j)) * Math.round(Math.abs(Y.get(i, j))));
+                                    (int) Math.signum(input.get(i, j)) * Math.round(Math.abs(input.get(i, j))));
             }
         }
-        printMatrix(Y);
+        printMatrix(input);
     }
 
     @Test
@@ -75,7 +76,8 @@ public class Blatt4
     @Test
     public void testSeparatedDCT()
     {
-        DoubleMatrix Y = CosineTransformation.separated(X);
+        DoubleMatrix input = X.dup();
+        DoubleMatrix Y = CosineTransformation.separated(input);
         for (int i = 0; i < Y.getRows(); i++)
         {
             for (int j = 0; j < Y.getColumns(); j++)
@@ -107,7 +109,8 @@ public class Blatt4
     @Test
     public void testInverseDCTSeparate()
     {
-        DoubleMatrix Y = CosineTransformation.separated(X);
+        DoubleMatrix input = X.dup();
+        DoubleMatrix Y = CosineTransformation.separated(input);
         DoubleMatrix testResult = CosineTransformation.invert(Y);
         for (int i = 0; i < Y.getRows(); i++)
         {
@@ -124,11 +127,13 @@ public class Blatt4
     @Test
     public void testInverseDCTArai()
     {
-        DoubleMatrix Y = CosineTransformation.arai(X);
-        DoubleMatrix testResult = CosineTransformation.invert(Y);
-        for (int i = 0; i < Y.getRows(); i++)
+        DoubleMatrix input = X.dup();
+        CosineTransformation.arai(input);
+        printMatrix(input);
+        DoubleMatrix testResult = CosineTransformation.invert(input);
+        for (int i = 0; i < input.getRows(); i++)
         {
-            for (int j = 0; j < Y.getColumns(); j++)
+            for (int j = 0; j < input.getColumns(); j++)
             {
                 Assert.assertEquals((int) X.get(i, j),
                                     (int) Math.signum(testResult.get(i, j))

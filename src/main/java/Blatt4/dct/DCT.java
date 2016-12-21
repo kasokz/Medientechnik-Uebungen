@@ -55,10 +55,9 @@ class DCT
         return Y;
     }
 
-    static DoubleMatrix separated(DoubleMatrix X)
+    static void separated(DoubleMatrix X)
     {
-        DoubleMatrix AX = A.mmul(X);
-        return AX.mmul(A_T);
+        A.mmuli(X, X).mmuli(A_T, X);
     }
 
     static DoubleMatrix invert(DoubleMatrix Y)

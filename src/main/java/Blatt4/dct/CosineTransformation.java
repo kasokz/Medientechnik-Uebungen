@@ -8,20 +8,16 @@ import org.jblas.DoubleMatrix;
  */
 public class CosineTransformation
 {
-    public static DoubleMatrix arai(DoubleMatrix x)
+    public static void arai(DoubleMatrix x)
     {
-        DoubleMatrix y = new DoubleMatrix(8, 8);
         for (int i = 0; i < 8; i++)
         {
-            y.putRow(i,
-                     Arai.calc(x.getRow(i)));
+            x.putRow(i, Arai.calc(x.getRow(i)));
         }
         for (int i = 0; i < 8; i++)
         {
-            y.putColumn(i,
-                        Arai.calc(y.getColumn(i)));
+            x.putColumn(i, Arai.calc(x.getColumn(i)));
         }
-        return y;
     }
 
     public static DoubleMatrix direct(DoubleMatrix X)
@@ -31,7 +27,8 @@ public class CosineTransformation
 
     public static DoubleMatrix separated(DoubleMatrix X)
     {
-        return DCT.separated(X);
+        DCT.separated(X);
+        return X;
     }
 
     public static DoubleMatrix invert(DoubleMatrix Y)

@@ -40,102 +40,101 @@ class Arai
                                                                            1d / (4 * C.get(7))
                                                                    });
 
-    static DoubleMatrix calc(DoubleMatrix x)
+    static DoubleMatrix calc(DoubleMatrix vector)
     {
-        DoubleMatrix y = new DoubleMatrix(8);
-        araiStep1(x, y);
-        araiStep2(y, x);
-        araiStep3(x, y);
-        araiStep4(y, x);
-        araiStep5(x, y);
-        araiStep6(y, x);
-        araiStep7(x, y);
-
-        return y;
+        DoubleMatrix tempVector = new DoubleMatrix(8);
+        araiStep1(vector, tempVector);
+        araiStep2(tempVector, vector);
+        araiStep3(vector, tempVector);
+        araiStep4(tempVector, vector);
+        araiStep5(vector, tempVector);
+        araiStep6(tempVector, vector);
+        araiStep7(vector, tempVector);
+        return tempVector;
     }
 
-    private static void araiStep1(DoubleMatrix x, DoubleMatrix y)
+    private static void araiStep1(DoubleMatrix input, DoubleMatrix output)
     {
-        y.put(0, x.get(0) + x.get(7));
-        y.put(1, x.get(1) + x.get(6));
-        y.put(2, x.get(2) + x.get(5));
-        y.put(3, x.get(3) + x.get(4));
-        y.put(4, x.get(3) + -x.get(4));
-        y.put(5, x.get(2) + -x.get(5));
-        y.put(6, x.get(1) + -x.get(6));
-        y.put(7, x.get(0) + -x.get(7));
+        output.put(0, input.get(0) + input.get(7));
+        output.put(1, input.get(1) + input.get(6));
+        output.put(2, input.get(2) + input.get(5));
+        output.put(3, input.get(3) + input.get(4));
+        output.put(4, input.get(3) + -input.get(4));
+        output.put(5, input.get(2) + -input.get(5));
+        output.put(6, input.get(1) + -input.get(6));
+        output.put(7, input.get(0) + -input.get(7));
     }
 
-    private static void araiStep2(DoubleMatrix x, DoubleMatrix y)
+    private static void araiStep2(DoubleMatrix input, DoubleMatrix output)
     {
-        y.put(0, x.get(0) + x.get(3));
-        y.put(1, x.get(1) + x.get(2));
-        y.put(2, x.get(1) + -x.get(2));
-        y.put(3, x.get(0) + -x.get(3));
-        y.put(4, -x.get(4) + -x.get(5));
-        y.put(5, x.get(5) + x.get(6));
-        y.put(6, x.get(6) + x.get(7));
-        y.put(7, x.get(7));
+        output.put(0, input.get(0) + input.get(3));
+        output.put(1, input.get(1) + input.get(2));
+        output.put(2, input.get(1) + -input.get(2));
+        output.put(3, input.get(0) + -input.get(3));
+        output.put(4, -input.get(4) + -input.get(5));
+        output.put(5, input.get(5) + input.get(6));
+        output.put(6, input.get(6) + input.get(7));
+        output.put(7, input.get(7));
     }
 
-    private static void araiStep3(DoubleMatrix x, DoubleMatrix y)
+    private static void araiStep3(DoubleMatrix input, DoubleMatrix output)
     {
-        y.put(0, x.get(0) + x.get(1));
-        y.put(1, x.get(0) + -x.get(1));
-        y.put(2, x.get(2) + x.get(3));
-        y.put(3, x.get(3));
-        y.put(4, x.get(4));
-        y.put(5, x.get(5));
-        y.put(6, x.get(6));
-        y.put(7, x.get(7));
+        output.put(0, input.get(0) + input.get(1));
+        output.put(1, input.get(0) + -input.get(1));
+        output.put(2, input.get(2) + input.get(3));
+        output.put(3, input.get(3));
+        output.put(4, input.get(4));
+        output.put(5, input.get(5));
+        output.put(6, input.get(6));
+        output.put(7, input.get(7));
     }
 
-    private static void araiStep4(DoubleMatrix x, DoubleMatrix y)
+    private static void araiStep4(DoubleMatrix input, DoubleMatrix output)
     {
-        double araiStep4Temp = ((x.get(4) + x.get(6)) * A.get(5));
-        y.put(0, x.get(0));
-        y.put(1, x.get(1));
-        y.put(2, x.get(2) * A.get(1));
-        y.put(3, x.get(3));
-        y.put(4, -(x.get(4) * A.get(2)) + -araiStep4Temp);
-        y.put(5, x.get(5) * A.get(3));
-        y.put(6, (x.get(6) * A.get(4)) + -(araiStep4Temp));
-        y.put(7, x.get(7));
+        double araiStep4Temp = ((input.get(4) + input.get(6)) * A.get(5));
+        output.put(0, input.get(0));
+        output.put(1, input.get(1));
+        output.put(2, input.get(2) * A.get(1));
+        output.put(3, input.get(3));
+        output.put(4, -(input.get(4) * A.get(2)) + -araiStep4Temp);
+        output.put(5, input.get(5) * A.get(3));
+        output.put(6, (input.get(6) * A.get(4)) + -(araiStep4Temp));
+        output.put(7, input.get(7));
     }
 
-    private static void araiStep5(DoubleMatrix x, DoubleMatrix y)
+    private static void araiStep5(DoubleMatrix input, DoubleMatrix output)
     {
-        y.put(0, x.get(0));
-        y.put(1, x.get(1));
-        y.put(2, x.get(2) + x.get(3));
-        y.put(3, -x.get(2) + x.get(3));
-        y.put(4, x.get(4));
-        y.put(5, x.get(5) + x.get(7));
-        y.put(6, x.get(6));
-        y.put(7, -x.get(5) + x.get(7));
+        output.put(0, input.get(0));
+        output.put(1, input.get(1));
+        output.put(2, input.get(2) + input.get(3));
+        output.put(3, -input.get(2) + input.get(3));
+        output.put(4, input.get(4));
+        output.put(5, input.get(5) + input.get(7));
+        output.put(6, input.get(6));
+        output.put(7, -input.get(5) + input.get(7));
     }
 
-    private static void araiStep6(DoubleMatrix x, DoubleMatrix y)
+    private static void araiStep6(DoubleMatrix input, DoubleMatrix output)
     {
-        y.put(0, x.get(0));
-        y.put(1, x.get(1));
-        y.put(2, x.get(2));
-        y.put(3, x.get(3));
-        y.put(4, x.get(4) + x.get(7));
-        y.put(5, x.get(5) + x.get(6));
-        y.put(6, x.get(5) + -x.get(6));
-        y.put(7, -x.get(4) + x.get(7));
+        output.put(0, input.get(0));
+        output.put(1, input.get(1));
+        output.put(2, input.get(2));
+        output.put(3, input.get(3));
+        output.put(4, input.get(4) + input.get(7));
+        output.put(5, input.get(5) + input.get(6));
+        output.put(6, input.get(5) + -input.get(6));
+        output.put(7, -input.get(4) + input.get(7));
     }
 
-    private static void araiStep7(DoubleMatrix x, DoubleMatrix y)
+    private static void araiStep7(DoubleMatrix input, DoubleMatrix output)
     {
-        y.put(0, x.get(0) * S.get(0));
-        y.put(1, x.get(5) * S.get(1));
-        y.put(2, x.get(2) * S.get(2));
-        y.put(3, x.get(7) * S.get(3));
-        y.put(4, x.get(1) * S.get(4));
-        y.put(5, x.get(4) * S.get(5));
-        y.put(6, x.get(3) * S.get(6));
-        y.put(7, x.get(6) * S.get(7));
+        output.put(0, input.get(0) * S.get(0));
+        output.put(1, input.get(5) * S.get(1));
+        output.put(2, input.get(2) * S.get(2));
+        output.put(3, input.get(7) * S.get(3));
+        output.put(4, input.get(1) * S.get(4));
+        output.put(5, input.get(4) * S.get(5));
+        output.put(6, input.get(3) * S.get(6));
+        output.put(7, input.get(6) * S.get(7));
     }
 }

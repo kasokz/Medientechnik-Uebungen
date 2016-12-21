@@ -1,6 +1,7 @@
 package Blatt4.dct;
 
 import org.jblas.DoubleMatrix;
+import org.jblas.ranges.IntervalRange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,8 +65,8 @@ public class PerformanceCheck
     public static void main(String[] args) throws InterruptedException
     {
         PerformanceCheck performanceCheck = new PerformanceCheck();
-        List<DoubleMatrix> blocks = new ArrayList<DoubleMatrix>();
         Thread[] threads = new Thread[4];
+        List<DoubleMatrix> blocks = new ArrayList<DoubleMatrix>(1024);
         for (int i = 0; i < 1024; i++)
         {
             blocks.add(performanceCheck.getBlock(i));
