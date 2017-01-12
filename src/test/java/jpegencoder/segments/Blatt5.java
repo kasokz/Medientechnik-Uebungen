@@ -26,6 +26,7 @@ public class Blatt5
         List<QuantizationTable> tables = new ArrayList<QuantizationTable>();
         tables.add(new QuantizationTable(0, CosineTransformation.QUANTIZATION_MATRIX_LUMINANCE));
         tables.add(new QuantizationTable(1, CosineTransformation.QUANTIZATION_MATRIX_CHROMINANCE));
+        tables.add(new QuantizationTable(2, CosineTransformation.QUANTIZATION_MATRIX_CHROMINANCE));
         dqtWriter.setTables(tables);
         dqtWriter.writeSegment();
         bos.close();
