@@ -43,7 +43,7 @@ public class QuantizationTable
 
     public void writeTable(BitOutputStream bos) throws IOException
     {
-        bos.writeByte((id << 4) + precision);
+        bos.writeByte((precision << 4) + id);
         zigzag(bos);
     }
 
