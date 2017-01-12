@@ -4,6 +4,7 @@ import jpegencoder.segments.dct.CosineTransformation;
 import jpegencoder.segments.dqt.DQTWriter;
 import jpegencoder.segments.dqt.QuantizationTable;
 import jpegencoder.streams.BitOutputStream;
+import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 public class Blatt5
 {
+    @Test
     public void testDqtWriter() throws IOException
     {
         BitOutputStream bos = new BitOutputStream(new FileOutputStream("bits.dat"));
