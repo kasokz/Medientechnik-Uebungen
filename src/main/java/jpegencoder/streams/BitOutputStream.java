@@ -73,11 +73,11 @@ public class BitOutputStream extends OutputStream
     }
 
     // Hilfsmethode Aufgabe 2
-    public static void writeByte(OutputStream os, int byteToWrite) throws IOException
+    public void writeByte(int byteToWrite) throws IOException
     {
         for (int i = 0; i < 8; i++)
         {
-            os.write((byteToWrite & 128) >> 7);
+            write((byteToWrite & 128) >> 7);
             byteToWrite = byteToWrite << 1;
         }
     }

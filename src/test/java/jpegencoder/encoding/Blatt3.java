@@ -1,6 +1,6 @@
 package jpegencoder.encoding;
 
-import jpegencoder.segments.DHT.DHTWriter;
+import jpegencoder.segments.dht.DHTWriter;
 import jpegencoder.encoding.huffman.HuffmanTree;
 import jpegencoder.encoding.huffman.HuffmanTreeComponent;
 import jpegencoder.streams.BitOutputStream;

@@ -1,8 +1,8 @@
 package jpegencoder.streams;
 
-import jpegencoder.segments.APP0.APP0Writer;
-import jpegencoder.segments.SOF0.SOF0Component;
-import jpegencoder.segments.SOF0.SOF0Writer;
+import jpegencoder.segments.app0.APP0Writer;
+import jpegencoder.segments.sof0.SOF0Component;
+import jpegencoder.segments.sof0.SOF0Writer;
 import org.junit.Assert;
 import org.junit.Test;
 

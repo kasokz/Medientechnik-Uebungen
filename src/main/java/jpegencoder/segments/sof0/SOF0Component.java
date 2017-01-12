@@ -1,4 +1,4 @@
-package jpegencoder.segments.SOF0;
+package jpegencoder.segments.sof0;
 
 import jpegencoder.streams.BitOutputStream;
 
@@ -24,11 +24,11 @@ public class SOF0Component
         this.quantNum = quantNum;
     }
 
-    public void writeToStream(OutputStream os) throws IOException
+    public void writeToStream(BitOutputStream os) throws IOException
     {
-        BitOutputStream.writeByte(os, id);
+        os.writeByte(id);
         int subsamplingFactor = (subSamplingFactorHorizontal << 4) + subSamplingFactorVertical;
-        BitOutputStream.writeByte(os, subsamplingFactor);
-        BitOutputStream.writeByte(os, quantNum);
+        os.writeByte(subsamplingFactor);
+        os.writeByte(quantNum);
     }
 }

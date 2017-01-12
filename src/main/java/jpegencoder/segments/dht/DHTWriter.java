@@ -1,4 +1,4 @@
-package jpegencoder.segments.DHT;
+package jpegencoder.segments.dht;
 
 import jpegencoder.encoding.CodeWord;
 import jpegencoder.segments.SegmentWriter;
@@ -24,7 +24,7 @@ public class DHTWriter extends SegmentWriter
     private int huffmanTableIdentifier = 0;
     private int numOfTables = 1;
 
-    public DHTWriter(OutputStream os)
+    public DHTWriter(BitOutputStream os)
     {
         super(os);
     }
@@ -80,19 +80,19 @@ public class DHTWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        BitOutputStream.writeByte(os, 0xFF);
-        BitOutputStream.writeByte(os, DHTMARKER);
-        BitOutputStream.writeByte(os, (getLength() & 0xFF00) >> 8);
-        BitOutputStream.writeByte(os, getLength() & 0xFF);
-        BitOutputStream.writeByte(os, (tableClass << 4) + huffmanTableIdentifier);
+        os.writeByte(0xFF);
+        os.writeByte(DHTMARKER);
+        os.writeByte((getLength() & 0xFF00) >> 8);
+        os.writeByte(getLength() & 0xFF);
+        os.writeByte((tableClass << 4) + huffmanTableIdentifier);
         for (int i = 1; i <= 16; i++)
         {
-            BitOutputStream.writeByte(os, codeWordLengthMap.get(i));
+            os.writeByte(codeWordLengthMap.get(i));
         }
         for (int i = 0; i < codeBook.size(); i++)
         {
             CodeWord codeWord = codeBook.get(i);
-            BitOutputStream.writeByte(os, codeWord.getSymbol());
+            os.writeByte(codeWord.getSymbol());
         }
     }
 }

@@ -1,5 +1,7 @@
 package jpegencoder.segments;
 
+import jpegencoder.streams.BitOutputStream;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -11,9 +13,9 @@ import java.io.OutputStream;
 // Für JPEG-Pipeline später
 public abstract class SegmentWriter
 {
-    protected OutputStream os;
+    protected BitOutputStream os;
 
-    protected SegmentWriter(OutputStream os)
+    protected SegmentWriter(BitOutputStream os)
     {
         this.os = os;
     }

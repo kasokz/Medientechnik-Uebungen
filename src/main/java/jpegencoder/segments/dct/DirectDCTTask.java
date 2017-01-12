@@ -1,18 +1,18 @@
-package Blatt4.dct;
+package jpegencoder.segments.dct;
 
 import org.jblas.DoubleMatrix;
 
 import java.util.List;
 
 /**
- * Created by Long Bui on 20.12.16.
+ * Created by Long Bui on 20/12/2016.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class SeparatedDCTTask implements Runnable
+public class DirectDCTTask implements Runnable
 {
     private List<DoubleMatrix> blocks;
 
-    public SeparatedDCTTask(List<DoubleMatrix> blocks)
+    public DirectDCTTask(List<DoubleMatrix> blocks)
     {
         this.blocks = blocks;
     }
@@ -21,7 +21,7 @@ public class SeparatedDCTTask implements Runnable
     {
         for (DoubleMatrix block : blocks)
         {
-            CosineTransformation.separated(block);
+            CosineTransformation.direct(block);
         }
     }
 }

@@ -1,4 +1,4 @@
-package jpegencoder.segments.APP0;
+package jpegencoder.segments.app0;
 
 import jpegencoder.segments.SegmentWriter;
 import jpegencoder.streams.BitOutputStream;
@@ -29,7 +29,7 @@ public class APP0Writer extends SegmentWriter
     private int yThumb = 0;
     private List<Byte> thumbnail = new ArrayList<Byte>();
 
-    public APP0Writer(OutputStream os)
+    public APP0Writer(BitOutputStream os)
     {
         super(os);
     }
@@ -101,26 +101,26 @@ public class APP0Writer extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        BitOutputStream.writeByte(os, 0xFF);
-        BitOutputStream.writeByte(os, APP0MARKER);
-        BitOutputStream.writeByte(os, (length & 0xFF00) >> 8);
-        BitOutputStream.writeByte(os, length & 0xFF);
+        os.writeByte(0xFF);
+        os.writeByte(APP0MARKER);
+        os.writeByte((length & 0xFF00) >> 8);
+        os.writeByte(length & 0xFF);
         for (int i = 0; i < JFIF_STRING.length; i++)
         {
-            BitOutputStream.writeByte(os, JFIF_STRING[i]);
+            os.writeByte(JFIF_STRING[i]);
         }
-        BitOutputStream.writeByte(os, major);
-        BitOutputStream.writeByte(os, minor);
-        BitOutputStream.writeByte(os, pixelUnit);
-        BitOutputStream.writeByte(os, xDensityHigh);
-        BitOutputStream.writeByte(os, xDensityLow);
-        BitOutputStream.writeByte(os, yDensityHigh);
-        BitOutputStream.writeByte(os, yDensityLow);
-        BitOutputStream.writeByte(os, xThumb);
-        BitOutputStream.writeByte(os, yThumb);
+        os.writeByte(major);
+        os.writeByte(minor);
+        os.writeByte(pixelUnit);
+        os.writeByte(xDensityHigh);
+        os.writeByte(xDensityLow);
+        os.writeByte(yDensityHigh);
+        os.writeByte(yDensityLow);
+        os.writeByte(xThumb);
+        os.writeByte(yThumb);
         for (Byte thumbnailByte : thumbnail)
         {
-            BitOutputStream.writeByte(os, thumbnailByte);
+            os.writeByte(thumbnailByte);
         }
     }
 }

@@ -15,7 +15,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>Blatt4.dct.PerformanceCheck</mainClass>
+                            <mainClass>jpegencoder.segments.dct.PerformanceCheck</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

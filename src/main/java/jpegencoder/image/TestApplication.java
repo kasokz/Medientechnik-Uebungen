@@ -24,10 +24,10 @@ import java.io.*;
  */
 public class TestApplication extends Application
 {
-//    public static void main(String[] args)
-//    {
-//        launch();
-//    }
+    public static void main(String[] args)
+    {
+        launch();
+    }
 
     public void start(Stage primaryStage) throws Exception
     {
@@ -56,7 +56,7 @@ public class TestApplication extends Application
             e.printStackTrace();
         }
         YCbCrImage yCbCrImage = ColorChannels.RGBToYCbCr(testPicture);
-        yCbCrImage.reduce(4, 4, 4);
+        yCbCrImage.reduce(1, 1, 1);
         long start = System.currentTimeMillis();
         BufferedImage img = new BufferedImage(yCbCrImage.getWidth(),
                                               yCbCrImage.getHeight(),

@@ -1,4 +1,4 @@
-package jpegencoder.segments.SOF0;
+package jpegencoder.segments.sof0;
 
 import jpegencoder.segments.SegmentWriter;
 import jpegencoder.streams.BitOutputStream;
@@ -25,7 +25,7 @@ public class SOF0Writer extends SegmentWriter
     private int numberOfComponents;
     private List<SOF0Component> components;
 
-    public SOF0Writer(OutputStream os)
+    public SOF0Writer(BitOutputStream os)
     {
         super(os);
     }
@@ -88,16 +88,16 @@ public class SOF0Writer extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        BitOutputStream.writeByte(os, 0xFF);
-        BitOutputStream.writeByte(os, SOFOMARKER);
-        BitOutputStream.writeByte(os, (length & 0xFF00) >> 8);
-        BitOutputStream.writeByte(os, length & 0xFF);
-        BitOutputStream.writeByte(os, sampleRate);
-        BitOutputStream.writeByte(os, yImgSizeHigh);
-        BitOutputStream.writeByte(os, yImgSizeLow);
-        BitOutputStream.writeByte(os, xImgSizeHigh);
-        BitOutputStream.writeByte(os, xImgSizeLow);
-        BitOutputStream.writeByte(os, numberOfComponents);
+        os.writeByte(0xFF);
+        os.writeByte(SOFOMARKER);
+        os.writeByte((length & 0xFF00) >> 8);
+        os.writeByte(length & 0xFF);
+        os.writeByte(sampleRate);
+        os.writeByte(yImgSizeHigh);
+        os.writeByte(yImgSizeLow);
+        os.writeByte(xImgSizeHigh);
+        os.writeByte(xImgSizeLow);
+        os.writeByte(numberOfComponents);
         for (SOF0Component sof0Component : components)
         {
             sof0Component.writeToStream(os);

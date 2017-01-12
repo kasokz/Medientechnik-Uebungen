@@ -1,4 +1,4 @@
-package Blatt4.dct;
+package jpegencoder.segments.dct;
 
 import org.jblas.DoubleMatrix;
 

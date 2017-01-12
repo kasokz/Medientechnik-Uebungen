@@ -1,7 +1,6 @@
-package Blatt4.dct;
+package jpegencoder.segments.dct;
 
 import org.jblas.DoubleMatrix;
-import org.jblas.ranges.IntervalRange;
 
 import java.util.ArrayList;
 import java.util.List;

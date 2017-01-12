@@ -1,6 +1,6 @@
-package Blatt4;
+package jpegencoder.segments;
 
-import Blatt4.dct.CosineTransformation;
+import jpegencoder.segments.dct.CosineTransformation;
 import org.jblas.DoubleMatrix;
 import org.junit.Assert;
 import org.junit.Before;
@@ -141,6 +141,12 @@ public class Blatt4
             }
         }
         printMatrix(testResult);
+    }
+
+    @Test
+    public void testQuantization()
+    {
+        printMatrix(CosineTransformation.quantize(expected, CosineTransformation.QUANTIZATION_MATRIX_LUMINANCE));
     }
 
     private void printMatrix(DoubleMatrix matrix)
