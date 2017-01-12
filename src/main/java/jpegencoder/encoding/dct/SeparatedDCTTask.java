@@ -1,4 +1,4 @@
-package jpegencoder.segments.dct;
+package jpegencoder.encoding.dct;
 
 import org.jblas.DoubleMatrix;
 
@@ -8,11 +8,11 @@ import java.util.List;
  * Created by Long Bui on 20.12.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class AraiTask implements Runnable
+public class SeparatedDCTTask implements Runnable
 {
     private List<DoubleMatrix> blocks;
 
-    public AraiTask(List<DoubleMatrix> blocks)
+    public SeparatedDCTTask(List<DoubleMatrix> blocks)
     {
         this.blocks = blocks;
     }
@@ -21,7 +21,7 @@ public class AraiTask implements Runnable
     {
         for (DoubleMatrix block : blocks)
         {
-            CosineTransformation.arai(block);
+            CosineTransformation.separated(block);
         }
     }
 }

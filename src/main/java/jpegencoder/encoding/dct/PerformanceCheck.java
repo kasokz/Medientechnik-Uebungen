@@ -1,4 +1,4 @@
-package jpegencoder.segments.dct;
+package jpegencoder.encoding.dct;
 
 import org.jblas.DoubleMatrix;
 
@@ -29,11 +29,6 @@ public class PerformanceCheck
                 picture.put(y, x, value);
             }
         }
-    }
-
-    public DoubleMatrix getPicture()
-    {
-        return picture;
     }
 
     public DoubleMatrix getBlock(int blockNum)

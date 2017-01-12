@@ -1,12 +1,12 @@
-package jpegencoder.encoding;
+package jpegencoder.encoding.acdc;
 
-import jpegencoder.encoding.acdc.ACCoefficient;
-import jpegencoder.encoding.acdc.ACZeroCategoryPair;
+import jpegencoder.encoding.AcDcEncoder;
+import jpegencoder.encoding.CodeWord;
+import jpegencoder.encoding.acdc.ACRuntimeEncodedPair;
+import jpegencoder.encoding.acdc.ACCategoryEncodedPair;
 import jpegencoder.streams.BitOutputStream;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.Map;
  * Created by Long Bui on 12.01.17.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class AcDcTest
+public class AcDcTests
 {
     private int[] toTest = {127, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 2, 0,
@@ -29,7 +29,7 @@ public class AcDcTest
     @Test
     public void testACEncode()
     {
-        for (ACCoefficient coefficient : AcDcEncoder.encodeAc(toTest))
+        for (ACRuntimeEncodedPair coefficient : AcDcEncoder.encodeAc(toTest))
         {
             System.out.println(coefficient.toString());
         }
@@ -38,9 +38,9 @@ public class AcDcTest
     @Test
     public void testCategoryEncode()
     {
-        for (ACZeroCategoryPair acZeroCategoryPair : AcDcEncoder.encodeCategories(AcDcEncoder.encodeAc(toTest)))
+        for (ACCategoryEncodedPair acCategoryEncodedPair : AcDcEncoder.encodeCategories(AcDcEncoder.encodeAc(toTest)))
         {
-            System.out.println(acZeroCategoryPair.toString());
+            System.out.println(acCategoryEncodedPair.toString());
         }
     }
 
@@ -58,9 +58,9 @@ public class AcDcTest
     @Test
     public void testWriteACTable() throws IOException
     {
-        List<ACZeroCategoryPair> pairs = AcDcEncoder.encodeCategories(AcDcEncoder.encodeAc(toTest));
+        List<ACCategoryEncodedPair> pairs = AcDcEncoder.encodeCategories(AcDcEncoder.encodeAc(toTest));
         Map<Integer, CodeWord> codebook = new HashMap<Integer, CodeWord>();
-        for (ACZeroCategoryPair pair : pairs)
+        for (ACCategoryEncodedPair pair : pairs)
         {
             codebook.put(pair.getPair(), new CodeWord(pair.getPair(), pair.getPair(), 8));
         }

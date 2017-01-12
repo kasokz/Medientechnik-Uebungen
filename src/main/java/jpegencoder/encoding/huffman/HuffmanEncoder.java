@@ -1,9 +1,10 @@
-package jpegencoder.encoding;
+package jpegencoder.encoding.huffman;
 
-import jpegencoder.encoding.huffman.HuffmanTree;
-import jpegencoder.encoding.huffman.HuffmanTreeComponent;
-import jpegencoder.encoding.huffman.HuffmanTreeLeaf;
-import jpegencoder.encoding.huffman.HuffmanTreeNode;
+import jpegencoder.encoding.CodeWord;
+import jpegencoder.encoding.huffman.model.HuffmanTree;
+import jpegencoder.encoding.huffman.model.HuffmanTreeComponent;
+import jpegencoder.encoding.huffman.model.HuffmanTreeLeaf;
+import jpegencoder.encoding.huffman.model.HuffmanTreeNode;
 
 import java.util.*;
 
@@ -13,15 +14,50 @@ import java.util.*;
  */
 public class HuffmanEncoder
 {
-    private Map<Integer, Integer> frequencies;
+    private HuffmanTree huffmanTree;
 
-    public HuffmanEncoder()
+    HuffmanEncoder()
     {
-        frequencies = new HashMap<Integer, Integer>();
+    }
+
+    public static HuffmanEncoder encode(int[] symbols)
+    {
+        HuffmanEncoder encoder = new HuffmanEncoder();
+        encoder.huffmanTree = encoder.createHuffmanTree(encoder.huffmanInit(symbols));
+        return encoder;
+    }
+
+    public HuffmanEncoder forJpeg()
+    {
+        return canonical().withoutFullOnes().withLengthRestriction(16);
+    }
+
+    public HuffmanEncoder canonical()
+    {
+        this.huffmanTree.makeCanonical();
+        return this;
+    }
+
+    public HuffmanEncoder withoutFullOnes()
+    {
+        this.huffmanTree.replaceMostRight();
+        return this;
+    }
+
+    public HuffmanEncoder withLengthRestriction(int lengthRestriction)
+    {
+        this.huffmanTree.restrictToLength(lengthRestriction);
+        return this;
+    }
+
+    public Map<Integer, CodeWord> getCodebookAsMap()
+    {
+        return this.huffmanTree.getCodeBookAsMap();
     }
 
     List<HuffmanTreeComponent> huffmanInit(int[] symbols)
     {
+        Map<Integer, Integer> frequencies = new HashMap<Integer, Integer>();
         int totalSymbols = symbols.length;
         for (int symbol : symbols)
         {
@@ -43,10 +79,10 @@ public class HuffmanEncoder
         return leafs;
     }
 
-    public HuffmanTree createHuffmanTree(List<HuffmanTreeComponent> nodes)
+    HuffmanTree createHuffmanTree(List<HuffmanTreeComponent> nodes)
     {
         List<HuffmanTreeLeaf> symbols = new ArrayList<HuffmanTreeLeaf>();
-        for(HuffmanTreeComponent node: nodes)
+        for (HuffmanTreeComponent node : nodes)
         {
             symbols.add((HuffmanTreeLeaf) node);
         }

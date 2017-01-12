@@ -15,7 +15,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>jpegencoder.segments.dct.PerformanceCheck</mainClass>
+                            <mainClass>jpegencoder.encoding.dct.PerformanceCheck</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

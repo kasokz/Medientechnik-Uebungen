@@ -1,6 +1,6 @@
-package jpegencoder.segments;
+package jpegencoder.encoding;
 
-import jpegencoder.segments.dct.CosineTransformation;
+import jpegencoder.encoding.dct.CosineTransformation;
 import org.jblas.DoubleMatrix;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,7 +10,7 @@ import org.junit.Test;
  * Created by Long Bui on 14.12.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class Blatt4
+public class DCTTests
 {
     private DoubleMatrix X;
     private DoubleMatrix expected;

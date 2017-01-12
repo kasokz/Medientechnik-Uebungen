@@ -4,12 +4,12 @@ package jpegencoder.encoding.acdc;
  * Created by Long Bui on 12.01.17.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class ACZeroCategoryPair
+public class ACCategoryEncodedPair
 {
     private int pair;
     private int entryCategoryEncoded;
 
-    public ACZeroCategoryPair(int pair, int entryCategoryEncoded)
+    public ACCategoryEncodedPair(int pair, int entryCategoryEncoded)
     {
         this.pair = pair;
         this.entryCategoryEncoded = entryCategoryEncoded;

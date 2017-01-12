@@ -1,7 +1,7 @@
 package jpegencoder.encoding;
 
-import jpegencoder.encoding.acdc.ACCoefficient;
-import jpegencoder.encoding.acdc.ACZeroCategoryPair;
+import jpegencoder.encoding.acdc.ACRuntimeEncodedPair;
+import jpegencoder.encoding.acdc.ACCategoryEncodedPair;
 import jpegencoder.streams.BitOutputStream;
 
 import java.io.IOException;
@@ -28,19 +28,19 @@ public class AcDcEncoder
                                                 Math.log(2) + 0.5);
         CodeWord codeWord = codebook.get(category);
         bos.writeBits(codeWord.getCode(), codeWord.getLength());
-        bos.writeBits(ACZeroCategoryPair.encodeCategory(deltaDc), category);
+        bos.writeBits(ACCategoryEncodedPair.encodeCategory(deltaDc), category);
     }
 
-    public static List<ACCoefficient> encodeAc(int[] zigzaged)
+    public static List<ACRuntimeEncodedPair> encodeAc(int[] zigzaged)
     {
-        List<ACCoefficient> resultList = new ArrayList<ACCoefficient>();
+        List<ACRuntimeEncodedPair> resultList = new ArrayList<ACRuntimeEncodedPair>();
         // loop starts at index 1 because index 0 is DC
         int zeroCount = 0;
         for (int i = 1; i < zigzaged.length; i++)
         {
             if (zigzaged[i] != 0 || zeroCount == 15)
             {
-                resultList.add(new ACCoefficient(zeroCount, zigzaged[i]));
+                resultList.add(new ACRuntimeEncodedPair(zeroCount, zigzaged[i]));
                 zeroCount = 0;
             }
             else
@@ -55,32 +55,32 @@ public class AcDcEncoder
             {
                 resultList.remove(resultList.size() - 1);
             }
-            resultList.add(new ACCoefficient(0, 0));
+            resultList.add(new ACRuntimeEncodedPair(0, 0));
         }
         return resultList;
     }
 
-    public static List<ACZeroCategoryPair> encodeCategories(List<ACCoefficient> acCoefficients)
+    public static List<ACCategoryEncodedPair> encodeCategories(List<ACRuntimeEncodedPair> acRuntimeEncodedPairs)
     {
-        List<ACZeroCategoryPair> resultList = new ArrayList<ACZeroCategoryPair>();
-        for (ACCoefficient acCoefficient : acCoefficients)
+        List<ACCategoryEncodedPair> resultList = new ArrayList<ACCategoryEncodedPair>();
+        for (ACRuntimeEncodedPair acRuntimeEncodedPair : acRuntimeEncodedPairs)
         {
-            int category = (int) Math.round(Math.log(Math.abs(acCoefficient.getEntry())) /
+            int category = (int) Math.round(Math.log(Math.abs(acRuntimeEncodedPair.getEntry())) /
                                                     Math.log(2) + 0.5);
-            int pair = (acCoefficient.getZeroCount() << 4) +
+            int pair = (acRuntimeEncodedPair.getZeroCount() << 4) +
                     category;
-            int categoryEncoded = ACZeroCategoryPair.encodeCategory(acCoefficient.getEntry());
-            resultList.add(new ACZeroCategoryPair(pair, categoryEncoded));
+            int categoryEncoded = ACCategoryEncodedPair.encodeCategory(acRuntimeEncodedPair.getEntry());
+            resultList.add(new ACCategoryEncodedPair(pair, categoryEncoded));
         }
         return resultList;
     }
 
     // Weiterer Schritt wo anders, z.B. Hauptprogramm
 
-    public static void writeACTable(BitOutputStream bos, List<ACZeroCategoryPair> acEncoding,
+    public static void writeACTable(BitOutputStream bos, List<ACCategoryEncodedPair> acEncoding,
                                     Map<Integer, CodeWord> codebook) throws IOException
     {
-        for (ACZeroCategoryPair pair : acEncoding)
+        for (ACCategoryEncodedPair pair : acEncoding)
         {
             CodeWord codeWord = codebook.get(pair.getPair());
             bos.writeBits(codeWord.getCode(), codeWord.getLength());

@@ -17,23 +17,23 @@ public class ColorChannels
     public static YCbCrImage RGBToYCbCr(RGBImage rgbImage)
     {
         long start = System.currentTimeMillis();
-        ArrayList<ArrayList<YCbCr>> newPictureValues = new ArrayList<ArrayList<YCbCr>>(rgbImage.getHeight());
-        for (int i = 0; i < rgbImage.getHeight(); i++)
+        DoubleMatrix luminance = new DoubleMatrix(rgbImage.getStrideHeight(), rgbImage.getStrideWidth());
+        DoubleMatrix cbChannel = new DoubleMatrix(rgbImage.getStrideHeight(), rgbImage.getStrideWidth());
+        DoubleMatrix crChannel = new DoubleMatrix(rgbImage.getStrideHeight(), rgbImage.getStrideWidth());
+        for (int pixelRow = 0; pixelRow < rgbImage.getStrideHeight(); pixelRow++)
         {
-            newPictureValues.add(new ArrayList<YCbCr>(rgbImage.getWidth()));
-        }
-        for (int pixelRow = 0; pixelRow < rgbImage.getHeight(); pixelRow++)
-        {
-            for (int pixelColumn = 0; pixelColumn < rgbImage.getWidth(); pixelColumn++)
+            for (int pixelColumn = 0; pixelColumn < rgbImage.getStrideWidth(); pixelColumn++)
             {
-                newPictureValues.get(pixelRow)
-                                .add(convertRGBToYCbCr(rgbImage.getRGBAt(pixelColumn, pixelRow)));
+                YCbCr converted = convertRGBToYCbCr(rgbImage.getRGBAt(pixelColumn, pixelRow));
+                luminance.put(pixelRow, pixelColumn, converted.getLuminanceChannel());
+                cbChannel.put(pixelRow, pixelColumn, converted.getCbChannel());
+                crChannel.put(pixelRow, pixelColumn, converted.getCrChannel());
             }
         }
         System.out.println("Finished RGB to YCbCr conversion in "
                                    + ((System.currentTimeMillis() - start) / 1000d)
                                    + " seconds");
-        return new YCbCrImage(newPictureValues);
+        return new YCbCrImage(luminance, cbChannel, crChannel);
     }
 
     public static YCbCr convertRGBToYCbCr(RGB pixel)

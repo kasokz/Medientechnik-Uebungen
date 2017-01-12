@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * E-Mail: giaolong.bui@student.fhws.de
  */
 
-public class Blatt2
+public class BitStreamTests
 {
 
     @Test

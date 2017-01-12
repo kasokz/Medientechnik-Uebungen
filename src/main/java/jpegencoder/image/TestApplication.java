@@ -35,7 +35,7 @@ public class TestApplication extends Application
         Image image = SwingFXUtils.toFXImage(img, null);
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
-        imageView.setFitWidth(1080);
+        imageView.setFitWidth(900);
         VBox verticalBox = new VBox();
         verticalBox.getChildren().add(imageView);
         Scene scene = new Scene(verticalBox, image.getWidth(), image.getHeight());
@@ -82,23 +82,23 @@ public class TestApplication extends Application
         RGBImage testPicture = null;
         try
         {
-            testPicture = new RGBImage(new FileInputStream(new File("1080.ppm")));
+            testPicture = new RGBImage(new FileInputStream(new File("test-pic.ppm")));
         }
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
         long start = System.currentTimeMillis();
-        BufferedImage img = new BufferedImage(testPicture.getWidth(),
-                                              testPicture.getHeight(),
+        BufferedImage img = new BufferedImage(testPicture.getStrideWidth(),
+                                              testPicture.getStrideHeight(),
                                               BufferedImage.TYPE_INT_RGB);
         int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
-        for (int i = 0; i < testPicture.getHeight(); i++)
+        for (int i = 0; i < testPicture.getStrideHeight(); i++)
         {
-            for (int j = 0; j < testPicture.getWidth(); j++)
+            for (int j = 0; j < testPicture.getStrideWidth(); j++)
             {
                 RGB pixel = testPicture.getRGBAt(j, i);
-                pixels[j + i * testPicture.getWidth()] = pixel.getRed() << 16
+                pixels[j + i * testPicture.getStrideWidth()] = pixel.getRed() << 16
                         | pixel.getGreen() << 8
                         | pixel.getBlue();
             }

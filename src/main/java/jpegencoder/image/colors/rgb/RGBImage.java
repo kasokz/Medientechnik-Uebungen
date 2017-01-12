@@ -19,8 +19,8 @@ public class RGBImage
 
     private RGBImage()
     {
-        this.strideHeight = 16;
-        this.strideWidth = 16;
+        this.strideHeight = 8;
+        this.strideWidth = 8;
     }
 
     // Konstruktor mit InputStream parsing: Aufgabe 1b)
@@ -89,19 +89,19 @@ public class RGBImage
     public RGB getRGBAt(int x, int y)
     {
         RGB result;
-        if (x > this.getStrideWidth() || y > this.getStrideHeight())
+        if (x >= this.getStrideWidth() || y >= this.getStrideHeight())
         {
             throw new IllegalArgumentException();
         }
-        if (x > this.getWidth() && y > this.getHeight())
+        if (x >= this.getWidth() && y >= this.getHeight())
         {
             result = picture.get((width - 1) + (height - 1) * width);
         }
-        else if (x > this.getWidth())
+        else if (x >= this.getWidth())
         {
             result = picture.get((width - 1) + y * width);
         }
-        else if (y > this.getHeight())
+        else if (y >= this.getHeight())
         {
             result = picture.get(x + (height - 1) * width);
         }
@@ -120,16 +120,6 @@ public class RGBImage
     public int getWidth()
     {
         return this.width;
-    }
-
-    public void setStrideWidth(int stride)
-    {
-        this.strideWidth = stride;
-    }
-
-    public void setStrideHeight(int stride)
-    {
-        this.strideHeight = stride;
     }
 
     public int getStrideHeight()

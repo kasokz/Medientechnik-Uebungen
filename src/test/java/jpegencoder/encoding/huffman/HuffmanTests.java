@@ -1,8 +1,11 @@
-package jpegencoder.encoding;
+package jpegencoder.encoding.huffman;
 
+import jpegencoder.encoding.CodeWord;
+import jpegencoder.encoding.huffman.HuffmanEncoder;
 import jpegencoder.segments.dht.DHTWriter;
-import jpegencoder.encoding.huffman.HuffmanTree;
-import jpegencoder.encoding.huffman.HuffmanTreeComponent;
+import jpegencoder.encoding.huffman.model.HuffmanTree;
+import jpegencoder.encoding.huffman.model.HuffmanTreeComponent;
+import jpegencoder.segments.dht.HuffmanTable;
 import jpegencoder.streams.BitOutputStream;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,13 +13,14 @@ import org.junit.Test;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Long Bui on 29.11.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class Blatt3
+public class HuffmanTests
 {
     private HuffmanEncoder huffmanEncoder;
     private HuffmanTree huffmanTree;
@@ -128,11 +132,12 @@ public class Blatt3
     public void testDHTWriter() throws IOException
     {
         BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
-        DHTWriter dhtWriter = new DHTWriter(bos);
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
         huffmanTree.restrictToLength(16);
-        dhtWriter.setCodeBook(huffmanTree.getCodeBook());
+        List<HuffmanTable> tables = new ArrayList<HuffmanTable>();
+        tables.add(new HuffmanTable(0,0,huffmanTree.getCodeBook()));
+        DHTWriter dhtWriter = new DHTWriter(bos, tables);
         dhtWriter.writeSegment();
         bos.close();
     }

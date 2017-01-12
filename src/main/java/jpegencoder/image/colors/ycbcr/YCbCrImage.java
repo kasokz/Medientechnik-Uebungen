@@ -13,35 +13,23 @@ public class YCbCrImage
     private DoubleMatrix luminance;
     private DoubleMatrix cbChannel;
     private DoubleMatrix crChannel;
-    private int height;
-    private int width;
 
-    public YCbCrImage(ArrayList<ArrayList<YCbCr>> picture)
+
+    public YCbCrImage(DoubleMatrix luminance, DoubleMatrix cbChannel, DoubleMatrix crChannel)
     {
-        this.height = picture.size();
-        this.width = picture.get(0).size();
-        this.luminance = new DoubleMatrix(height, width);
-        this.cbChannel = new DoubleMatrix(height, width);
-        this.crChannel = new DoubleMatrix(height, width);
-        for (int row = 0; row < picture.size(); row++)
-        {
-            for (int column = 0; column < picture.get(row).size(); column++)
-            {
-                luminance.put(row, column, picture.get(row).get(column).getLuminanceChannel());
-                cbChannel.put(row, column, picture.get(row).get(column).getCbChannel());
-                crChannel.put(row, column, picture.get(row).get(column).getCrChannel());
-            }
-        }
+        this.luminance = luminance;
+        this.cbChannel = cbChannel;
+        this.crChannel = crChannel;
     }
 
     public int getHeight()
     {
-        return Math.max(Math.max(luminance.getRows(), cbChannel.getRows()), crChannel.getRows());
+        return luminance.getRows();
     }
 
     public int getWidth()
     {
-        return Math.max(Math.max(luminance.getColumns(), cbChannel.getColumns()), crChannel.getColumns());
+        return luminance.getColumns();
     }
 
     public YCbCr getPixelAt(int x, int y)
@@ -86,9 +74,9 @@ public class YCbCrImage
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < getHeight(); i++)
         {
-            for (int j = 0; j < width; j++)
+            for (int j = 0; j < getWidth(); j++)
             {
                 sb.append(getPixelAt(i, j).toString())
                   .append(",");

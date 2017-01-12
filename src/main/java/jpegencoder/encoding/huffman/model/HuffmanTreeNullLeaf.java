@@ -1,4 +1,4 @@
-package jpegencoder.encoding.huffman;
+package jpegencoder.encoding.huffman.model;
 
 import jpegencoder.encoding.CodeWord;
 

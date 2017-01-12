@@ -1,4 +1,4 @@
-package jpegencoder.segments.dct;
+package jpegencoder.encoding.dct;
 
 import org.jblas.DoubleMatrix;
 
