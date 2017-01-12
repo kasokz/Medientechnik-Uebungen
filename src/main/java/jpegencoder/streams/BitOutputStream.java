@@ -81,4 +81,12 @@ public class BitOutputStream extends OutputStream
             byteToWrite = byteToWrite << 1;
         }
     }
+
+    public void writeBits(int bits, int length) throws IOException
+    {
+        for (int i = length - 1; i >= 0; i--)
+        {
+            write((bits >> i) & 0x1);
+        }
+    }
 }
