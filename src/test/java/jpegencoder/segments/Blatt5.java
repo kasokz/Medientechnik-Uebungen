@@ -21,12 +21,13 @@ public class Blatt5
     @Test
     public void testDqtWriter() throws IOException
     {
-        BitOutputStream bos = new BitOutputStream(new FileOutputStream("bits.dat"));
+        BitOutputStream bos = new BitOutputStream(new FileOutputStream("dqt.jpg"));
         DQTWriter dqtWriter = new DQTWriter(bos);
         List<QuantizationTable> tables = new ArrayList<QuantizationTable>();
         tables.add(new QuantizationTable(0, CosineTransformation.QUANTIZATION_MATRIX_LUMINANCE));
         tables.add(new QuantizationTable(1, CosineTransformation.QUANTIZATION_MATRIX_CHROMINANCE));
         dqtWriter.setTables(tables);
         dqtWriter.writeSegment();
+        bos.close();
     }
 }
