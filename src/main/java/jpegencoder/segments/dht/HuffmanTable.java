@@ -1,6 +1,6 @@
 package jpegencoder.segments.dht;
 
-import jpegencoder.encoding.CodeWord;
+import jpegencoder.encoding.huffman.CodeWord;
 import jpegencoder.streams.BitOutputStream;
 
 import java.io.IOException;

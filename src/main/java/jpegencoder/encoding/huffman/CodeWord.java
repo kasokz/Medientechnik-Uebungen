@@ -1,4 +1,4 @@
-package jpegencoder.encoding;
+package jpegencoder.encoding.huffman;
 
 import java.io.OutputStream;
 

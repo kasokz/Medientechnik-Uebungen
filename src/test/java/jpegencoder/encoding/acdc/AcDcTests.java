@@ -1,7 +1,6 @@
 package jpegencoder.encoding.acdc;
 
-import jpegencoder.encoding.AcDcEncoder;
-import jpegencoder.encoding.CodeWord;
+import jpegencoder.encoding.huffman.CodeWord;
 import jpegencoder.streams.BitOutputStream;
 import org.junit.Test;
 

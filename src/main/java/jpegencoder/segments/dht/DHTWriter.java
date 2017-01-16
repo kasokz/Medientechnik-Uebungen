@@ -1,11 +1,10 @@
 package jpegencoder.segments.dht;
 
-import jpegencoder.encoding.CodeWord;
+import jpegencoder.encoding.huffman.CodeWord;
 import jpegencoder.segments.SegmentWriter;
 import jpegencoder.streams.BitOutputStream;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

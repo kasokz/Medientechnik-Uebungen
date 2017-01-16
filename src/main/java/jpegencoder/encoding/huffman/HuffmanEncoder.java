@@ -1,6 +1,5 @@
 package jpegencoder.encoding.huffman;
 
-import jpegencoder.encoding.CodeWord;
 import jpegencoder.encoding.huffman.model.HuffmanTree;
 import jpegencoder.encoding.huffman.model.HuffmanTreeComponent;
 import jpegencoder.encoding.huffman.model.HuffmanTreeLeaf;

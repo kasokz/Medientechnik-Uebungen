@@ -1,6 +1,6 @@
 package jpegencoder.encoding.huffman.model;
 
-import jpegencoder.encoding.CodeWord;
+import jpegencoder.encoding.huffman.CodeWord;
 
 import java.util.*;
 
