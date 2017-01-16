@@ -65,7 +65,7 @@ public class JpegEncoder
         {
             symbols[index++] = acCategoryEncodedPair.getPair();
         }
-        return new HuffmanTable(2, 1,
+        return new HuffmanTable(0, 1,
                                 (List<CodeWord>) HuffmanEncoder.encode(symbols)
                                                                .forJpeg()
                                                                .getCodebookAsMap()
@@ -82,7 +82,7 @@ public class JpegEncoder
         {
             symbols[index++] = acCategoryEncodedPair.getPair();
         }
-        return new HuffmanTable(3, 1,
+        return new HuffmanTable(1, 1,
                                 (List<CodeWord>) HuffmanEncoder.encode(symbols)
                                                                .forJpeg()
                                                                .getCodebookAsMap()
