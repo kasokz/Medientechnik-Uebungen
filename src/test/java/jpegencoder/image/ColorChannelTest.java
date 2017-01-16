@@ -36,19 +36,24 @@ public class ColorChannelTest
     @Test
     public void testSettersWithGetters()
     {
-        for (int i = 0; i < 8; i++)
+        int index = 0;
+        for (int i = 0; i < 32; i++)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < 32; j++)
             {
-                testChannel.setPixel(j, i, i + j);
+                testChannel.setPixel(j, i, index++);
             }
         }
-        for(int i = 0; i < 8; i++)
+        index = 0;
+        for(int i = 0; i < 32; i++)
         {
-            for(int j = 0; j < 8; j++)
+            for(int j = 0; j < 32; j++)
             {
-                Assert.assertEquals(i+j,testChannel.getPixel(j,i));
+                System.out.print(testChannel.getPixel(j,i)+ " ");
+                Assert.assertEquals(index++,testChannel.getPixel(j,i));
             }
+            System.out.println();
         }
+        System.out.println(Runtime.getRuntime().availableProcessors());
     }
 }

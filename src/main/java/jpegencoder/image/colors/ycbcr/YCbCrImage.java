@@ -14,6 +14,10 @@ public class YCbCrImage
     private DoubleMatrix cbChannel;
     private DoubleMatrix crChannel;
 
+    private int cbReductionFaktor = 1;
+    private int crReductionFaktor = 1;
+
+
     public YCbCrImage(DoubleMatrix luminance, DoubleMatrix cbChannel, DoubleMatrix crChannel)
     {
         this.luminance = luminance;
@@ -62,7 +66,7 @@ public class YCbCrImage
                         sum += channel.get(rowInInput, columnInInput);
                     }
                 }
-                result.put(row, column, (int) (sum / (double) (factor * factor)) + 0.5);
+                result.put(row, column, (int) ((sum / (double) (factor * factor)) + 0.5));
             }
         }
         return result;
