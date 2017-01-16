@@ -4,7 +4,10 @@ import jpegencoder.image.colors.ColorChannel;
 import org.jblas.DoubleMatrix;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.*;
 
 /**
  * Created by Long Bui on 19.12.16.
@@ -54,77 +57,67 @@ public class PerformanceCheck
         }
     }
 
-    public static void main(String[] args) throws InterruptedException
+    public static void main(String[] args) throws InterruptedException, ExecutionException
     {
         PerformanceCheck performanceCheck = new PerformanceCheck();
-        Thread[] threads = new Thread[Runtime.getRuntime().availableProcessors()];
-        int numOfBlocks = performanceCheck.getNumOfBlocks();
+        int numberOfThreads = Runtime.getRuntime().availableProcessors();
+        ExecutorService pool = Executors.newFixedThreadPool(numberOfThreads);
+        Set<Future<Integer>> set = new HashSet<Future<Integer>>();
         int count = 0;
         System.out.println("Starting Direct DCT Benchmark");
         long start = System.currentTimeMillis();
-        long end = start + 10000;
-        while (System.currentTimeMillis() < end)
+        for (int i = 0; i < numberOfThreads; i++)
         {
-            for (int i = 0; i < threads.length; i++)
-            {
-                threads[i] = new Thread(
-                        new DirectDCTTask(performanceCheck.getBlocksAsList(i * numOfBlocks / threads.length,
-                                                                           (i + 1) * (numOfBlocks / threads.length - 1))));
-                threads[i].setPriority(Thread.MAX_PRIORITY);
-                threads[i].start();
-            }
-            for (Thread thread : threads)
-            {
-                thread.join();
-            }
-            count++;
+            Callable<Integer> callable = new FullImageDirectTask(performanceCheck.picture);
+            Future<Integer> future = pool.submit(callable);
+            set.add(future);
         }
-        System.out.println("Direct DCT takes " + 10000d / count + " ms/image");
+        for (Future<Integer> future : set)
+        {
+            count += future.get();
+        }
+        long finishedAfter = System.currentTimeMillis() - start;
+        System.out.println("Finished after " + finishedAfter / 1000d + "seconds");
+        System.out.println("Direct DCT takes " + (double) finishedAfter / count + " ms/image");
         System.out.println("Managed " + count + " images");
+        pool = Executors.newFixedThreadPool(numberOfThreads);
+        set = new HashSet<Future<Integer>>();
         count = 0;
         System.out.println("Starting Separated DCT Benchmark");
         start = System.currentTimeMillis();
-        end = start + 10000;
-        while (System.currentTimeMillis() < end)
+        for (int i = 0; i < numberOfThreads; i++)
         {
-            for (int i = 0; i < threads.length; i++)
-            {
-                threads[i] = new Thread(
-                        new SeparatedDCTTask(performanceCheck.getBlocksAsList(i * numOfBlocks / threads.length,
-                                                                              (i + 1) * (numOfBlocks / threads.length - 1))));
-                threads[i].setPriority(Thread.MAX_PRIORITY);
-                threads[i].start();
-            }
-            for (Thread thread : threads)
-            {
-                thread.join();
-            }
-            count++;
+            Callable<Integer> callable = new FullImageSeparatedTask(performanceCheck.picture);
+            Future<Integer> future = pool.submit(callable);
+            set.add(future);
         }
-        System.out.println("Separated DCT takes " + 10000d / count + " ms/image");
+        for (Future<Integer> future : set)
+        {
+            count += future.get();
+        }
+        finishedAfter = System.currentTimeMillis() - start;
+        System.out.println("Finished after " + finishedAfter / 1000d + "seconds");
+        System.out.println("Separated DCT takes " + (double) finishedAfter / count + " ms/image");
         System.out.println("Managed " + count + " images");
+        pool = Executors.newFixedThreadPool(numberOfThreads);
+        set = new HashSet<Future<Integer>>();
         count = 0;
         System.out.println("Starting Arai Benchmark");
         start = System.currentTimeMillis();
-        end = start + 10000;
-        while (System.currentTimeMillis() < end)
+        for (int i = 0; i < numberOfThreads; i++)
         {
-            for (int i = 0; i < threads.length; i++)
-            {
-                threads[i] = new Thread(
-                        new AraiTask(performanceCheck.getBlocksAsList(i * numOfBlocks / threads.length,
-                                                                      (i + 1) * (numOfBlocks / threads.length - 1))));
-                threads[i].setPriority(Thread.MAX_PRIORITY);
-                threads[i].start();
-            }
-            for (Thread thread : threads)
-            {
-                thread.join();
-            }
-            count++;
+            Callable<Integer> callable = new FullImageAraiTask(performanceCheck.picture);
+            Future<Integer> future = pool.submit(callable);
+            set.add(future);
         }
-        System.out.println("Arai takes " + 10000d / count + " ms/image");
+        for (Future<Integer> future : set)
+        {
+            count += future.get();
+        }
+        finishedAfter = System.currentTimeMillis() - start;
+        System.out.println("Finished after " + finishedAfter / 1000d + "seconds");
+        System.out.println("Arai takes " + (double) finishedAfter / count + " ms/image");
         System.out.println("Managed " + count + " images");
-
+        System.exit(0);
     }
 }
