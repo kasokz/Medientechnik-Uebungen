@@ -1,6 +1,7 @@
 package jpegencoder.encoding;
 
 import jpegencoder.encoding.dct.CosineTransformation;
+import jpegencoder.segments.dqt.QuantizationTable;
 import org.jblas.DoubleMatrix;
 import org.junit.Assert;
 import org.junit.Before;
@@ -146,7 +147,7 @@ public class DCTTests
     @Test
     public void testQuantization()
     {
-        printMatrix(CosineTransformation.quantize(expected, CosineTransformation.QUANTIZATION_MATRIX_LUMINANCE));
+        printMatrix(CosineTransformation.quantize(expected, QuantizationTable.QUANTIZATION_MATRIX_LUMINANCE));
     }
 
     private void printMatrix(DoubleMatrix matrix)

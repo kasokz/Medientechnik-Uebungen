@@ -40,8 +40,7 @@ public abstract class AbstractCategoryEncodedPair
     public static int encodeCategory(int toEncode)
     {
         int result;
-        int category = (int) Math.round(Math.log(Math.abs(toEncode)) /
-                                                Math.log(2) + 0.5);
+        int category = calculateCategory(toEncode);
         if (toEncode < 0)
         {
             int maxValueCategory = (int) (Math.pow(2, category) - 1);

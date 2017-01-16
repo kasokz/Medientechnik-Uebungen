@@ -1,6 +1,5 @@
 package jpegencoder.segments;
 
-import jpegencoder.encoding.dct.CosineTransformation;
 import jpegencoder.segments.dqt.DQTWriter;
 import jpegencoder.segments.dqt.QuantizationTable;
 import jpegencoder.streams.BitOutputStream;
@@ -23,8 +22,8 @@ public class DQTTests
         BitOutputStream bos = new BitOutputStream(new FileOutputStream("dqt.jpg"));
         DQTWriter dqtWriter = new DQTWriter(bos);
         List<QuantizationTable> tables = new ArrayList<QuantizationTable>();
-        tables.add(new QuantizationTable(0, CosineTransformation.QUANTIZATION_MATRIX_LUMINANCE));
-        tables.add(new QuantizationTable(1, CosineTransformation.QUANTIZATION_MATRIX_CHROMINANCE));
+        tables.add(new QuantizationTable(0, QuantizationTable.QUANTIZATION_MATRIX_LUMINANCE));
+        tables.add(new QuantizationTable(1, QuantizationTable.QUANTIZATION_MATRIX_CHROMINANCE));
         dqtWriter.setTables(tables);
         dqtWriter.writeSegment();
         bos.close();

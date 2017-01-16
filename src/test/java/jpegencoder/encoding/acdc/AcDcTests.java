@@ -35,7 +35,7 @@ public class AcDcTests
     @Test
     public void testCategoryEncode()
     {
-        for (ACCategoryEncodedPair acCategoryEncodedPair : AcDcEncoder.encodeCategories(AcDcEncoder.encodeRunlength(toTest)))
+        for (ACCategoryEncodedPair acCategoryEncodedPair : AcDcEncoder.encodeCategoriesAC(AcDcEncoder.encodeRunlength(toTest)))
         {
             System.out.println(acCategoryEncodedPair.toString());
         }
@@ -55,7 +55,7 @@ public class AcDcTests
     @Test
     public void testWriteACTable() throws IOException
     {
-        List<ACCategoryEncodedPair> pairs = AcDcEncoder.encodeCategories(AcDcEncoder.encodeRunlength(toTest));
+        List<ACCategoryEncodedPair> pairs = AcDcEncoder.encodeCategoriesAC(AcDcEncoder.encodeRunlength(toTest));
         Map<Integer, CodeWord> codebook = new HashMap<Integer, CodeWord>();
         for (ACCategoryEncodedPair pair : pairs)
         {

@@ -22,12 +22,12 @@ public class AcDcEncoder
         List<DCCategoryEncodedPair> result = new ArrayList<DCCategoryEncodedPair>(channel.getNumOfBlocks());
         for (int i = 0; i < channel.getNumOfBlocks(); i++)
         {
-            result.add(calculateDC(channel, i));
+            result.add(calculateDifferenceDC(channel, i));
         }
         return result;
     }
 
-    private static DCCategoryEncodedPair calculateDC(ColorChannel channel, int i)
+    private static DCCategoryEncodedPair calculateDifferenceDC(ColorChannel channel, int i)
     {
         int result = (int) channel.getBlock(i).get(0);
         if (i != 0)
@@ -39,7 +39,6 @@ public class AcDcEncoder
     }
 
     // Weiterer Schritt wo anders, z.B. Hauptprogramm
-
     public static void writeDC(BitOutputStream bos, int deltaDc, Map<Integer, CodeWord> codebook) throws IOException
     {
         int category = AbstractCategoryEncodedPair.calculateCategory(deltaDc);
@@ -51,10 +50,10 @@ public class AcDcEncoder
     public static List<ACCategoryEncodedPair> getAllACs(ColorChannel channel)
     {
         List<ACCategoryEncodedPair> result = new ArrayList<ACCategoryEncodedPair>();
-        for (DoubleMatrix block : channel.getBlocks(0, channel.getNumOfBlocks() - 1))
+        for (DoubleMatrix block : channel.getBlocks(0, channel.getNumOfBlocks()))
         {
             List<ACRunlengthEncodedPair> runlengthEncodedBlock = encodeRunlength(Util.zigzagSort(block));
-            List<ACCategoryEncodedPair> categoryEncodedBlock = encodeCategories(runlengthEncodedBlock);
+            List<ACCategoryEncodedPair> categoryEncodedBlock = encodeCategoriesAC(runlengthEncodedBlock);
             result.addAll(categoryEncodedBlock);
         }
         return result;
@@ -89,7 +88,7 @@ public class AcDcEncoder
         return resultList;
     }
 
-    public static List<ACCategoryEncodedPair> encodeCategories(List<ACRunlengthEncodedPair> acRunlengthEncodedPairs)
+    public static List<ACCategoryEncodedPair> encodeCategoriesAC(List<ACRunlengthEncodedPair> acRunlengthEncodedPairs)
     {
         List<ACCategoryEncodedPair> resultList = new ArrayList<ACCategoryEncodedPair>();
         for (ACRunlengthEncodedPair acRunlengthEncodedPair : acRunlengthEncodedPairs)

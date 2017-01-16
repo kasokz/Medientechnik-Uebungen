@@ -31,19 +31,19 @@ public class HuffmanEncoder
         return canonical().withoutFullOnes().withLengthRestriction(16);
     }
 
-    public HuffmanEncoder canonical()
+    private HuffmanEncoder canonical()
     {
         this.huffmanTree.makeCanonical();
         return this;
     }
 
-    public HuffmanEncoder withoutFullOnes()
+    private HuffmanEncoder withoutFullOnes()
     {
         this.huffmanTree.replaceMostRight();
         return this;
     }
 
-    public HuffmanEncoder withLengthRestriction(int lengthRestriction)
+    private HuffmanEncoder withLengthRestriction(int lengthRestriction)
     {
         this.huffmanTree.restrictToLength(lengthRestriction);
         return this;
