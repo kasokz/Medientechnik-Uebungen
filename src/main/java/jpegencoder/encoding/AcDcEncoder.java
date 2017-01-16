@@ -1,6 +1,6 @@
 package jpegencoder.encoding;
 
-import jpegencoder.encoding.acdc.ACRuntimeEncodedPair;
+import jpegencoder.encoding.acdc.ACRunlengthEncodedPair;
 import jpegencoder.encoding.acdc.ACCategoryEncodedPair;
 import jpegencoder.streams.BitOutputStream;
 
@@ -31,16 +31,16 @@ public class AcDcEncoder
         bos.writeBits(ACCategoryEncodedPair.encodeCategory(deltaDc), category);
     }
 
-    public static List<ACRuntimeEncodedPair> encodeAc(int[] zigzaged)
+    public static List<ACRunlengthEncodedPair> encodeRunlength(int[] zigzaged)
     {
-        List<ACRuntimeEncodedPair> resultList = new ArrayList<ACRuntimeEncodedPair>();
+        List<ACRunlengthEncodedPair> resultList = new ArrayList<ACRunlengthEncodedPair>();
         // loop starts at index 1 because index 0 is DC
         int zeroCount = 0;
         for (int i = 1; i < zigzaged.length; i++)
         {
             if (zigzaged[i] != 0 || zeroCount == 15)
             {
-                resultList.add(new ACRuntimeEncodedPair(zeroCount, zigzaged[i]));
+                resultList.add(new ACRunlengthEncodedPair(zeroCount, zigzaged[i]));
                 zeroCount = 0;
             }
             else
@@ -55,21 +55,21 @@ public class AcDcEncoder
             {
                 resultList.remove(resultList.size() - 1);
             }
-            resultList.add(new ACRuntimeEncodedPair(0, 0));
+            resultList.add(new ACRunlengthEncodedPair(0, 0));
         }
         return resultList;
     }
 
-    public static List<ACCategoryEncodedPair> encodeCategories(List<ACRuntimeEncodedPair> acRuntimeEncodedPairs)
+    public static List<ACCategoryEncodedPair> encodeCategories(List<ACRunlengthEncodedPair> acRunlengthEncodedPairs)
     {
         List<ACCategoryEncodedPair> resultList = new ArrayList<ACCategoryEncodedPair>();
-        for (ACRuntimeEncodedPair acRuntimeEncodedPair : acRuntimeEncodedPairs)
+        for (ACRunlengthEncodedPair acRunlengthEncodedPair : acRunlengthEncodedPairs)
         {
-            int category = (int) Math.round(Math.log(Math.abs(acRuntimeEncodedPair.getEntry())) /
+            int category = (int) Math.round(Math.log(Math.abs(acRunlengthEncodedPair.getEntry())) /
                                                     Math.log(2) + 0.5);
-            int pair = (acRuntimeEncodedPair.getZeroCount() << 4) +
+            int pair = (acRunlengthEncodedPair.getZeroCount() << 4) +
                     category;
-            int categoryEncoded = ACCategoryEncodedPair.encodeCategory(acRuntimeEncodedPair.getEntry());
+            int categoryEncoded = ACCategoryEncodedPair.encodeCategory(acRunlengthEncodedPair.getEntry());
             resultList.add(new ACCategoryEncodedPair(pair, categoryEncoded));
         }
         return resultList;

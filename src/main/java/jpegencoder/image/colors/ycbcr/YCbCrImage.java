@@ -14,7 +14,6 @@ public class YCbCrImage
     private DoubleMatrix cbChannel;
     private DoubleMatrix crChannel;
 
-
     public YCbCrImage(DoubleMatrix luminance, DoubleMatrix cbChannel, DoubleMatrix crChannel)
     {
         this.luminance = luminance;

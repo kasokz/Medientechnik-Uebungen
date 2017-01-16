@@ -1,5 +1,6 @@
 package jpegencoder.encoding.dct;
 
+import jpegencoder.image.colors.ColorChannel;
 import org.jblas.DoubleMatrix;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class PerformanceCheck
 {
-    private DoubleMatrix picture = new DoubleMatrix(256, 256);
+    private ColorChannel picture = new ColorChannel(256, 256);
 
     public PerformanceCheck()
     {
@@ -20,37 +21,34 @@ public class PerformanceCheck
 
     private void fillPicture()
     {
-        for (int y = 0; y < picture.getRows(); y++)
+        for (int y = 0; y < picture.getHeight(); y++)
         {
-            for (int x = 0; x < picture.getColumns(); x++)
+            for (int x = 0; x < picture.getWidth(); x++)
             {
                 int value;
                 value = (x + (y * 8)) % 256;
-                picture.put(y, x, value);
+                picture.setPixel(y, x, value);
             }
         }
     }
 
-    public DoubleMatrix getBlock(int blockNum)
+    public List<DoubleMatrix> getBlocksAsList(int start, int end)
     {
-        DoubleMatrix matrix = new DoubleMatrix(8, 8);
-        for (int y = (blockNum / 32) * 8; y < ((blockNum / 32) * 8) + 8; y++)
-        {
-            for (int x = (blockNum * 8) % 256; x < (((blockNum * 8) % 256) + 8); x++)
-            {
-                matrix.put(y % 8, x % 8, picture.get(y, x));
-            }
-        }
-        return matrix;
+        return picture.getBlocks(start, end);
+    }
+
+    public int getNumOfBlocks()
+    {
+        return picture.getNumOfBlocks();
     }
 
     public void print()
     {
-        for (int row = 0; row < picture.getRows(); row++)
+        for (int row = 0; row < picture.getHeight(); row++)
         {
-            for (int col = 0; col < picture.getColumns(); col++)
+            for (int col = 0; col < picture.getWidth(); col++)
             {
-                System.out.print((int) picture.get(row, col) + " ");
+                System.out.print(picture.getPixel(row, col) + " ");
             }
             System.out.println();
         }
@@ -59,25 +57,22 @@ public class PerformanceCheck
     public static void main(String[] args) throws InterruptedException
     {
         PerformanceCheck performanceCheck = new PerformanceCheck();
-        Thread[] threads = new Thread[4];
-        List<DoubleMatrix> blocks = new ArrayList<DoubleMatrix>(1024);
-        for (int i = 0; i < 1024; i++)
-        {
-            blocks.add(performanceCheck.getBlock(i));
-        }
+        Thread[] threads = new Thread[Runtime.getRuntime().availableProcessors()];
+        int numOfBlocks = performanceCheck.getNumOfBlocks();
+        int count = 0;
+        System.out.println("Starting Direct DCT Benchmark");
         long start = System.currentTimeMillis();
         long end = start + 10000;
-        int count = 0;
         while (System.currentTimeMillis() < end)
         {
-            threads[0] = new Thread(new DirectDCTTask(blocks.subList(0, 255)));
-            threads[0].start();
-            threads[1] = new Thread(new DirectDCTTask(blocks.subList(256, 511)));
-            threads[1].start();
-            threads[2] = new Thread(new DirectDCTTask(blocks.subList(512, 767)));
-            threads[2].start();
-            threads[3] = new Thread(new DirectDCTTask(blocks.subList(768, 1023)));
-            threads[3].start();
+            for (int i = 0; i < threads.length; i++)
+            {
+                threads[i] = new Thread(
+                        new DirectDCTTask(performanceCheck.getBlocksAsList(i * numOfBlocks / threads.length,
+                                                                           (i + 1) * (numOfBlocks / threads.length - 1))));
+                threads[i].setPriority(Thread.MAX_PRIORITY);
+                threads[i].start();
+            }
             for (Thread thread : threads)
             {
                 thread.join();
@@ -85,19 +80,21 @@ public class PerformanceCheck
             count++;
         }
         System.out.println("Direct DCT takes " + 10000d / count + " ms/image");
+        System.out.println("Managed " + count + " images");
+        count = 0;
+        System.out.println("Starting Separated DCT Benchmark");
         start = System.currentTimeMillis();
         end = start + 10000;
-        count = 0;
         while (System.currentTimeMillis() < end)
         {
-            threads[0] = new Thread(new SeparatedDCTTask(blocks.subList(0, 255)));
-            threads[0].start();
-            threads[1] = new Thread(new SeparatedDCTTask(blocks.subList(256, 511)));
-            threads[1].start();
-            threads[2] = new Thread(new SeparatedDCTTask(blocks.subList(512, 767)));
-            threads[2].start();
-            threads[3] = new Thread(new SeparatedDCTTask(blocks.subList(768, 1023)));
-            threads[3].start();
+            for (int i = 0; i < threads.length; i++)
+            {
+                threads[i] = new Thread(
+                        new SeparatedDCTTask(performanceCheck.getBlocksAsList(i * numOfBlocks / threads.length,
+                                                                              (i + 1) * (numOfBlocks / threads.length - 1))));
+                threads[i].setPriority(Thread.MAX_PRIORITY);
+                threads[i].start();
+            }
             for (Thread thread : threads)
             {
                 thread.join();
@@ -105,19 +102,21 @@ public class PerformanceCheck
             count++;
         }
         System.out.println("Separated DCT takes " + 10000d / count + " ms/image");
+        System.out.println("Managed " + count + " images");
+        count = 0;
+        System.out.println("Starting Arai Benchmark");
         start = System.currentTimeMillis();
         end = start + 10000;
-        count = 0;
         while (System.currentTimeMillis() < end)
         {
-            threads[0] = new Thread(new AraiTask(blocks.subList(0, 255)));
-            threads[0].start();
-            threads[1] = new Thread(new AraiTask(blocks.subList(256, 511)));
-            threads[1].start();
-            threads[2] = new Thread(new AraiTask(blocks.subList(512, 767)));
-            threads[2].start();
-            threads[3] = new Thread(new AraiTask(blocks.subList(768, 1023)));
-            threads[3].start();
+            for (int i = 0; i < threads.length; i++)
+            {
+                threads[i] = new Thread(
+                        new AraiTask(performanceCheck.getBlocksAsList(i * numOfBlocks / threads.length,
+                                                                      (i + 1) * (numOfBlocks / threads.length - 1))));
+                threads[i].setPriority(Thread.MAX_PRIORITY);
+                threads[i].start();
+            }
             for (Thread thread : threads)
             {
                 thread.join();
@@ -125,5 +124,7 @@ public class PerformanceCheck
             count++;
         }
         System.out.println("Arai takes " + 10000d / count + " ms/image");
+        System.out.println("Managed " + count + " images");
+
     }
 }

@@ -2,8 +2,6 @@ package jpegencoder.encoding.acdc;
 
 import jpegencoder.encoding.AcDcEncoder;
 import jpegencoder.encoding.CodeWord;
-import jpegencoder.encoding.acdc.ACRuntimeEncodedPair;
-import jpegencoder.encoding.acdc.ACCategoryEncodedPair;
 import jpegencoder.streams.BitOutputStream;
 import org.junit.Test;
 
@@ -29,7 +27,7 @@ public class AcDcTests
     @Test
     public void testACEncode()
     {
-        for (ACRuntimeEncodedPair coefficient : AcDcEncoder.encodeAc(toTest))
+        for (ACRunlengthEncodedPair coefficient : AcDcEncoder.encodeRunlength(toTest))
         {
             System.out.println(coefficient.toString());
         }
@@ -38,7 +36,7 @@ public class AcDcTests
     @Test
     public void testCategoryEncode()
     {
-        for (ACCategoryEncodedPair acCategoryEncodedPair : AcDcEncoder.encodeCategories(AcDcEncoder.encodeAc(toTest)))
+        for (ACCategoryEncodedPair acCategoryEncodedPair : AcDcEncoder.encodeCategories(AcDcEncoder.encodeRunlength(toTest)))
         {
             System.out.println(acCategoryEncodedPair.toString());
         }
@@ -58,7 +56,7 @@ public class AcDcTests
     @Test
     public void testWriteACTable() throws IOException
     {
-        List<ACCategoryEncodedPair> pairs = AcDcEncoder.encodeCategories(AcDcEncoder.encodeAc(toTest));
+        List<ACCategoryEncodedPair> pairs = AcDcEncoder.encodeCategories(AcDcEncoder.encodeRunlength(toTest));
         Map<Integer, CodeWord> codebook = new HashMap<Integer, CodeWord>();
         for (ACCategoryEncodedPair pair : pairs)
         {
