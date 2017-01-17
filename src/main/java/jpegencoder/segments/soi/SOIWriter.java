@@ -20,7 +20,7 @@ public class SOIWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.write(0xFF);
-        os.write(SOI_MARKER);
+        os.writeByte(0xFF);
+        os.writeByte(SOI_MARKER);
     }
 }

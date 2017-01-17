@@ -41,16 +41,16 @@ public class SOSWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.write(0xFF);
-        os.write(SOS_MARKER);
-        os.write(length);
-        os.write(numOfComponents);
+        os.writeByte(0xFF);
+        os.writeByte(SOS_MARKER);
+        os.writeBits(length, 16);
+        os.writeByte(numOfComponents);
         for (SOSComponent component : components)
         {
             component.writeComponent(os);
         }
-        os.write(startOfSpectralSelection);
-        os.write(endOfSpectralSelection);
+        os.writeByte(startOfSpectralSelection);
+        os.writeByte(endOfSpectralSelection);
         os.writeBits(successiveApproximationHigh, 4);
         os.writeBits(successiveApproximationLow, 4);
     }

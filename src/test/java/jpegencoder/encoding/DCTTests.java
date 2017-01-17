@@ -1,6 +1,7 @@
 package jpegencoder.encoding;
 
 import jpegencoder.encoding.dct.CosineTransformation;
+import jpegencoder.image.colors.ColorChannel;
 import jpegencoder.segments.dqt.QuantizationTable;
 import org.jblas.DoubleMatrix;
 import org.junit.Assert;
@@ -161,6 +162,46 @@ public class DCTTests
                                          * Math.round(Math.abs(matrix.get(i, j))) + " ");
             }
             System.out.println();
+        }
+    }
+
+    @Test
+    public void testDCTWithImage()
+    {
+        ColorChannel channel = new ColorChannel(8, 16);
+        for (int i = 0; i < X.getRows(); i++)
+        {
+            for (int j = 0; j < X.getColumns(); j++)
+            {
+                channel.setPixel(j, i, (int) X.get(i, j));
+            }
+        }
+        for (int i = 0; i < X.getRows(); i++)
+        {
+            for (int j = 0; j < X.getColumns(); j++)
+            {
+                channel.setPixel(8 + j, i, (int) X.get(i, j));
+            }
+        }
+        CosineTransformation.arai(channel.getBlock(0));
+        CosineTransformation.arai(channel.getBlock(1));
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                System.out.print(channel.getPixel(j, i));
+            }
+            System.out.println();
+        }
+        for (int y = 0; y < expected.getRows(); y++)
+        {
+            for (int x = 0; x < expected.getColumns(); x++)
+            {
+                Assert.assertEquals((int) expected.get(y, x),
+                                    (int) Math.signum(channel.getPixel(x, y)) *
+                                            Math.round(Math.abs(channel.getPixel(x,
+                                                                                 y))));
+            }
         }
     }
 }

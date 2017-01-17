@@ -27,7 +27,7 @@ public class AcDcEncoder
         return result;
     }
 
-    private static DCCategoryEncodedPair calculateDifferenceDC(ColorChannel channel, int i)
+    public static DCCategoryEncodedPair calculateDifferenceDC(ColorChannel channel, int i)
     {
         int result = (int) channel.getBlock(i).get(0);
         if (i != 0)
@@ -36,15 +36,6 @@ public class AcDcEncoder
         }
         return new DCCategoryEncodedPair(AbstractCategoryEncodedPair.calculateCategory(result),
                                          AbstractCategoryEncodedPair.encodeCategory(result));
-    }
-
-    // Weiterer Schritt wo anders, z.B. Hauptprogramm
-    public static void writeDC(BitOutputStream bos, int deltaDc, Map<Integer, CodeWord> codebook) throws IOException
-    {
-        int category = AbstractCategoryEncodedPair.calculateCategory(deltaDc);
-        CodeWord codeWord = codebook.get(category);
-        bos.writeBits(codeWord.getCode(), codeWord.getLength());
-        bos.writeBits(ACCategoryEncodedPair.encodeCategory(deltaDc), category);
     }
 
     public static List<ACCategoryEncodedPair> getAllACs(ColorChannel channel)
@@ -79,7 +70,7 @@ public class AcDcEncoder
         // EOB
         if (zeroCount != 0 || resultList.get(resultList.size() - 1).getEntry() == 0)
         {
-            while (resultList.get(resultList.size() - 1).getEntry() == 0)
+            while (resultList.size() != 0 && resultList.get(resultList.size() - 1).getEntry() == 0)
             {
                 resultList.remove(resultList.size() - 1);
             }
@@ -102,8 +93,6 @@ public class AcDcEncoder
         return resultList;
     }
 
-    // Weiterer Schritt wo anders, z.B. Hauptprogramm
-
     public static void writeACTable(BitOutputStream bos, List<ACCategoryEncodedPair> acEncoding,
                                     Map<Integer, CodeWord> codebook) throws IOException
     {
@@ -113,5 +102,13 @@ public class AcDcEncoder
             bos.writeBits(codeWord.getCode(), codeWord.getLength());
             bos.writeBits(pair.getEntryCategoryEncoded(), pair.getCategory());
         }
+    }
+
+    public static void writeDC(BitOutputStream bos, int deltaDc, Map<Integer, CodeWord> codebook) throws IOException
+    {
+        int category = AbstractCategoryEncodedPair.calculateCategory(deltaDc);
+        CodeWord codeWord = codebook.get(category);
+        bos.writeBits(codeWord.getCode(), codeWord.getLength());
+        bos.writeBits(ACCategoryEncodedPair.encodeCategory(deltaDc), category);
     }
 }

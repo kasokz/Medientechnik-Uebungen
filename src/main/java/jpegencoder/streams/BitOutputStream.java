@@ -16,14 +16,14 @@ public class BitOutputStream extends OutputStream
     private static int BUFFER_CAPACITY = 1000000;
 
     private OutputStream os;
-    private byte bitBuffer;
+    private int bitBuffer;
     private short counter;
-    private List<Byte> byteBuffer;
+    private List<Integer> byteBuffer;
 
     public BitOutputStream(OutputStream os)
     {
         this.os = os;
-        this.byteBuffer = new ArrayList<Byte>(BUFFER_CAPACITY);
+        this.byteBuffer = new ArrayList<Integer>(BUFFER_CAPACITY);
         this.bitBuffer = 0;
         this.counter = 0;
     }
@@ -34,20 +34,23 @@ public class BitOutputStream extends OutputStream
         {
             throw new IllegalArgumentException();
         }
-        // bitweise rechts nach links
-//        bitBuffer = (byte) ((bitBuffer << 1) + b);
-        // bitweise links nach rechts
         bitBuffer = (byte) (bitBuffer + (b << (7 - counter)));
+        int temp = bitBuffer;
         counter++;
         if (counter == 8)
         {
             byteBuffer.add(bitBuffer);
+            temp = bitBuffer;
             counter = 0;
             bitBuffer = 0;
         }
         if (byteBuffer.size() == BUFFER_CAPACITY)
         {
             this.flush();
+        }
+        if (temp == 0xFF)
+        {
+            writeByte(0);
         }
     }
 
@@ -61,12 +64,21 @@ public class BitOutputStream extends OutputStream
     {
         if (counter != 0)
         {
+            for (int i = 0; i < 8 - counter; i++)
+            {
+                bitBuffer = (byte) ((bitBuffer << 1) + 1);
+            }
             byteBuffer.add(bitBuffer);
+            if (bitBuffer == 0xFF)
+            {
+                byteBuffer.add(0);
+            }
         }
-        // ByteArrayBuffer zu Array konvertieren
-        Byte[] writeOut = byteBuffer.toArray(new Byte[byteBuffer.size()]);
-        os.write(ArrayUtils.toPrimitive(writeOut));
-        byteBuffer = new ArrayList<Byte>(BUFFER_CAPACITY);
+        for (Integer i : byteBuffer)
+        {
+            os.write(i);
+        }
+        byteBuffer = new ArrayList<Integer>(BUFFER_CAPACITY);
         byteBuffer.clear();
         counter = 0;
         bitBuffer = 0;
@@ -75,11 +87,7 @@ public class BitOutputStream extends OutputStream
     // Hilfsmethode Aufgabe 2
     public void writeByte(int byteToWrite) throws IOException
     {
-        for (int i = 0; i < 8; i++)
-        {
-            write((byteToWrite & 128) >> 7);
-            byteToWrite = byteToWrite << 1;
-        }
+        writeBits(byteToWrite, 8);
     }
 
     public void writeBits(int bits, int length) throws IOException

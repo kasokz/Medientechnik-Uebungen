@@ -1,11 +1,13 @@
 package jpegencoder;
 
-import jpegencoder.encoding.dct.CosineTransformation;
+import jpegencoder.encoding.huffman.CodeWord;
 import jpegencoder.image.Image;
 import jpegencoder.image.colors.ColorChannel;
 import org.jblas.DoubleMatrix;
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Map;
 
 /**
  * Created by Long Bui on 17.01.17.
@@ -13,58 +15,113 @@ import org.junit.Test;
  */
 public class JpegEncoderTest
 {
-    DoubleMatrix X = new DoubleMatrix(new double[][]
-                                              {
-                                                      {47, 18, 13, 16, 41, 90, 47, 27},
-                                                      {62, 42, 35, 39, 66, 90, 41, 26},
-                                                      {71, 55, 56, 67, 55, 40, 22, 39},
-                                                      {53, 60, 63, 50, 48, 25, 37, 87},
-                                                      {31, 27, 33, 27, 37, 50, 81, 147},
-                                                      {54, 31, 33, 46, 58, 104, 144, 179},
-                                                      {76, 70, 71, 91, 118, 151, 176, 184},
-                                                      {102, 105, 115, 124, 135, 168, 173, 181}
-                                              });
-    DoubleMatrix expected = new DoubleMatrix(new double[][]
-                                                     {
-                                                             {581, -144, 56, 17, 15, -7, 25, -9},
-                                                             {-242, 133, -48, 42, -2, -7, 13, -4},
-                                                             {108, -18, -40, 71, -33, 12, 6, -10},
-                                                             {-56, -93, 48, 19, -8, 7, 6, -2},
-                                                             {-17, 9, 7, -23, -3, -10, 5, 3},
-                                                             {4, 9, -4, -5, 2, 2, -7, 3},
-                                                             {-9, 7, 8, -6, 5, 12, 2, -5},
-                                                             {-9, -4, -2, -3, 6, 1, -1, -1}
-                                                     });
+    Image image;
 
-    @Test
-    public void testChannelTransformation()
+    @Before
+    public void initImage()
     {
-        ColorChannel channelToTest = new ColorChannel(8, 8);
-        for (int i = 0; i < X.getRows(); i++)
+        ColorChannel channel1 = new ColorChannel(256, 256);
+        ColorChannel channel2 = new ColorChannel(256, 256);
+        ColorChannel channel3 = new ColorChannel(256, 256);
+        fillPicture(channel1);
+        fillPicture(channel2);
+        fillPicture(channel3);
+        image = new Image(channel1, channel2, channel3)
         {
-            for (int j = 0; j < X.getColumns(); j++)
-            {
-                channelToTest.setPixel(j, i, (int) X.get(i, j));
-            }
-        }
-        Image image = new Image(channelToTest, channelToTest, channelToTest)
-        {
-
         };
-        JpegEncoder jpegEncoder = new JpegEncoder(image);
-        jpegEncoder.performDCT();
-        printMatrix(jpegEncoder.image.getChannel1().getBlock(0));
     }
 
-    private void printMatrix(DoubleMatrix matrix)
+    @Test
+    public void testImage()
     {
-        for (int i = 0; i < matrix.getRows(); i++)
+        print();
+    }
+
+    @Test
+    public void testBlocks()
+    {
+        for (int i = 0; i < image.getChannel1().getBlock(0).getRows(); i++)
         {
-            for (int j = 0; j < matrix.getColumns(); j++)
+            for (int j = 0; j < image.getChannel1().getBlock(0).getColumns(); j++)
             {
-                System.out.print(matrix.get(j, i) + " ");
+                System.out.print(image.getChannel1().getBlock(0).get(i, j) + " ");
             }
             System.out.println();
         }
     }
+
+    @Test
+    public void testHuffmanTableAcY()
+    {
+        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image).convertToJpeg().acYCodeBook.entrySet())
+        {
+            System.out.println(entry.getValue().toString());
+        }
+
+    }
+
+    @Test
+    public void testHuffmanTableDcY()
+    {
+        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image).convertToJpeg().dcYCodeBook.entrySet())
+        {
+            System.out.println(entry.getValue().toString());
+        }
+
+    }
+
+    @Test
+    public void testHuffmanTableAcCbCr()
+    {
+        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
+                                                             .convertToJpeg().acCbCrCodeBook.entrySet())
+        {
+            System.out.println(entry.getValue().toString());
+        }
+
+    }
+
+    @Test
+    public void testHuffmanTableDcCbCr()
+    {
+        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
+                                                             .convertToJpeg().dcCbCrCodeBook.entrySet())
+        {
+            System.out.println(entry.getValue().toString());
+        }
+
+    }
+
+    @Test
+    public void testJpegConversion()
+    {
+        JpegEncoder.withImage(image).convertToJpeg().writeImageToDisk();
+    }
+
+    private void fillPicture(ColorChannel colorChannel)
+    {
+        for (int y = 0; y < colorChannel.getHeight(); y++)
+        {
+            for (int x = 0; x < colorChannel.getWidth(); x++)
+            {
+                int value;
+                value = (x + (y * 8)) % 256;
+                colorChannel.setPixel(x, y, value);
+            }
+        }
+    }
+
+    public void print()
+    {
+        for (int row = 0; row < image.getChannel1().getHeight(); row++)
+        {
+            for (int col = 0; col < image.getChannel1().getWidth(); col++)
+            {
+                System.out.print(image.getChannel1().getPixel(col, row) + " ");
+            }
+            System.out.println();
+        }
+    }
+
 }
+

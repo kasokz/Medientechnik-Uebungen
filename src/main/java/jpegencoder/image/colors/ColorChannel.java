@@ -26,15 +26,25 @@ public class ColorChannel
         }
     }
 
-    public void setPixel(int x, int y, int value)
+    public void setPixel(int x, int y, double value)
     {
         blocks[(x / 8) + ((height / 8) * (y / 8))].put(y % 8, x % 8, value);
     }
 
-    public int getPixel(int x, int y)
+    public double getPixel(int x, int y)
     {
         DoubleMatrix block = blocks[x / 8 + ((height / 8) * (y / 8))];
-        return (int) block.get(y % 8, x % 8);
+        return block.get(y % 8, x % 8);
+    }
+
+    public int getPlainIndexOfBlock(int x, int y)
+    {
+        return (x % (width / 8)) + (y * (height / 8));
+    }
+
+    public DoubleMatrix getBlock(int x, int y)
+    {
+        return blocks[(x % (width / 8)) + (y * (height / 8))];
     }
 
     public DoubleMatrix getBlock(int index)

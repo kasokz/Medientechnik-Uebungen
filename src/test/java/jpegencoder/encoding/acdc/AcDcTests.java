@@ -35,7 +35,8 @@ public class AcDcTests
     @Test
     public void testCategoryEncode()
     {
-        for (ACCategoryEncodedPair acCategoryEncodedPair : AcDcEncoder.encodeCategoriesAC(AcDcEncoder.encodeRunlength(toTest)))
+        for (ACCategoryEncodedPair acCategoryEncodedPair : AcDcEncoder.encodeCategoriesAC(AcDcEncoder.encodeRunlength(
+                toTest)))
         {
             System.out.println(acCategoryEncodedPair.toString());
         }

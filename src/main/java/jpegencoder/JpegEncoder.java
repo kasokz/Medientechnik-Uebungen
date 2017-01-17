@@ -15,6 +15,7 @@ import jpegencoder.segments.dht.HuffmanTable;
 import jpegencoder.segments.dqt.DQTWriter;
 import jpegencoder.segments.dqt.QuantizationTable;
 import jpegencoder.segments.eoi.EOIWriter;
+import jpegencoder.segments.imageData.ImageDataWriter;
 import jpegencoder.segments.sof0.SOF0Writer;
 import jpegencoder.segments.soi.SOIWriter;
 import jpegencoder.segments.sos.SOSWriter;
@@ -167,28 +168,28 @@ public class JpegEncoder
         }
     }
 
-    public HuffmanTable getHuffmanTableDCY()
+    private HuffmanTable getHuffmanTableDCY()
     {
         return new HuffmanTable(0, 0,
-                                (List<CodeWord>) dcYCodeBook.values());
+                                new ArrayList<CodeWord>(dcYCodeBook.values()));
     }
 
-    public HuffmanTable getHuffmanTableDCCbCr()
+    private HuffmanTable getHuffmanTableDCCbCr()
     {
         return new HuffmanTable(1, 0,
-                                (List<CodeWord>) dcCbCrCodeBook.values());
+                                new ArrayList<CodeWord>(dcCbCrCodeBook.values()));
     }
 
-    public HuffmanTable getHuffmanTableACY()
+    private HuffmanTable getHuffmanTableACY()
     {
         return new HuffmanTable(0, 1,
-                                (List<CodeWord>) acYCodeBook.values());
+                                new ArrayList<CodeWord>(acYCodeBook.values()));
     }
 
-    public HuffmanTable getHuffmanTableACCbCr()
+    private HuffmanTable getHuffmanTableACCbCr()
     {
         return new HuffmanTable(1, 1,
-                                (List<CodeWord>) acCbCrCodeBook.values());
+                                new ArrayList<CodeWord>(acCbCrCodeBook.values()));
     }
 
     public void writeImageToDisk()
@@ -208,12 +209,18 @@ public class JpegEncoder
             huffmanTables.add(getHuffmanTableACCbCr());
             segmentWriters.add(new DHTWriter(bos, huffmanTables));
             segmentWriters.add(new SOSWriter(bos));
-
+            segmentWriters.add(new ImageDataWriter(bos,
+                                                   image,
+                                                   dcYCodeBook,
+                                                   acYCodeBook,
+                                                   dcCbCrCodeBook,
+                                                   acCbCrCodeBook));
             segmentWriters.add(new EOIWriter(bos));
             for (SegmentWriter segmentWriter : segmentWriters)
             {
                 segmentWriter.writeSegment();
             }
+            bos.close();
         }
         catch (FileNotFoundException e)
         {

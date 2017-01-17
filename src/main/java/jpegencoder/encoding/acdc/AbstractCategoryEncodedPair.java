@@ -46,13 +46,9 @@ public abstract class AbstractCategoryEncodedPair
             int maxValueCategory = (int) (Math.pow(2, category) - 1);
             result = Math.abs(toEncode) ^ maxValueCategory;
         }
-        else if (toEncode > 0)
-        {
-            result = toEncode;
-        }
         else
         {
-            result = Integer.MIN_VALUE;
+            result = toEncode;
         }
         return result;
     }

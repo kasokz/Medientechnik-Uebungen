@@ -24,6 +24,6 @@ public class ACCategoryEncodedPair extends AbstractCategoryEncodedPair
     public String toString()
     {
         return "(" + (getPair() >> 4) + "," + (getPair() & 0xf) + "), " +
-                ((getEntryCategoryEncoded() == Integer.MIN_VALUE) ? "" : getEntryCategoryEncoded());
+                ((getEntryCategoryEncoded() == 0) ? "" : getEntryCategoryEncoded());
     }
 }

@@ -23,7 +23,7 @@ public class SOSComponent
 
     public void writeComponent(BitOutputStream bos) throws IOException
     {
-        bos.write(id);
+        bos.writeByte(id);
         bos.writeBits(huffmanTableIdAC, 4);
         bos.writeBits(huffmanTableIdDC, 4);
     }
