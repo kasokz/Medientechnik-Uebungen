@@ -33,4 +33,14 @@ public abstract class Image
     {
         return channel3;
     }
+
+    public int getHeight()
+    {
+        return channel1.getHeight();
+    }
+
+    public int getWidth()
+    {
+        return channel1.getWidth();
+    }
 }

@@ -25,10 +25,9 @@ public class CosineTransformation
         return DCT.direct(X);
     }
 
-    public static DoubleMatrix separated(DoubleMatrix X)
+    public static void separated(DoubleMatrix X)
     {
         DCT.separated(X);
-        return X;
     }
 
     public static DoubleMatrix invert(DoubleMatrix Y)
@@ -36,8 +35,8 @@ public class CosineTransformation
         return DCT.invert(Y);
     }
 
-    public static DoubleMatrix quantize(DoubleMatrix transformedMatrix, DoubleMatrix quantizationMatrix)
+    public static void quantize(DoubleMatrix transformedMatrix, DoubleMatrix quantizationMatrix)
     {
-        return transformedMatrix.div(quantizationMatrix);
+        transformedMatrix.divi(quantizationMatrix, transformedMatrix);
     }
 }

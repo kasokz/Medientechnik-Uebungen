@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class SOF0Writer extends SegmentWriter
 {
-    public static int SOFOMARKER = 0xc0;
+    private static final int SOFOMARKER = 0xc0;
 
     private int length;
     private int sampleRate = 8;
@@ -25,9 +25,22 @@ public class SOF0Writer extends SegmentWriter
     private int numberOfComponents;
     private List<SOF0Component> components;
 
-    public SOF0Writer(BitOutputStream os)
+    public SOF0Writer(BitOutputStream os, int xImgSize, int yImgSize)
     {
         super(os);
+        setComponents();
+        this.numberOfComponents = components.size();
+        this.length = 8 + numberOfComponents * 3;
+        setXImgSize(xImgSize);
+        setYImgSize(yImgSize);
+    }
+
+    private void setComponents()
+    {
+        components = new ArrayList<SOF0Component>();
+        components.add(new SOF0Component(0, 2, 2, 0));
+        components.add(new SOF0Component(1, 1, 1, 1));
+        components.add(new SOF0Component(2, 1, 1, 1));
     }
 
     public void setSampleRate(int sampleRate)
@@ -61,24 +74,6 @@ public class SOF0Writer extends SegmentWriter
         {
             this.xImgSizeHigh = (xImgSize & 0xFF00) >> 8;
             this.xImgSizeLow = xImgSize & 0xFF;
-        }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public void setComponents(int numberOfComponents, SOF0Component... components)
-    {
-        if (numberOfComponents == 1 || numberOfComponents == 3)
-        {
-            this.numberOfComponents = numberOfComponents;
-            this.length = 8 + numberOfComponents * 3;
-            this.components = new ArrayList<SOF0Component>(numberOfComponents);
-            for (int i = 0; i < numberOfComponents; i++)
-            {
-                this.components.add(components[i]);
-            }
         }
         else
         {

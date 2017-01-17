@@ -3,7 +3,6 @@ package jpegencoder.segments.sof0;
 import jpegencoder.streams.BitOutputStream;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * Created by Long Bui on 14.11.16.
@@ -14,14 +13,15 @@ public class SOF0Component
     private int id;
     private int subSamplingFactorVertical;
     private int subSamplingFactorHorizontal;
-    private int quantNum;
+    private int quantizationTableId;
 
-    public SOF0Component(int id, int subSamplingFactorVertical, int subSamplingFactorHorizontal, int quantNum)
+    public SOF0Component(int id, int subSamplingFactorVertical, int subSamplingFactorHorizontal,
+                         int quantizationTableId)
     {
         this.id = id;
         this.subSamplingFactorHorizontal = subSamplingFactorHorizontal;
         this.subSamplingFactorVertical = subSamplingFactorVertical;
-        this.quantNum = quantNum;
+        this.quantizationTableId = quantizationTableId;
     }
 
     public void writeToStream(BitOutputStream os) throws IOException
@@ -29,6 +29,6 @@ public class SOF0Component
         os.writeByte(id);
         int subsamplingFactor = (subSamplingFactorHorizontal << 4) + subSamplingFactorVertical;
         os.writeByte(subsamplingFactor);
-        os.writeByte(quantNum);
+        os.writeByte(quantizationTableId);
     }
 }

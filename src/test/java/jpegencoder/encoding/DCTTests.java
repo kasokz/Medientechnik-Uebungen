@@ -77,8 +77,8 @@ public class DCTTests
     @Test
     public void testSeparatedDCT()
     {
-        DoubleMatrix input = X.dup();
-        DoubleMatrix Y = CosineTransformation.separated(input);
+        DoubleMatrix Y = X.dup();
+        CosineTransformation.separated(Y);
         for (int i = 0; i < Y.getRows(); i++)
         {
             for (int j = 0; j < Y.getColumns(); j++)
@@ -110,8 +110,8 @@ public class DCTTests
     @Test
     public void testInverseDCTSeparate()
     {
-        DoubleMatrix input = X.dup();
-        DoubleMatrix Y = CosineTransformation.separated(input);
+        DoubleMatrix Y = X.dup();
+        CosineTransformation.separated(Y);
         DoubleMatrix testResult = CosineTransformation.invert(Y);
         for (int i = 0; i < Y.getRows(); i++)
         {
@@ -147,7 +147,8 @@ public class DCTTests
     @Test
     public void testQuantization()
     {
-        printMatrix(CosineTransformation.quantize(expected, QuantizationTable.QUANTIZATION_MATRIX_LUMINANCE));
+        CosineTransformation.quantize(expected, QuantizationTable.QUANTIZATION_MATRIX_LUMINANCE);
+        printMatrix(expected);
     }
 
     private void printMatrix(DoubleMatrix matrix)

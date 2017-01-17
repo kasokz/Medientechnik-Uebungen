@@ -42,6 +42,11 @@ public class ColorChannel
         return blocks[index];
     }
 
+    public void setBlock(int index, DoubleMatrix modified)
+    {
+        blocks[index] = modified;
+    }
+
     public List<DoubleMatrix> getBlocks(int start, int end)
     {
         return Arrays.asList(blocks).subList(start, end);

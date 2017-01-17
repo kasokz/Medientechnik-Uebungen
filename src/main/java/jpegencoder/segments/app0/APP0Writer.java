@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class APP0Writer extends SegmentWriter
 {
-    public static int APP0MARKER = 0xe0;
-    public static int[] JFIF_STRING = {0x4A, 0x46, 0x49, 0x46, 0x00};
+    private static final int APP0MARKER = 0xe0;
+    private static int[] JFIF_STRING = {0x4A, 0x46, 0x49, 0x46, 0x00};
 
     private int length = 16;
     private int major = 1;
@@ -29,9 +29,11 @@ public class APP0Writer extends SegmentWriter
     private int yThumb = 0;
     private List<Byte> thumbnail = new ArrayList<Byte>();
 
-    public APP0Writer(BitOutputStream os)
+    public APP0Writer(BitOutputStream os, int xDensity, int yDensity)
     {
         super(os);
+        setXDensity(xDensity);
+        setyDensity(yDensity);
     }
 
     public void setMajor(int major)
