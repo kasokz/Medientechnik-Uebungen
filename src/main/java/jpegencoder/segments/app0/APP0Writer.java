@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class APP0Writer extends SegmentWriter
 {
-    private static final int APP0MARKER = 0xe0;
+    private static final int APP0MARKER = 0xFFE0;
     private static int[] JFIF_STRING = {0x4A, 0x46, 0x49, 0x46, 0x00};
 
     private int length = 16;
@@ -103,8 +103,7 @@ public class APP0Writer extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.writeByte(0xFF);
-        os.writeByte(APP0MARKER);
+        os.writeMarker(APP0MARKER);
         os.writeByte((length & 0xFF00) >> 8);
         os.writeByte(length & 0xFF);
         for (int i = 0; i < JFIF_STRING.length; i++)

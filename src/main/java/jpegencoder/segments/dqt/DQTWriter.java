@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class DQTWriter extends SegmentWriter
 {
-    private static final int DQT_MARKER = 0xDB;
+    private static final int DQT_MARKER = 0xFFDB;
     private int length;
     private List<QuantizationTable> tables;
 
@@ -33,10 +33,8 @@ public class DQTWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.writeByte(0xFF);
-        os.writeByte(DQT_MARKER);
-        os.writeByte((length & 0xFF00) >> 8);
-        os.writeByte(length & 0xFF);
+        os.writeMarker(DQT_MARKER);
+        os.writeBits(length, 16);
         for (QuantizationTable table : tables)
         {
             table.writeTable(os);

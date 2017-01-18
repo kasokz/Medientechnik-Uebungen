@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class SOSWriter extends SegmentWriter
 {
-    private static final int SOS_MARKER = 0xDA;
+    private static final int SOS_MARKER = 0xFFDA;
 
     private int length;
     private List<SOSComponent> components;
@@ -41,8 +41,7 @@ public class SOSWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.writeByte(0xFF);
-        os.writeByte(SOS_MARKER);
+        os.writeMarker(SOS_MARKER);
         os.writeBits(length, 16);
         os.writeByte(numOfComponents);
         for (SOSComponent component : components)

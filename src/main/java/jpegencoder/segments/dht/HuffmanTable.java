@@ -4,9 +4,7 @@ import jpegencoder.encoding.huffman.CodeWord;
 import jpegencoder.streams.BitOutputStream;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Long Bui on 12/01/2017.
@@ -24,6 +22,7 @@ public class HuffmanTable
         this.id = id;
         this.tableClass = tableClass;
         this.codeBook = codeBook;
+        Collections.sort(codeBook);
         this.setCodeWordLengthMap();
     }
 

@@ -40,13 +40,13 @@ import java.util.Map;
  */
 public class JpegEncoder
 {
-    Image image;
+    private Image image;
     List<DCCategoryEncodedPair> dcYValues;
     List<ACCategoryEncodedPair> acYValues;
-    private List<DCCategoryEncodedPair> dcCbValues;
-    private List<ACCategoryEncodedPair> acCbValues;
-    private List<DCCategoryEncodedPair> dcCrValues;
-    private List<ACCategoryEncodedPair> acCrValues;
+    List<DCCategoryEncodedPair> dcCbValues;
+    List<ACCategoryEncodedPair> acCbValues;
+    List<DCCategoryEncodedPair> dcCrValues;
+    List<ACCategoryEncodedPair> acCrValues;
     Map<Integer, CodeWord> dcYCodeBook;
     Map<Integer, CodeWord> acYCodeBook;
     Map<Integer, CodeWord> dcCbCrCodeBook;
@@ -83,7 +83,7 @@ public class JpegEncoder
     {
         transformChannel(image.getChannel1());
         transformChannel(image.getChannel2());
-        transformChannel(image.getChannel2());
+        transformChannel(image.getChannel3());
         return this;
     }
 

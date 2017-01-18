@@ -27,8 +27,8 @@ public class SOF0Component
     public void writeToStream(BitOutputStream os) throws IOException
     {
         os.writeByte(id);
-        int subsamplingFactor = (subSamplingFactorHorizontal << 4) + subSamplingFactorVertical;
-        os.writeByte(subsamplingFactor);
+        os.writeBits(subSamplingFactorHorizontal, 4);
+        os.writeBits(subSamplingFactorVertical, 4);
         os.writeByte(quantizationTableId);
     }
 }

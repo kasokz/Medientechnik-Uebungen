@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class SOIWriter extends SegmentWriter
 {
-    private static final int SOI_MARKER = 0xD8;
+    private static final int SOI_MARKER = 0xFFD8;
 
     public SOIWriter(BitOutputStream os)
     {
@@ -20,7 +20,6 @@ public class SOIWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.writeByte(0xFF);
-        os.writeByte(SOI_MARKER);
+        os.writeMarker(SOI_MARKER);
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class SOF0Writer extends SegmentWriter
 {
-    private static final int SOFOMARKER = 0xc0;
+    private static final int SOFOMARKER = 0xFFC0;
 
     private int length;
     private int sampleRate = 8;
@@ -43,10 +43,8 @@ public class SOF0Writer extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.writeByte(0xFF);
-        os.writeByte(SOFOMARKER);
-        os.writeByte((length & 0xFF00) >> 8);
-        os.writeByte(length & 0xFF);
+        os.writeMarker(SOFOMARKER);
+        os.writeBits(length, 16);
         os.writeByte(sampleRate);
         os.writeBits(yImgSize, 16);
         os.writeBits(xImgSize, 16);

@@ -15,19 +15,14 @@ import java.util.Map;
  */
 public class DHTWriter extends SegmentWriter
 {
-    private static final int DHT_MARKER = 0xC4;
+    private static final int DHT_MARKER = 0xFFC4;
 
     private List<HuffmanTable> tables;
-
-    private Map<Integer, Integer> codeWordLengthMap = new HashMap<Integer, Integer>();
-    private List<CodeWord> codeBook;
-    private int numOfTables;
 
     public DHTWriter(BitOutputStream os, List<HuffmanTable> tables)
     {
         super(os);
         this.tables = tables;
-        this.numOfTables = tables.size();
     }
 
     public int getLength()
@@ -42,10 +37,8 @@ public class DHTWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.writeByte(0xFF);
-        os.writeByte(DHT_MARKER);
-        os.writeByte((getLength() & 0xFF00) >> 8);
-        os.writeByte(getLength() & 0xFF);
+        os.writeMarker(DHT_MARKER);
+        os.writeBits(getLength(), 16);
         for (HuffmanTable table : tables)
         {
             table.write(os);

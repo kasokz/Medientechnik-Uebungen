@@ -45,8 +45,6 @@ public class ImageDataWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        int cbCr = 0;
-        int y = 0;
         for (int currentY = 0; currentY < image.getHeight() / 8 / subSampling; currentY++)
         {
             for (int currentX = 0; currentX < image.getWidth() / 8 / subSampling; currentX++)
@@ -64,16 +62,12 @@ public class ImageDataWriter extends SegmentWriter
                                               currentYLuminance,
                                               dcYCodeBook,
                                               acYCodeBook);
-                        y++;
                     }
                 }
                 writeAcDcEncodedBlock(image.getChannel2(), currentX, currentY, dcCbCrCodeBook, acCbCrCodeBook);
                 writeAcDcEncodedBlock(image.getChannel3(), currentX, currentY, dcCbCrCodeBook, acCbCrCodeBook);
-                cbCr++;
             }
         }
-        System.out.println(y + " Y Blocks wrote");
-        System.out.println(cbCr + " CbCr Blocks wrote");
         os.flush();
     }
 

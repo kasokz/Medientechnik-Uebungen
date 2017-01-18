@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class EOIWriter extends SegmentWriter
 {
-    private static final int EOI_MARKER = 0xD9;
+    private static final int EOI_MARKER = 0xFFD9;
 
     public EOIWriter(BitOutputStream os)
     {
@@ -20,7 +20,6 @@ public class EOIWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        os.writeByte(0xFF);
-        os.writeByte(EOI_MARKER);
+        os.writeMarker(EOI_MARKER);
     }
 }

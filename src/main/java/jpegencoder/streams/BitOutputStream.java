@@ -16,6 +16,7 @@ public class BitOutputStream extends OutputStream
 {
     private static int BUFFER_CAPACITY = 1000000;
 
+    private boolean allowFF = false;
     private OutputStream os;
     private int bitBuffer;
     private short counter;
@@ -41,17 +42,16 @@ public class BitOutputStream extends OutputStream
         if (counter == 8)
         {
             byteBuffer.add(bitBuffer);
-            temp = bitBuffer;
             counter = 0;
             bitBuffer = 0;
         }
-        if (byteBuffer.size() == BUFFER_CAPACITY)
+        if ((temp & 0xFF) == 0xFF && !allowFF)
+        {
+            byteBuffer.add(0);
+        }
+        if (byteBuffer.size() >= BUFFER_CAPACITY)
         {
             this.flush();
-        }
-        if (temp == 0xFF)
-        {
-            writeByte(0);
         }
     }
 
@@ -65,15 +65,8 @@ public class BitOutputStream extends OutputStream
     {
         if (counter != 0)
         {
-            for (int i = 0; i < 8 - counter; i++)
-            {
-                bitBuffer = (byte) ((bitBuffer << 1) + 1);
-            }
+
             byteBuffer.add(bitBuffer);
-            if (bitBuffer == 0xFF)
-            {
-                byteBuffer.add(0);
-            }
         }
         for (Integer i : byteBuffer)
         {
@@ -85,7 +78,6 @@ public class BitOutputStream extends OutputStream
         bitBuffer = 0;
     }
 
-    // Hilfsmethode Aufgabe 2
     public void writeByte(int byteToWrite) throws IOException
     {
         writeBits(byteToWrite, 8);
@@ -97,5 +89,12 @@ public class BitOutputStream extends OutputStream
         {
             write((bits >> i) & 0x1);
         }
+    }
+
+    public void writeMarker(int marker) throws IOException
+    {
+        allowFF = true;
+        writeBits(marker, 16);
+        allowFF = false;
     }
 }

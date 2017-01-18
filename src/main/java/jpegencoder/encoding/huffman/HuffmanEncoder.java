@@ -1,9 +1,7 @@
 package jpegencoder.encoding.huffman;
 
-import jpegencoder.encoding.huffman.model.HuffmanTree;
-import jpegencoder.encoding.huffman.model.HuffmanTreeComponent;
-import jpegencoder.encoding.huffman.model.HuffmanTreeLeaf;
-import jpegencoder.encoding.huffman.model.HuffmanTreeNode;
+import jpegencoder.encoding.huffman.model.*;
+import jpegencoder.segments.dht.HuffmanTable;
 
 import java.util.*;
 
@@ -85,7 +83,16 @@ public class HuffmanEncoder
         {
             symbols.add((HuffmanTreeLeaf) node);
         }
-        createHuffmanTreeNodes(nodes);
+        if (nodes.size() > 1)
+        {
+            createHuffmanTreeNodes(nodes);
+        }
+        else
+        {
+            HuffmanTreeNode huffmanTreeNode = new HuffmanTreeNode(nodes.get(0), new HuffmanTreeNullLeaf());
+            nodes.remove(0);
+            nodes.add(huffmanTreeNode);
+        }
         return new HuffmanTree(nodes.get(0), symbols);
     }
 
