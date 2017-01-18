@@ -1,159 +1,168 @@
 package jpegencoder.image.colors.rgb;
 
+import jpegencoder.image.Image;
+import jpegencoder.image.colors.ColorChannel;
+
 import java.io.*;
-import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Created by Long Bui on 26.10.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-
-// Ganze Klasse: Aufgabe 1a)
-public class RGBImage
+public class RGBImage extends Image
 {
-    private ArrayList<RGB> picture;
-    private int width;
-    private int height;
-    private int strideWidth;
-    private int strideHeight;
-
-    private RGBImage()
+    public static class RGBImageBuilder
     {
-        this.strideHeight = 8;
-        this.strideWidth = 8;
-    }
+        private int strideWidth = 8;
+        private int strideHeight = 8;
+        private int imageWidth;
+        private int imageHeight;
+        ColorChannel red;
+        ColorChannel green;
+        ColorChannel blue;
 
-    // Konstruktor mit InputStream parsing: Aufgabe 1b)
-    public RGBImage(InputStream is)
-    {
-        this();
-        long start = System.currentTimeMillis();
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        try
+        public static RGBImageBuilder from(InputStream is)
         {
-            extractMetaInformation(br);
-            initPicture();
-            String currentLine;
-            int red;
-            int green;
-            int blue;
-            while (br.ready())
+            return new RGBImageBuilder(is);
+        }
+
+        private RGBImageBuilder(InputStream is)
+        {
+            long start = System.currentTimeMillis();
+            Scanner sc = new Scanner(is);
+            try
             {
-                currentLine = br.readLine().replaceAll(" +", " ");
-                String[] splitLine = currentLine.split(" ");
-                if (splitLine.length % 3 != 0)
+                extractMetaInformation(sc);
+                initPicture();
+                int x = 0;
+                int y = 0;
+                while (sc.hasNext())
                 {
-                    continue;
-                }
-                for (int i = 0; i < splitLine.length; i = i + 3)
-                {
-                    red = Short.parseShort(splitLine[i]);
-                    green = Short.parseShort(splitLine[i + 1]);
-                    blue = Short.parseShort(splitLine[i + 2]);
-                    picture.add(new RGB(red, green, blue));
+                    red.setPixel(x, y, sc.nextInt());
+                    green.setPixel(x, y, sc.nextInt());
+                    blue.setPixel(x, y, sc.nextInt());
+                    x++;
+                    if (x % imageWidth == 0)
+                    {
+                        x = 0;
+                        y++;
+                    }
                 }
             }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            System.out.println("Finished reading PPM in "
+                                       + ((System.currentTimeMillis() - start) / 1000d)
+                                       + " seconds");
         }
-        catch (IOException e)
+
+        private void initPicture()
         {
-            e.printStackTrace();
+            red = new ColorChannel(getRealHeight(), getRealWidth());
+            green = new ColorChannel(getRealHeight(), getRealWidth());
+            blue = new ColorChannel(getRealHeight(), getRealWidth());
         }
-        System.out.println("Finished reading PPM in "
-                                   + ((System.currentTimeMillis() - start) / 1000d)
-                                   + " seconds");
-    }
 
-    private void initPicture()
-    {
-        picture = new ArrayList<RGB>(height * width);
-    }
-
-    private void extractMetaInformation(BufferedReader br) throws IOException
-    {
-        skipLine(br);
-        String metaInformation = br.readLine();
-        String[] splitMeta = metaInformation.split(" ");
-        this.width = Integer.parseInt(splitMeta[0]);
-        this.height = Integer.parseInt(splitMeta[1]);
-        skipLine(br);
-    }
-
-    private void skipLine(BufferedReader br) throws IOException
-    {
-        if (br.ready())
+        private void extractMetaInformation(Scanner sc) throws IOException
         {
-            br.readLine();
+            sc.nextLine();
+            String metaInformation = readLine(sc);
+            String[] splitMeta = metaInformation.split(" ");
+            this.imageWidth = Integer.parseInt(splitMeta[0]);
+            this.imageHeight = Integer.parseInt(splitMeta[1]);
+            sc.nextLine();
         }
+
+        private String readLine(Scanner sc)
+        {
+            String result = sc.nextLine();
+            if (result.contains("#"))
+            {
+                return readLine(sc);
+            }
+            return result;
+        }
+
+        private int getRealHeight()
+        {
+            int result = imageHeight;
+            if (imageHeight % strideHeight != 0)
+            {
+                result = ((imageHeight / strideHeight) + 1) * strideHeight;
+            }
+            return result;
+        }
+
+        private int getRealWidth()
+        {
+            int result = imageWidth;
+            if (imageWidth % strideWidth != 0)
+            {
+                result = ((imageWidth / strideWidth) + 1) * strideWidth;
+            }
+            return result;
+        }
+
+        public RGBImage build()
+        {
+            return new RGBImage(red, green, blue, imageWidth, imageHeight);
+        }
+    }
+
+    private int originalWidth;
+    private int originalHeight;
+
+    private RGBImage(ColorChannel r, ColorChannel g, ColorChannel b, int originalWidth, int originalHeight)
+    {
+        super(r, g, b);
+        this.originalWidth = originalWidth;
+        this.originalHeight = originalHeight;
     }
 
     public RGB getRGBAt(int x, int y)
     {
-        RGB result;
-        if (x >= this.getStrideWidth() || y >= this.getStrideHeight())
+        if (x >= getWidth() || y >= getHeight())
         {
             throw new IllegalArgumentException();
         }
-        if (x >= this.getWidth() && y >= this.getHeight())
+        if (x >= originalWidth)
         {
-            result = picture.get((width - 1) + (height - 1) * width);
+            x = originalWidth - 1;
         }
-        else if (x >= this.getWidth())
+        if (y >= originalHeight)
         {
-            result = picture.get((width - 1) + y * width);
+            y = originalHeight - 1;
         }
-        else if (y >= this.getHeight())
-        {
-            result = picture.get(x + (height - 1) * width);
-        }
-        else
-        {
-            result = picture.get(x + y * width);
-        }
-        return result;
+        return new RGB((int) getChannel1().getPixel(x, y),
+                       (int) getChannel2().getPixel(x, y),
+                       (int) getChannel3().getPixel(x, y));
     }
 
-    public int getHeight()
+    public int getOriginalWidth()
     {
-        return this.height;
+        return originalWidth;
     }
 
-    public int getWidth()
+    public int getOriginalHeight()
     {
-        return this.width;
-    }
-
-    public int getStrideHeight()
-    {
-        int result = this.getHeight();
-        if (this.getHeight() % strideHeight != 0)
-        {
-            result = ((this.getHeight() / strideHeight) + 1) * strideHeight;
-        }
-        return result;
-    }
-
-    public int getStrideWidth()
-    {
-        int result = this.getWidth();
-        if (this.getWidth() % strideWidth != 0)
-        {
-            result = ((this.getWidth() / strideWidth) + 1) * strideWidth;
-        }
-        return result;
+        return originalHeight;
     }
 
     @Override
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        long pixelCount = 0;
-        for (RGB rgb : picture)
+        for (int i = 0; i < getWidth(); i++)
         {
-            sb.append(rgb.toString()).append(" ");
-            if ((pixelCount + 1) % width == 0)
+            for (int j = 0; j < getHeight(); j++)
             {
-                sb.append("\n");
+                RGB pixel = getRGBAt(i, j);
+                sb.append(pixel.toString()).append(" ");
             }
+            sb.append("\n");
         }
         return sb.toString();
     }

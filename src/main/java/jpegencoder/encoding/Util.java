@@ -87,10 +87,19 @@ public class Util
         return result;
     }
 
-    private static int round(double toRound)
-
+    public static int round(double toRound)
     {
         return (int) (Math.signum(toRound)
                 * Math.round(Math.abs(toRound)));
+    }
+
+    public static String getBitsAsString(int bits, int length)
+    {
+        String result = "";
+        for (int i = length - 1; i >= 0; i--)
+        {
+            result += "" + ((bits >> i) & 0x1);
+        }
+        return result;
     }
 }

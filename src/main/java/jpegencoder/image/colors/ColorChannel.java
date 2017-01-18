@@ -14,13 +14,17 @@ public class ColorChannel
     private DoubleMatrix[] blocks;
     private int height;
     private int width;
+    private int widthInBlocks;
+    private int heightInBlocks;
 
     public ColorChannel(int height, int width)
     {
         this.height = height;
         this.width = width;
-        blocks = new DoubleMatrix[(height / 8) * (width / 8)];
-        for (int i = 0; i < (height / 8) * (width / 8); i++)
+        widthInBlocks = (int) Math.ceil(width / 8d);
+        heightInBlocks = (int) Math.ceil(height / 8d);
+        blocks = new DoubleMatrix[heightInBlocks * widthInBlocks];
+        for (int i = 0; i < heightInBlocks * widthInBlocks; i++)
         {
             blocks[i] = DoubleMatrix.zeros(8, 8);
         }
@@ -28,33 +32,27 @@ public class ColorChannel
 
     public void setPixel(int x, int y, double value)
     {
-        blocks[(x / 8) + ((height / 8) * (y / 8))].put(y % 8, x % 8, value);
+        blocks[getPlainIndexOfBlock(x / 8, y / 8)].put(y % 8, x % 8, value);
     }
 
     public double getPixel(int x, int y)
     {
-        DoubleMatrix block = blocks[x / 8 + ((height / 8) * (y / 8))];
-        return block.get(y % 8, x % 8);
+        return blocks[getPlainIndexOfBlock(x / 8, y / 8)].get(y % 8, x % 8);
     }
 
     public int getPlainIndexOfBlock(int x, int y)
     {
-        return (x % (width / 8)) + (y * (height / 8));
+        return (x + (y * (width / 8)));
     }
 
     public DoubleMatrix getBlock(int x, int y)
     {
-        return blocks[(x % (width / 8)) + (y * (height / 8))];
+        return blocks[getPlainIndexOfBlock(x, y)];
     }
 
     public DoubleMatrix getBlock(int index)
     {
         return blocks[index];
-    }
-
-    public void setBlock(int index, DoubleMatrix modified)
-    {
-        blocks[index] = modified;
     }
 
     public List<DoubleMatrix> getBlocks(int start, int end)

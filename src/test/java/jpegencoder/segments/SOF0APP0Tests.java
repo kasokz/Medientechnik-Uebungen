@@ -28,7 +28,7 @@ public class SOF0APP0Tests
         app0Writer.writeSegment();
         sof0Writer.writeSegment();
         bos.close();
-        FileInputStream fis1 = new FileInputStream("expectedSegments.jpg");
+        FileInputStream fis1 = new FileInputStream("expectedSegment.jpg");
         FileInputStream fis2 = new FileInputStream("testImage.jpg");
         int read1;
         int read2;

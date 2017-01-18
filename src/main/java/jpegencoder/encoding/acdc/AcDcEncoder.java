@@ -41,8 +41,9 @@ public class AcDcEncoder
     public static List<ACCategoryEncodedPair> getAllACs(ColorChannel channel)
     {
         List<ACCategoryEncodedPair> result = new ArrayList<ACCategoryEncodedPair>();
-        for (DoubleMatrix block : channel.getBlocks(0, channel.getNumOfBlocks()))
+        for (int i = 0; i < channel.getNumOfBlocks(); i++)
         {
+            DoubleMatrix block = channel.getBlock(i);
             List<ACRunlengthEncodedPair> runlengthEncodedBlock = encodeRunlength(Util.zigzagSort(block));
             List<ACCategoryEncodedPair> categoryEncodedBlock = encodeCategoriesAC(runlengthEncodedBlock);
             result.addAll(categoryEncodedBlock);
@@ -96,19 +97,19 @@ public class AcDcEncoder
     public static void writeACTable(BitOutputStream bos, List<ACCategoryEncodedPair> acEncoding,
                                     Map<Integer, CodeWord> codebook) throws IOException
     {
-        for (ACCategoryEncodedPair pair : acEncoding)
+        for (ACCategoryEncodedPair ac : acEncoding)
         {
-            CodeWord codeWord = codebook.get(pair.getPair());
+            CodeWord codeWord = codebook.get(ac.getPair());
             bos.writeBits(codeWord.getCode(), codeWord.getLength());
-            bos.writeBits(pair.getEntryCategoryEncoded(), pair.getCategory());
+            bos.writeBits(ac.getEntryCategoryEncoded(), ac.getCategory());
         }
     }
 
-    public static void writeDC(BitOutputStream bos, int deltaDc, Map<Integer, CodeWord> codebook) throws IOException
+    public static void writeDC(BitOutputStream bos, DCCategoryEncodedPair dc, Map<Integer, CodeWord> codebook)
+            throws IOException
     {
-        int category = AbstractCategoryEncodedPair.calculateCategory(deltaDc);
-        CodeWord codeWord = codebook.get(category);
+        CodeWord codeWord = codebook.get(dc.getPair());
         bos.writeBits(codeWord.getCode(), codeWord.getLength());
-        bos.writeBits(ACCategoryEncodedPair.encodeCategory(deltaDc), category);
+        bos.writeBits(dc.getEntryCategoryEncoded(), dc.getPair());
     }
 }

@@ -1,12 +1,20 @@
 package jpegencoder;
 
+import jpegencoder.encoding.Util;
+import jpegencoder.encoding.acdc.ACCategoryEncodedPair;
+import jpegencoder.encoding.acdc.ACRunlengthEncodedPair;
+import jpegencoder.encoding.acdc.AcDcEncoder;
+import jpegencoder.encoding.acdc.DCCategoryEncodedPair;
 import jpegencoder.encoding.huffman.CodeWord;
 import jpegencoder.image.Image;
 import jpegencoder.image.colors.ColorChannel;
+import jpegencoder.image.colors.ycbcr.YCbCr;
+import jpegencoder.image.colors.ycbcr.YCbCrImage;
 import org.jblas.DoubleMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,20 +23,19 @@ import java.util.Map;
  */
 public class JpegEncoderTest
 {
-    Image image;
+    YCbCrImage image;
 
     @Before
     public void initImage()
     {
-        ColorChannel channel1 = new ColorChannel(256, 256);
-        ColorChannel channel2 = new ColorChannel(256, 256);
-        ColorChannel channel3 = new ColorChannel(256, 256);
+        ColorChannel channel1 = new ColorChannel(16, 16);
+        ColorChannel channel2 = new ColorChannel(16, 16);
+        ColorChannel channel3 = new ColorChannel(16, 16);
         fillPicture(channel1);
         fillPicture(channel2);
         fillPicture(channel3);
-        image = new Image(channel1, channel2, channel3)
-        {
-        };
+        image = new YCbCrImage(channel1, channel2, channel3);
+        image.reduce(2);
     }
 
     @Test
@@ -40,20 +47,102 @@ public class JpegEncoderTest
     @Test
     public void testBlocks()
     {
-        for (int i = 0; i < image.getChannel1().getBlock(0).getRows(); i++)
+        for (int k = 0; k < image.getChannel1().getNumOfBlocks(); k++)
         {
-            for (int j = 0; j < image.getChannel1().getBlock(0).getColumns(); j++)
+            printBlock(k);
+        }
+    }
+
+    private void printBlock(int k)
+    {
+        for (int i = 0; i < image.getChannel1().getBlock(k).getRows(); i++)
+        {
+            for (int j = 0; j < image.getChannel1().getBlock(k).getColumns(); j++)
             {
-                System.out.print(image.getChannel1().getBlock(0).get(i, j) + " ");
+                System.out.print(Util.round(image.getChannel1().getBlock(k).get(i, j)) + " ");
             }
             System.out.println();
+        }
+        System.out.println();
+    }
+
+    @Test
+    public void testImageAfterDCT()
+    {
+        JpegEncoder jpegEncoder = JpegEncoder.withImage(image).performDCT();
+        for (int k = 0; k < jpegEncoder.getImage().getChannel1().getNumOfBlocks(); k++)
+        {
+            printBlock(k);
+        }
+    }
+
+    @Test
+    public void testImageAfterQuantization()
+    {
+        JpegEncoder jpegEncoder = JpegEncoder.withImage(image).performDCT().performQuantization();
+        for (int k = 0; k < jpegEncoder.getImage().getChannel1().getNumOfBlocks(); k++)
+        {
+            printBlock(k);
+        }
+    }
+
+    @Test
+    public void testImageRunlengthEncoding()
+    {
+        JpegEncoder jpegEncoder = JpegEncoder.withImage(image).performDCT().performQuantization();
+        List<ACRunlengthEncodedPair> acRunlengthEncodedPairs = AcDcEncoder.encodeRunlength(Util.zigzagSort(jpegEncoder.getImage()
+                                                                                                                      .getChannel1()
+                                                                                                                      .getBlock(
+                                                                                                                              0)));
+        for (ACRunlengthEncodedPair acRunlengthEncodedPair : acRunlengthEncodedPairs)
+        {
+            System.out.println(acRunlengthEncodedPair);
+        }
+    }
+
+    @Test
+    public void testImageAcCategoryEncoding()
+    {
+        JpegEncoder jpegEncoder = JpegEncoder.withImage(image).performDCT().performQuantization();
+        List<ACRunlengthEncodedPair> acRunlengthEncodedPairs = AcDcEncoder.encodeRunlength(Util.zigzagSort(jpegEncoder.getImage()
+                                                                                                                      .getChannel1()
+                                                                                                                      .getBlock(
+                                                                                                                              0)));
+        for (ACCategoryEncodedPair acCategoryEncodedPair : AcDcEncoder.encodeCategoriesAC(acRunlengthEncodedPairs))
+        {
+            System.out.println(acCategoryEncodedPair);
+        }
+    }
+
+    @Test
+    public void testImageAfterAcDcEncoding()
+    {
+        JpegEncoder jpegEncoder = JpegEncoder.withImage(image)
+                                             .performDCT()
+                                             .performQuantization()
+                                             .performAcDcEncoding();
+        System.out.println("DCs:");
+        for (DCCategoryEncodedPair dcCategoryEncodedPair : jpegEncoder.dcYValues)
+        {
+            System.out.println(dcCategoryEncodedPair.toString());
+        }
+        System.out.println();
+        System.out.println("ACs:");
+        for (ACCategoryEncodedPair acCategoryEncodedPair : jpegEncoder.acYValues)
+        {
+            System.out.println(acCategoryEncodedPair);
         }
     }
 
     @Test
     public void testHuffmanTableAcY()
     {
-        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image).convertToJpeg().acYCodeBook.entrySet())
+        JpegEncoder jpegEncoder = JpegEncoder.withImage(image)
+                                             .performDCT()
+                                             .performQuantization()
+                                             .performAcDcEncoding()
+                                             .performHuffmanEncoding();
+        for (Map.Entry<Integer, CodeWord> entry : jpegEncoder.acYCodeBook.entrySet())
         {
             System.out.println(entry.getValue().toString());
         }
@@ -63,7 +152,8 @@ public class JpegEncoderTest
     @Test
     public void testHuffmanTableDcY()
     {
-        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image).convertToJpeg().dcYCodeBook.entrySet())
+        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
+                                                             .convertToJpeg().dcYCodeBook.entrySet())
         {
             System.out.println(entry.getValue().toString());
         }
@@ -89,7 +179,6 @@ public class JpegEncoderTest
         {
             System.out.println(entry.getValue().toString());
         }
-
     }
 
     @Test

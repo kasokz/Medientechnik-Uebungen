@@ -26,7 +26,7 @@ public class ImageDataWriter extends SegmentWriter
     private Map<Integer, CodeWord> acYCodeBook;
     private Map<Integer, CodeWord> dcCbCrCodeBook;
     private Map<Integer, CodeWord> acCbCrCodeBook;
-    private int subSampling = 2;
+    private int subSampling;
 
     public ImageDataWriter(BitOutputStream os, Image image,
                            Map<Integer, CodeWord> dcYCodeBook,
@@ -35,6 +35,7 @@ public class ImageDataWriter extends SegmentWriter
                            Map<Integer, CodeWord> acCbCrCodeBook)
     {
         super(os);
+        this.subSampling = image.getSubSampling();
         this.image = image;
         this.dcYCodeBook = dcYCodeBook;
         this.acYCodeBook = acYCodeBook;
@@ -44,29 +45,35 @@ public class ImageDataWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        for (int currentX = 0; currentX < image.getWidth() / 8 / subSampling; currentX++)
+        int cbCr = 0;
+        int y = 0;
+        for (int currentY = 0; currentY < image.getHeight() / 8 / subSampling; currentY++)
         {
-            for (int currentY = 0; currentY < image.getHeight() / 8 / subSampling; currentY++)
+            for (int currentX = 0; currentX < image.getWidth() / 8 / subSampling; currentX++)
             {
-                for (int currentXLuminance = currentX * subSampling;
-                     currentXLuminance < currentX + subSampling;
-                     currentXLuminance++)
+                for (int currentYLuminance = currentY * subSampling;
+                     currentYLuminance < currentY * subSampling + subSampling;
+                     currentYLuminance++)
                 {
-                    for (int currentYLuminance = currentY * subSampling;
-                         currentYLuminance < currentY + subSampling;
-                         currentYLuminance++)
+                    for (int currentXLuminance = currentX * subSampling;
+                         currentXLuminance < currentX * subSampling + subSampling;
+                         currentXLuminance++)
                     {
                         writeAcDcEncodedBlock(image.getChannel1(),
                                               currentXLuminance,
                                               currentYLuminance,
                                               dcYCodeBook,
                                               acYCodeBook);
+                        y++;
                     }
                 }
                 writeAcDcEncodedBlock(image.getChannel2(), currentX, currentY, dcCbCrCodeBook, acCbCrCodeBook);
                 writeAcDcEncodedBlock(image.getChannel3(), currentX, currentY, dcCbCrCodeBook, acCbCrCodeBook);
+                cbCr++;
             }
         }
+        System.out.println(y + " Y Blocks wrote");
+        System.out.println(cbCr + " CbCr Blocks wrote");
         os.flush();
     }
 
@@ -85,7 +92,7 @@ public class ImageDataWriter extends SegmentWriter
                                                                              yOfChannel)));
         List<ACCategoryEncodedPair> acCategoryEncodedPairs = AcDcEncoder.encodeCategoriesAC(
                 acRunlengthEncodedPairs);
-        AcDcEncoder.writeDC(os, dc.getEntryCategoryEncoded(), dcCodeBook);
+        AcDcEncoder.writeDC(os, dc, dcCodeBook);
         AcDcEncoder.writeACTable(os, acCategoryEncodedPairs, acCodeBook);
     }
 }

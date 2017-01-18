@@ -80,7 +80,7 @@ public class AcDcTests
             codebook.put(i + 1, new CodeWord(i, i, 8));
         }
         BitOutputStream bos = new BitOutputStream(new FileOutputStream("dcTest.dat"));
-        AcDcEncoder.writeDC(bos, 511, codebook);
+        AcDcEncoder.writeDC(bos, new DCCategoryEncodedPair(9, 511), codebook);
         bos.close();
     }
 }

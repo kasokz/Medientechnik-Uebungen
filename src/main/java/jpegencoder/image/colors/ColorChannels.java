@@ -6,8 +6,6 @@ import jpegencoder.image.colors.ycbcr.YCbCr;
 import jpegencoder.image.colors.ycbcr.YCbCrImage;
 import org.jblas.DoubleMatrix;
 
-import java.util.ArrayList;
-
 /**
  * Created by Long Bui on 26.10.16.
  * E-Mail: giaolong.bui@student.fhws.de
@@ -17,17 +15,17 @@ public class ColorChannels
     public static YCbCrImage RGBToYCbCr(RGBImage rgbImage)
     {
         long start = System.currentTimeMillis();
-        DoubleMatrix luminance = new DoubleMatrix(rgbImage.getStrideHeight(), rgbImage.getStrideWidth());
-        DoubleMatrix cbChannel = new DoubleMatrix(rgbImage.getStrideHeight(), rgbImage.getStrideWidth());
-        DoubleMatrix crChannel = new DoubleMatrix(rgbImage.getStrideHeight(), rgbImage.getStrideWidth());
-        for (int pixelRow = 0; pixelRow < rgbImage.getStrideHeight(); pixelRow++)
+        ColorChannel luminance = new ColorChannel(rgbImage.getHeight(), rgbImage.getWidth());
+        ColorChannel cbChannel = new ColorChannel(rgbImage.getHeight(), rgbImage.getWidth());
+        ColorChannel crChannel = new ColorChannel(rgbImage.getHeight(), rgbImage.getWidth());
+        for (int y = 0; y < rgbImage.getHeight(); y++)
         {
-            for (int pixelColumn = 0; pixelColumn < rgbImage.getStrideWidth(); pixelColumn++)
+            for (int x = 0; x < rgbImage.getWidth(); x++)
             {
-                YCbCr converted = convertRGBToYCbCr(rgbImage.getRGBAt(pixelColumn, pixelRow));
-                luminance.put(pixelRow, pixelColumn, converted.getLuminanceChannel());
-                cbChannel.put(pixelRow, pixelColumn, converted.getCbChannel());
-                crChannel.put(pixelRow, pixelColumn, converted.getCrChannel());
+                YCbCr converted = convertRGBToYCbCr(rgbImage.getRGBAt(x, y));
+                luminance.setPixel(x, y, converted.getLuminanceChannel());
+                cbChannel.setPixel(x, y, converted.getCbChannel());
+                crChannel.setPixel(x, y, converted.getCrChannel());
             }
         }
         System.out.println("Finished RGB to YCbCr conversion in "

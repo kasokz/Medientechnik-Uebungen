@@ -8,9 +8,10 @@ import jpegencoder.image.colors.ColorChannel;
  */
 public abstract class Image
 {
-    private ColorChannel channel1;
-    private ColorChannel channel2;
-    private ColorChannel channel3;
+    protected ColorChannel channel1;
+    protected ColorChannel channel2;
+    protected ColorChannel channel3;
+    protected int subSampling = 1;
 
     public Image(ColorChannel channel1, ColorChannel channel2, ColorChannel channel3)
     {
@@ -42,5 +43,10 @@ public abstract class Image
     public int getWidth()
     {
         return channel1.getWidth();
+    }
+
+    public int getSubSampling()
+    {
+        return subSampling;
     }
 }

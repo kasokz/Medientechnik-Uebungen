@@ -18,10 +18,8 @@ public class SOF0Writer extends SegmentWriter
 
     private int length;
     private int sampleRate = 8;
-    private int yImgSizeHigh;
-    private int yImgSizeLow;
-    private int xImgSizeHigh;
-    private int xImgSizeLow;
+    private int yImgSize;
+    private int xImgSize;
     private int numberOfComponents;
     private List<SOF0Component> components;
 
@@ -31,8 +29,8 @@ public class SOF0Writer extends SegmentWriter
         setComponents();
         this.numberOfComponents = components.size();
         this.length = 8 + numberOfComponents * 3;
-        setXImgSize(xImgSize);
-        setYImgSize(yImgSize);
+        this.xImgSize = xImgSize;
+        this.yImgSize = yImgSize;
     }
 
     private void setComponents()
@@ -43,44 +41,6 @@ public class SOF0Writer extends SegmentWriter
         components.add(new SOF0Component(2, 1, 1, 1));
     }
 
-    public void setSampleRate(int sampleRate)
-    {
-        if (sampleRate == 8 || sampleRate == 12 || sampleRate == 16)
-        {
-            this.sampleRate = sampleRate;
-        }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public void setYImgSize(int yImgSize)
-    {
-        if (yImgSize > 0 && yImgSize <= 0xFFFF)
-        {
-            this.yImgSizeHigh = (yImgSize & 0xFF00) >> 8;
-            this.yImgSizeLow = yImgSize & 0xFF;
-        }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    public void setXImgSize(int xImgSize)
-    {
-        if (xImgSize > 0 && xImgSize <= 0xFFFF)
-        {
-            this.xImgSizeHigh = (xImgSize & 0xFF00) >> 8;
-            this.xImgSizeLow = xImgSize & 0xFF;
-        }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
-    }
-
     public void writeSegment() throws IOException
     {
         os.writeByte(0xFF);
@@ -88,10 +48,8 @@ public class SOF0Writer extends SegmentWriter
         os.writeByte((length & 0xFF00) >> 8);
         os.writeByte(length & 0xFF);
         os.writeByte(sampleRate);
-        os.writeByte(yImgSizeHigh);
-        os.writeByte(yImgSizeLow);
-        os.writeByte(xImgSizeHigh);
-        os.writeByte(xImgSizeLow);
+        os.writeBits(yImgSize, 16);
+        os.writeBits(xImgSize, 16);
         os.writeByte(numberOfComponents);
         for (SOF0Component sof0Component : components)
         {

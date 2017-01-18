@@ -52,4 +52,9 @@ public abstract class AbstractCategoryEncodedPair
         }
         return result;
     }
+
+    public String toString()
+    {
+        return pair + ", " + entryCategoryEncoded;
+    }
 }

@@ -1,5 +1,7 @@
 package jpegencoder.image.colors.ycbcr;
 
+import jpegencoder.image.Image;
+import jpegencoder.image.colors.ColorChannel;
 import org.jblas.DoubleMatrix;
 
 import java.util.ArrayList;
@@ -8,69 +10,59 @@ import java.util.ArrayList;
  * Created by Long Bui on 26.10.16.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class YCbCrImage
+public class YCbCrImage extends Image
 {
-    private DoubleMatrix luminance;
-    private DoubleMatrix cbChannel;
-    private DoubleMatrix crChannel;
-
-    private int cbReductionFaktor = 1;
-    private int crReductionFaktor = 1;
-
-
-    public YCbCrImage(DoubleMatrix luminance, DoubleMatrix cbChannel, DoubleMatrix crChannel)
+    public YCbCrImage(ColorChannel luminance, ColorChannel cbChannel, ColorChannel crChannel)
     {
-        this.luminance = luminance;
-        this.cbChannel = cbChannel;
-        this.crChannel = crChannel;
+        super(luminance, cbChannel, crChannel);
+
     }
 
     public int getHeight()
     {
-        return luminance.getRows();
+        return getChannel1().getHeight();
     }
 
     public int getWidth()
     {
-        return luminance.getColumns();
+        return getChannel1().getWidth();
     }
 
     public YCbCr getPixelAt(int x, int y)
     {
-        return new YCbCr((int) luminance.get(x, y), (int) cbChannel.get(x, y), (int) crChannel.get(x, y));
+        return new YCbCr((int) channel1.getPixel(x, y),
+                         (int) channel2.getPixel(x / subSampling, y / subSampling),
+                         (int) channel3.getPixel(x / subSampling, y / subSampling));
     }
 
-    public void reduce(int luminanceFactor, int cbFactor, int crFactor)
+    public void reduce(int subSampling)
     {
-        this.luminance = reduceChannel(luminance, luminanceFactor);
-        this.cbChannel = reduceChannel(cbChannel, cbFactor);
-        this.crChannel = reduceChannel(crChannel, crFactor);
+        this.channel2 = reduceChannel(channel2, subSampling);
+        this.channel3 = reduceChannel(channel3, subSampling);
+        this.subSampling = subSampling;
     }
 
-    private DoubleMatrix reduceChannel(DoubleMatrix channel, int factor)
+    private ColorChannel reduceChannel(ColorChannel channel, int factor)
     {
-        int reducedRowCount = channel.getRows() / factor;
-        int reducedColumnCount = channel.getColumns() / factor;
-        DoubleMatrix result = new DoubleMatrix(reducedRowCount, reducedColumnCount);
-        for (int row = 0; row < reducedRowCount; row++)
+        int reducedHeight = channel.getHeight() / factor;
+        int reducedWidth = channel.getWidth() / factor;
+        ColorChannel result = new ColorChannel(reducedHeight, reducedWidth);
+        for (int y = 0; y < reducedHeight; y++)
         {
-            for (int column = 0; column < reducedColumnCount; column++)
+            for (int x = 0; x < reducedWidth; x++)
             {
                 int sum = 0;
-                for (int blockRow = 0; blockRow < factor; blockRow++)
+                for (int blockY = y * factor; blockY < y * factor + factor; blockY++)
                 {
-                    int rowInInput = row * factor + blockRow;
-                    for (int blockColumn = 0; blockColumn < factor; blockColumn++)
+                    for (int blockX = x * factor; blockX < x * factor + factor; blockX++)
                     {
-                        int columnInInput = column * factor + blockColumn;
-                        sum += channel.get(rowInInput, columnInInput);
+                        sum += channel.getPixel(blockX, blockY);
                     }
                 }
-                result.put(row, column, (int) ((sum / (double) (factor * factor)) + 0.5));
+                result.setPixel(x, y, (int) ((sum / (double) (factor * factor)) + 0.5));
             }
         }
         return result;
-
     }
 
     @Override

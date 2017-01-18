@@ -1,6 +1,7 @@
 package jpegencoder.image;
 
 import jpegencoder.image.colors.ColorChannel;
+import org.jblas.DoubleMatrix;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class ColorChannelTest
     public void testSetterWithGetter()
     {
         testChannel.setPixel(16, 16, 300);
-        Assert.assertEquals(300, testChannel.getPixel(16, 16));
+        Assert.assertEquals(300, testChannel.getPixel(16, 16), 1);
     }
 
     @Test
@@ -49,10 +50,36 @@ public class ColorChannelTest
         {
             for (int j = 0; j < 32; j++)
             {
-                System.out.print(testChannel.getPixel(j, i) + " ");
-                Assert.assertEquals(index++, testChannel.getPixel(j, i));
+                Assert.assertEquals(index++, testChannel.getPixel(j, i), 1);
             }
-            System.out.println();
+        }
+    }
+
+    @Test
+    public void testFirstBlock()
+    {
+        testSettersWithGetters();
+        DoubleMatrix block = testChannel.getBlock(0);
+        for (int i = 0; i < block.getRows(); i++)
+        {
+            int index = i * testChannel.getWidth();
+            for (int j = 0; j < block.getColumns(); j++)
+            {
+                Assert.assertEquals(index++, block.get(i, j), 0.5);
+            }
+        }
+    }
+
+    @Test
+    public void testBlockAccess()
+    {
+        int x = 0;
+        for (int i = 0; i < testChannel.getHeight() / 8; i++)
+        {
+            for (int j = 0; j < testChannel.getWidth() / 8; j++)
+            {
+                Assert.assertEquals(x++, testChannel.getPlainIndexOfBlock(j, i));
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 package jpegencoder.encoding.acdc;
 
+import jpegencoder.encoding.Util;
+
 /**
  * Created by Long Bui on 12.01.17.
  * E-Mail: giaolong.bui@student.fhws.de
@@ -23,7 +25,8 @@ public class ACCategoryEncodedPair extends AbstractCategoryEncodedPair
 
     public String toString()
     {
-        return "(" + (getPair() >> 4) + "," + (getPair() & 0xf) + "), " +
-                ((getEntryCategoryEncoded() == 0) ? "" : getEntryCategoryEncoded());
+        return "(" + getZeroCount() + "," + getCategory() + "), " +
+                ((getEntryCategoryEncoded() == 0 && getCategory() == 0) ? "" : Util.getBitsAsString(getEntryCategoryEncoded(),
+                                                                                              getCategory()));
     }
 }

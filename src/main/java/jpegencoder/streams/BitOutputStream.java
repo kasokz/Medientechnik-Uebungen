@@ -1,5 +1,6 @@
 package jpegencoder.streams;
 
+import jpegencoder.encoding.Util;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.IOException;

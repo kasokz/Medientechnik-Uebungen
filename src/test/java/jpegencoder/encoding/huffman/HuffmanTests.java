@@ -129,7 +129,7 @@ public class HuffmanTests
     @Test
     public void testDHTWriter() throws IOException
     {
-        BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
+        BitOutputStream bos = new BitOutputStream(new FileOutputStream("expectedSegments.jpg"));
         huffmanTree.makeCanonical();
         huffmanTree.replaceMostRight();
         huffmanTree.restrictToLength(16);

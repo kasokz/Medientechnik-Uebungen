@@ -8,6 +8,10 @@ import jpegencoder.encoding.huffman.CodeWord;
 import jpegencoder.encoding.huffman.HuffmanEncoder;
 import jpegencoder.image.Image;
 import jpegencoder.image.colors.ColorChannel;
+import jpegencoder.image.colors.ColorChannels;
+import jpegencoder.image.colors.rgb.RGBImage;
+import jpegencoder.image.colors.ycbcr.YCbCr;
+import jpegencoder.image.colors.ycbcr.YCbCrImage;
 import jpegencoder.segments.SegmentWriter;
 import jpegencoder.segments.app0.APP0Writer;
 import jpegencoder.segments.dht.DHTWriter;
@@ -22,6 +26,7 @@ import jpegencoder.segments.sos.SOSWriter;
 import jpegencoder.streams.BitOutputStream;
 import org.jblas.DoubleMatrix;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,12 +43,22 @@ public class JpegEncoder
     Image image;
     List<DCCategoryEncodedPair> dcYValues;
     List<ACCategoryEncodedPair> acYValues;
-    List<DCCategoryEncodedPair> dcCbCrValues;
-    List<ACCategoryEncodedPair> acCbCrValues;
+    private List<DCCategoryEncodedPair> dcCbValues;
+    private List<ACCategoryEncodedPair> acCbValues;
+    private List<DCCategoryEncodedPair> dcCrValues;
+    private List<ACCategoryEncodedPair> acCrValues;
     Map<Integer, CodeWord> dcYCodeBook;
     Map<Integer, CodeWord> acYCodeBook;
     Map<Integer, CodeWord> dcCbCrCodeBook;
     Map<Integer, CodeWord> acCbCrCodeBook;
+
+    public static JpegEncoder withImageFromFile(String fileName) throws FileNotFoundException
+    {
+        RGBImage rgbImage = RGBImage.RGBImageBuilder.from(new FileInputStream(fileName)).build();
+        YCbCrImage yCbCrImage = ColorChannels.RGBToYCbCr(rgbImage);
+        yCbCrImage.reduce(2);
+        return new JpegEncoder(yCbCrImage);
+    }
 
     public static JpegEncoder withImage(Image image)
     {
@@ -64,34 +79,38 @@ public class JpegEncoder
         return this;
     }
 
-    void performDCT()
+    JpegEncoder performDCT()
     {
         transformChannel(image.getChannel1());
         transformChannel(image.getChannel2());
         transformChannel(image.getChannel2());
+        return this;
     }
 
-    void performQuantization()
+    JpegEncoder performQuantization()
     {
         quantizeChannel(image.getChannel1(), QuantizationTable.QUANTIZATION_MATRIX_LUMINANCE);
         quantizeChannel(image.getChannel2(), QuantizationTable.QUANTIZATION_MATRIX_CHROMINANCE);
         quantizeChannel(image.getChannel3(), QuantizationTable.QUANTIZATION_MATRIX_CHROMINANCE);
+        return this;
     }
 
-    void performAcDcEncoding()
+    JpegEncoder performAcDcEncoding()
     {
         dcYValues = AcDcEncoder.getAllDCs(image.getChannel1());
         getDCCbCrValues();
         acYValues = AcDcEncoder.getAllACs(image.getChannel1());
         getACCbCrValues();
+        return this;
     }
 
-    void performHuffmanEncoding()
+    JpegEncoder performHuffmanEncoding()
     {
         huffmanEncodeDCY();
         huffmanEncodeACY();
         huffmanEncodeDCCbCr();
         huffmanEncodeACCbCr();
+        return this;
     }
 
     private void huffmanEncodeDCY()
@@ -116,10 +135,11 @@ public class JpegEncoder
         acYCodeBook = HuffmanEncoder.encode(symbols).forJpeg().getCodebookAsMap();
     }
 
-
     private void huffmanEncodeDCCbCr()
     {
-        int[] symbols = new int[dcCbCrValues.size()];
+        int[] symbols = new int[dcCbValues.size() + dcCrValues.size()];
+        List<DCCategoryEncodedPair> dcCbCrValues = dcCbValues;
+        dcCbCrValues.addAll(dcCrValues);
         int index = 0;
         for (DCCategoryEncodedPair dcCategoryEncodedPair : dcCbCrValues)
         {
@@ -130,7 +150,9 @@ public class JpegEncoder
 
     private void huffmanEncodeACCbCr()
     {
-        int[] symbols = new int[acCbCrValues.size()];
+        int[] symbols = new int[acCbValues.size() + acCrValues.size()];
+        List<ACCategoryEncodedPair> acCbCrValues = acCbValues;
+        acCbCrValues.addAll(acCrValues);
         int index = 0;
         for (ACCategoryEncodedPair acCategoryEncodedPair : acCbCrValues)
         {
@@ -139,17 +161,16 @@ public class JpegEncoder
         acCbCrCodeBook = HuffmanEncoder.encode(symbols).forJpeg().getCodebookAsMap();
     }
 
-
     private void getDCCbCrValues()
     {
-        dcCbCrValues = AcDcEncoder.getAllDCs(image.getChannel2());
-        dcCbCrValues.addAll(AcDcEncoder.getAllDCs(image.getChannel3()));
+        dcCbValues = AcDcEncoder.getAllDCs(image.getChannel2());
+        dcCrValues = AcDcEncoder.getAllDCs(image.getChannel3());
     }
 
     private void getACCbCrValues()
     {
-        acCbCrValues = AcDcEncoder.getAllACs(image.getChannel2());
-        acCbCrValues.addAll(AcDcEncoder.getAllACs(image.getChannel3()));
+        acCbValues = AcDcEncoder.getAllACs(image.getChannel2());
+        acCrValues = AcDcEncoder.getAllACs(image.getChannel3());
     }
 
     private void transformChannel(ColorChannel channel)
@@ -201,11 +222,11 @@ public class JpegEncoder
             segmentWriters.add(new SOIWriter(bos));
             segmentWriters.add(new APP0Writer(bos, 0x0048, 0x0048));
             segmentWriters.add(new DQTWriter(bos));
-            segmentWriters.add(new SOF0Writer(bos, image.getHeight(), image.getWidth()));
+            segmentWriters.add(new SOF0Writer(bos, image.getWidth(), image.getHeight()));
             List<HuffmanTable> huffmanTables = new ArrayList<HuffmanTable>();
             huffmanTables.add(getHuffmanTableDCY());
-            huffmanTables.add(getHuffmanTableDCCbCr());
             huffmanTables.add(getHuffmanTableACY());
+            huffmanTables.add(getHuffmanTableDCCbCr());
             huffmanTables.add(getHuffmanTableACCbCr());
             segmentWriters.add(new DHTWriter(bos, huffmanTables));
             segmentWriters.add(new SOSWriter(bos));
@@ -230,6 +251,10 @@ public class JpegEncoder
         {
             e.printStackTrace();
         }
+    }
 
+    Image getImage()
+    {
+        return this.image;
     }
 }
