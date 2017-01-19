@@ -12,7 +12,7 @@ public class Application
     {
         try
         {
-            JpegEncoder.withImageFromFile("test-image.ppm").convertToJpeg().writeImageToDisk();
+            JpegEncoder.withImageFromFile("test-pic.ppm").convertToJpeg().writeImageToDisk();
         }
         catch (FileNotFoundException e)
         {

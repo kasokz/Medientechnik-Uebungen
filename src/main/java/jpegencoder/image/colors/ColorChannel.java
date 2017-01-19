@@ -74,4 +74,27 @@ public class ColorChannel
     {
         return width;
     }
+
+    public int getWidthInBlocks()
+    {
+        return widthInBlocks;
+    }
+
+    public int getHeightInBlocks()
+    {
+        return heightInBlocks;
+    }
+
+    public void fillWithMockData()
+    {
+        for (int y = 0; y < getHeight(); y++)
+        {
+            for (int x = 0; x < getWidth(); x++)
+            {
+                int value;
+                value = ((y + 1) * 32) % 256;
+                setPixel(x, y, value);
+            }
+        }
+    }
 }

@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class QuantizationTable
 {
-    public static DoubleMatrix QUANTIZATION_MATRIX_LUMINANCE = new DoubleMatrix(new double[][]{
+    public static DoubleMatrix QUANTIZATION_MATRIX_LUMINANCE1 = new DoubleMatrix(new double[][]{
             {15, 15, 15, 15, 15, 15, 15, 15},
             {15, 15, 15, 15, 15, 15, 15, 15},
             {15, 15, 15, 15, 15, 15, 15, 15},
@@ -22,7 +22,7 @@ public class QuantizationTable
             {15, 15, 15, 15, 15, 15, 15, 15},
             {15, 15, 15, 15, 15, 15, 15, 15}
     });
-    public static DoubleMatrix QUANTIZATION_MATRIX_LUMINANCE1 = new DoubleMatrix(new double[][]{
+    public static DoubleMatrix QUANTIZATION_MATRIX_LUMINANCE = new DoubleMatrix(new double[][]{
             {16, 11, 10, 16, 24, 40, 51, 61},
             {12, 12, 14, 19, 26, 58, 60, 55},
             {14, 13, 16, 24, 40, 57, 69, 56},
@@ -32,7 +32,7 @@ public class QuantizationTable
             {49, 64, 78, 87, 103, 121, 120, 101},
             {72, 92, 95, 98, 112, 100, 103, 99}
     });
-    public static DoubleMatrix QUANTIZATION_MATRIX_CHROMINANCE = new DoubleMatrix(new double[][]{
+    public static DoubleMatrix QUANTIZATION_MATRIX_CHROMINANCE1 = new DoubleMatrix(new double[][]{
             {15, 15, 15, 15, 15, 15, 15, 15},
             {15, 15, 15, 15, 15, 15, 15, 15},
             {15, 15, 15, 15, 15, 15, 15, 15},
@@ -42,7 +42,7 @@ public class QuantizationTable
             {15, 15, 15, 15, 15, 15, 15, 15},
             {15, 15, 15, 15, 15, 15, 15, 15}
     });
-    public static DoubleMatrix QUANTIZATION_MATRIX_CHROMINANCE1 = new DoubleMatrix(new double[][]{
+    public static DoubleMatrix QUANTIZATION_MATRIX_CHROMINANCE = new DoubleMatrix(new double[][]{
             {17, 18, 24, 47, 99, 99, 99, 99},
             {18, 21, 26, 66, 99, 99, 99, 99},
             {24, 26, 56, 99, 99, 99, 99, 99},

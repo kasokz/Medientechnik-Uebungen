@@ -37,18 +37,18 @@ public class BitOutputStream extends OutputStream
             throw new IllegalArgumentException();
         }
         bitBuffer = (byte) (bitBuffer + (b << (7 - counter)));
-        int temp = bitBuffer;
         counter++;
         if (counter == 8)
         {
             byteBuffer.add(bitBuffer);
+            if ((bitBuffer & 0xFF) == 0xFF && !allowFF)
+            {
+                byteBuffer.add(0);
+            }
             counter = 0;
             bitBuffer = 0;
         }
-        if ((temp & 0xFF) == 0xFF && !allowFF)
-        {
-            byteBuffer.add(0);
-        }
+
         if (byteBuffer.size() >= BUFFER_CAPACITY)
         {
             this.flush();
@@ -65,7 +65,6 @@ public class BitOutputStream extends OutputStream
     {
         if (counter != 0)
         {
-
             byteBuffer.add(bitBuffer);
         }
         for (Integer i : byteBuffer)

@@ -94,35 +94,35 @@ public class AcDcEncoder
         return resultList;
     }
 
-    public static void writeACTable(BitOutputStream bos, List<ACCategoryEncodedPair> acEncoding,
-                                    Map<Integer, CodeWord> codebook) throws IOException
+    public static void writeACCoefficients(BitOutputStream bos, List<ACCategoryEncodedPair> acEncoding,
+                                           Map<Integer, CodeWord> codebook) throws IOException
     {
-        System.out.println("AC: ");
         for (ACCategoryEncodedPair ac : acEncoding)
         {
-            System.out.println(ac);
             CodeWord codeWord = codebook.get(ac.getPair());
             bos.writeBits(codeWord.getCode(), codeWord.getLength());
             bos.writeBits(ac.getEntryCategoryEncoded(), ac.getCategory());
-            System.out.println("Wrote Huffcode " + codeWord.getSymbol() + ": " + Util.getBitsAsString(codeWord.getCode(),
-                                                                                                      codeWord.getLength()));
-            System.out.println("Wrote Entropy Code: " + Util.getBitsAsString(ac.getEntryCategoryEncoded(),
-                                                                             ac.getCategory()));
+            log(codeWord, ac);
         }
-        System.out.println();
     }
 
-    public static void writeDC(BitOutputStream bos, DCCategoryEncodedPair dc, Map<Integer, CodeWord> codebook)
+    public static void writeDCCoefficient(BitOutputStream bos, DCCategoryEncodedPair dc,
+                                          Map<Integer, CodeWord> codebook)
             throws IOException
     {
-        System.out.println("DC: ");
-        System.out.println(dc);
         CodeWord codeWord = codebook.get(dc.getPair());
         bos.writeBits(codeWord.getCode(), codeWord.getLength());
         bos.writeBits(dc.getEntryCategoryEncoded(), dc.getPair());
-        System.out.println("Wrote Huffcode " + codeWord.getSymbol() + ": " + Util.getBitsAsString(codeWord.getCode(),
-                                                                                                  codeWord.getLength()));
-        System.out.println("Wrote Entropy Code: " + Util.getBitsAsString(dc.getEntryCategoryEncoded(), dc.getPair()));
-        System.out.println();
+        log(codeWord, dc);
+    }
+
+    private static void log(CodeWord codeWord, AbstractCategoryEncodedPair pair)
+    {
+        boolean shouldLog = false;
+        if (shouldLog)
+        {
+            System.out.println(Util.getBitsAsString(codeWord.getCode(), codeWord.getLength()));
+            System.out.println(Util.getBitsAsString(pair.getEntryCategoryEncoded(), pair.getPair() & 0xf));
+        }
     }
 }

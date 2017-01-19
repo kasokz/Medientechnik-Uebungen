@@ -45,9 +45,9 @@ public class ImageDataWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
-        for (int currentY = 0; currentY < image.getHeight() / 8 / subSampling; currentY++)
+        for (int currentY = 0; currentY < image.getChannel2().getHeightInBlocks(); currentY++)
         {
-            for (int currentX = 0; currentX < image.getWidth() / 8 / subSampling; currentX++)
+            for (int currentX = 0; currentX < image.getChannel2().getWidthInBlocks(); currentX++)
             {
                 for (int currentYLuminance = currentY * subSampling;
                      currentYLuminance < currentY * subSampling + subSampling;
@@ -69,6 +69,7 @@ public class ImageDataWriter extends SegmentWriter
             }
         }
         os.flush();
+        os.writeByte(0xFF);
     }
 
     private void writeAcDcEncodedBlock(ColorChannel channel, int xOfChannel, int yOfChannel,
@@ -86,7 +87,7 @@ public class ImageDataWriter extends SegmentWriter
                                                                              yOfChannel)));
         List<ACCategoryEncodedPair> acCategoryEncodedPairs = AcDcEncoder.encodeCategoriesAC(
                 acRunlengthEncodedPairs);
-        AcDcEncoder.writeDC(os, dc, dcCodeBook);
-        AcDcEncoder.writeACTable(os, acCategoryEncodedPairs, acCodeBook);
+        AcDcEncoder.writeDCCoefficient(os, dc, dcCodeBook);
+        AcDcEncoder.writeACCoefficients(os, acCategoryEncodedPairs, acCodeBook);
     }
 }

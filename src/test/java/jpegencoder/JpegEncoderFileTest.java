@@ -6,40 +6,39 @@ import jpegencoder.encoding.acdc.ACRunlengthEncodedPair;
 import jpegencoder.encoding.acdc.AcDcEncoder;
 import jpegencoder.encoding.acdc.DCCategoryEncodedPair;
 import jpegencoder.encoding.huffman.CodeWord;
-import jpegencoder.image.Image;
-import jpegencoder.image.colors.ColorChannel;
-import jpegencoder.image.colors.ycbcr.YCbCr;
+import jpegencoder.image.colors.ColorChannels;
+import jpegencoder.image.colors.rgb.RGBImage;
 import jpegencoder.image.colors.ycbcr.YCbCrImage;
-import org.jblas.DoubleMatrix;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Map;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 /**
- * Created by Long Bui on 17.01.17.
+ * Created by Long Bui on 19/01/2017.
  * E-Mail: giaolong.bui@student.fhws.de
  */
-public class JpegEncoderTest
+public class JpegEncoderFileTest
 {
     YCbCrImage image;
 
     @Before
-    public void initImage()
+    public void initImage() throws FileNotFoundException
     {
-        ColorChannel channel1 = new ColorChannel(1920, 1920);
-        ColorChannel channel2 = new ColorChannel(1920, 1920);
-        ColorChannel channel3 = new ColorChannel(1920, 1920);
-        fillPicture(channel1);
-        image = new YCbCrImage(channel1, channel2, channel3);
-        image.reduce(2);
+        RGBImage rgbImage = RGBImage.RGBImageBuilder.from(new FileInputStream("test-pic.ppm")).build();
+        image = ColorChannels.RGBToYCbCr(rgbImage);
     }
 
     @Test
-    public void testImage()
+    public void testBlockAfterDCT()
     {
-        print();
+        JpegEncoder.withImage(image).performDCT();
+        for (int i = 10; i < 20; i++)
+        {
+            printBlock(i);
+        }
     }
 
     @Test
@@ -142,8 +141,7 @@ public class JpegEncoderTest
         JpegEncoder jpegEncoder = JpegEncoder.withImage(image).performDCT().performQuantization();
         List<ACRunlengthEncodedPair> acRunlengthEncodedPairs = AcDcEncoder.encodeRunlength(Util.zigzagSort(jpegEncoder.getImage()
                                                                                                                       .getChannel1()
-                                                                                                                      .getBlock(
-                                                                                                                              0)));
+                                                                                                                      .getBlock(0)));
         for (ACRunlengthEncodedPair acRunlengthEncodedPair : acRunlengthEncodedPairs)
         {
             System.out.println(acRunlengthEncodedPair);
@@ -251,10 +249,12 @@ public class JpegEncoderTest
     @Test
     public void testHuffmanTableDcY()
     {
-        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
-                                                             .convertToJpeg().dcYCodeBook.entrySet())
+        List<CodeWord> codeWords = new ArrayList<CodeWord>(JpegEncoder.withImage(image)
+                                                                      .convertToJpeg().dcYCodeBook.values());
+        Collections.sort(codeWords);
+        for (CodeWord codeWord : codeWords)
         {
-            System.out.println(entry.getValue().toString());
+            System.out.println(codeWord.toString());
         }
 
     }
@@ -262,10 +262,12 @@ public class JpegEncoderTest
     @Test
     public void testHuffmanTableAcCbCr()
     {
-        for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
-                                                             .convertToJpeg().acCbCrCodeBook.entrySet())
+        List<CodeWord> codeWords = new ArrayList<CodeWord>(JpegEncoder.withImage(image)
+                                                                      .convertToJpeg().acYCodeBook.values());
+        Collections.sort(codeWords);
+        for (CodeWord codeWord : codeWords)
         {
-            System.out.println(entry.getValue().toString());
+            System.out.println(codeWord.toString());
         }
 
     }
@@ -286,30 +288,4 @@ public class JpegEncoderTest
         JpegEncoder.withImage(image).convertToJpeg().writeImageToDisk();
     }
 
-    private void fillPicture(ColorChannel colorChannel)
-    {
-        for (int y = 0; y < colorChannel.getHeight(); y++)
-        {
-            for (int x = 0; x < colorChannel.getWidth(); x++)
-            {
-                int value;
-                value = (x + (y * 8)) % 256;
-                colorChannel.setPixel(x, y, value);
-            }
-        }
-    }
-
-    public void print()
-    {
-        for (int row = 0; row < image.getChannel1().getHeight(); row++)
-        {
-            for (int col = 0; col < image.getChannel1().getWidth(); col++)
-            {
-                System.out.print(image.getChannel1().getPixel(col, row) + " ");
-            }
-            System.out.println();
-        }
-    }
-
 }
-

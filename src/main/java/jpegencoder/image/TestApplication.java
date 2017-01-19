@@ -32,7 +32,7 @@ public class TestApplication extends Application
 
     public void start(Stage primaryStage) throws Exception
     {
-        BufferedImage img = readPpmAndConvertToYcbcr();
+        BufferedImage img = blackAndWhiteColorChannel();
         Image image = SwingFXUtils.toFXImage(img, null);
         ImageView imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
@@ -112,26 +112,24 @@ public class TestApplication extends Application
 
     private BufferedImage blackAndWhiteColorChannel()
     {
-        ColorChannel channel = new ColorChannel(1024, 1024);
-        for (int y = 0; y < channel.getHeight(); y++)
-        {
-            for (int x = 0; x < channel.getWidth(); x++)
-            {
-                int value;
-                value = (x + (y * 8)) % channel.getWidth();
-                channel.setPixel(x, y, value);
-            }
-        }
-        BufferedImage img = new BufferedImage(channel.getWidth(),
-                                              channel.getHeight(),
+        ColorChannel channel1 = new ColorChannel(800, 800);
+        ColorChannel channel2 = new ColorChannel(800, 800);
+        ColorChannel channel3 = new ColorChannel(800, 800);
+        channel1.fillWithMockData();
+        channel2.fillWithMockData();
+        channel3.fillWithMockData();
+        YCbCrImage image = ColorChannels.RGBToYCbCr(RGBImage.RGBImageBuilder.from(channel1, channel2, channel3)
+                                                                            .build());
+        BufferedImage img = new BufferedImage(image.getWidth(),
+                                              image.getHeight(),
                                               BufferedImage.TYPE_BYTE_GRAY);
         byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
-        for (int i = 0; i < channel.getHeight(); i++)
+        for (int i = 0; i < image.getHeight(); i++)
         {
-            for (int j = 0; j < channel.getWidth(); j++)
+            for (int j = 0; j < image.getWidth(); j++)
             {
-                double pixel = channel.getPixel(j, i);
-                pixels[j + i * channel.getWidth()] = (byte) (int) pixel;
+                double pixel = image.getPixelAt(j, i).getLuminanceChannel();
+                pixels[j + i * image.getWidth()] = (byte) (int) pixel;
             }
         }
         return img;

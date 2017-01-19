@@ -1,7 +1,9 @@
 package jpegencoder.encoding.acdc;
 
+import jpegencoder.encoding.Util;
 import jpegencoder.encoding.huffman.CodeWord;
 import jpegencoder.streams.BitOutputStream;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.FileOutputStream;
@@ -67,7 +69,7 @@ public class AcDcTests
             System.out.println(entry.getValue());
         }
         BitOutputStream bitOutputStream = new BitOutputStream(new FileOutputStream("acTest.dat"));
-        AcDcEncoder.writeACTable(bitOutputStream, pairs, codebook);
+        AcDcEncoder.writeACCoefficients(bitOutputStream, pairs, codebook);
         bitOutputStream.close();
     }
 
@@ -80,7 +82,18 @@ public class AcDcTests
             codebook.put(i + 1, new CodeWord(i, i, 8));
         }
         BitOutputStream bos = new BitOutputStream(new FileOutputStream("dcTest.dat"));
-        AcDcEncoder.writeDC(bos, new DCCategoryEncodedPair(9, 511), codebook);
+        AcDcEncoder.writeDCCoefficient(bos, new DCCategoryEncodedPair(9, 511), codebook);
         bos.close();
+    }
+
+    @Test
+    public void testZigZag()
+    {
+        int expected = 0;
+        int[] testMatrix = Util.zigzagSort(Util.testZigZag);
+        for (int i = 0; i < testMatrix.length; i++)
+        {
+            Assert.assertEquals(expected++, testMatrix[i]);
+        }
     }
 }

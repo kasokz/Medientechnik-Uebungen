@@ -27,6 +27,20 @@ public class RGBImage extends Image
             return new RGBImageBuilder(is);
         }
 
+        public static RGBImageBuilder from(ColorChannel red, ColorChannel green, ColorChannel blue)
+        {
+            return new RGBImageBuilder(red, green, blue);
+        }
+
+        private RGBImageBuilder(ColorChannel red, ColorChannel green, ColorChannel blue)
+        {
+            this.red = red;
+            this.green = green;
+            this.blue = blue;
+            this.imageWidth = red.getWidth();
+            this.imageHeight = red.getHeight();
+        }
+
         private RGBImageBuilder(InputStream is)
         {
             long start = System.currentTimeMillis();
