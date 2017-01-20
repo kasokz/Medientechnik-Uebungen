@@ -3,6 +3,7 @@ package jpegencoder.streams;
 import jpegencoder.encoding.Util;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -20,12 +21,12 @@ public class BitOutputStream extends OutputStream
     private OutputStream os;
     private int bitBuffer;
     private short counter;
-    private List<Integer> byteBuffer;
+    private ByteArrayOutputStream byteBuffer;
 
     public BitOutputStream(OutputStream os)
     {
         this.os = os;
-        this.byteBuffer = new ArrayList<Integer>(BUFFER_CAPACITY);
+        this.byteBuffer = new ByteArrayOutputStream(BUFFER_CAPACITY);
         this.bitBuffer = 0;
         this.counter = 0;
     }
@@ -40,10 +41,10 @@ public class BitOutputStream extends OutputStream
         counter++;
         if (counter == 8)
         {
-            byteBuffer.add(bitBuffer);
+            byteBuffer.write(bitBuffer);
             if ((bitBuffer & 0xFF) == 0xFF && !allowFF)
             {
-                byteBuffer.add(0);
+                byteBuffer.write(0);
             }
             counter = 0;
             bitBuffer = 0;
@@ -65,14 +66,10 @@ public class BitOutputStream extends OutputStream
     {
         if (counter != 0)
         {
-            byteBuffer.add(bitBuffer);
+            byteBuffer.write(bitBuffer);
         }
-        for (Integer i : byteBuffer)
-        {
-            os.write(i);
-        }
-        byteBuffer = new ArrayList<Integer>(BUFFER_CAPACITY);
-        byteBuffer.clear();
+        os.write(byteBuffer.toByteArray());
+        byteBuffer = new ByteArrayOutputStream(BUFFER_CAPACITY);
         counter = 0;
         bitBuffer = 0;
     }
