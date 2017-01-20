@@ -82,6 +82,7 @@ public class ImageDataWriter extends SegmentWriter
                                                                              .getPlainIndexOfBlock(
                                                                                      xOfChannel,
                                                                                      yOfChannel));
+
         List<ACRunlengthEncodedPair> acRunlengthEncodedPairs =
                 AcDcEncoder.encodeRunlength(Util.zigzagSort(channel.getBlock(xOfChannel,
                                                                              yOfChannel)));

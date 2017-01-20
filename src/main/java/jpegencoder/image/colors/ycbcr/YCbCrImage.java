@@ -46,7 +46,7 @@ public class YCbCrImage extends Image
     {
         int reducedHeight = channel.getHeight() / factor;
         int reducedWidth = channel.getWidth() / factor;
-        ColorChannel result = new ColorChannel(reducedHeight, reducedWidth);
+        ColorChannel result = new ColorChannel(reducedWidth, reducedHeight);
         for (int y = 0; y < reducedHeight; y++)
         {
             for (int x = 0; x < reducedWidth; x++)

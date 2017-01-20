@@ -6,29 +6,31 @@ package jpegencoder.image.colors.ycbcr;
  */
 public class YCbCr
 {
-    private int ycbcr = 0;
+    private int y;
+    private int cb;
+    private int cr;
 
     public YCbCr(int luminanceChannel, int cb, int cr)
     {
 
-        this.ycbcr = luminanceChannel;
-        this.ycbcr = (this.ycbcr << 8) + cb;
-        this.ycbcr = (this.ycbcr << 8) + cr;
+        this.y = luminanceChannel;
+        this.cb = cb;
+        this.cr = cr;
     }
 
     public int getLuminanceChannel()
     {
-        return (ycbcr >> 16) & 255;
+        return y;
     }
 
     public int getCbChannel()
     {
-        return (ycbcr >> 8) & 255;
+        return y;
     }
 
     public int getCrChannel()
     {
-        return ycbcr & 255;
+        return y;
     }
 
     @Override

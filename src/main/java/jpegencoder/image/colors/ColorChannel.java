@@ -17,7 +17,7 @@ public class ColorChannel
     private int widthInBlocks;
     private int heightInBlocks;
 
-    public ColorChannel(int height, int width)
+    public ColorChannel(int width, int height)
     {
         this.height = height;
         this.width = width;
@@ -50,7 +50,7 @@ public class ColorChannel
         return blocks[getPlainIndexOfBlock(x, y)];
     }
 
-    public DoubleMatrix getBlock(int index)
+    public DoubleMatrix getBlock(int index) throws ArrayIndexOutOfBoundsException
     {
         return blocks[index];
     }
@@ -91,8 +91,7 @@ public class ColorChannel
         {
             for (int x = 0; x < getWidth(); x++)
             {
-                int value;
-                value = ((y + 1) * 32) % 256;
+                int value = y % 256;
                 setPixel(x, y, value);
             }
         }
