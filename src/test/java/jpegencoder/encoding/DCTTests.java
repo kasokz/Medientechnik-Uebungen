@@ -168,7 +168,7 @@ public class DCTTests
     @Test
     public void testDCTWithImage()
     {
-        ColorChannel channel = new ColorChannel(8, 16);
+        ColorChannel channel = new ColorChannel(16, 8);
         for (int i = 0; i < X.getRows(); i++)
         {
             for (int j = 0; j < X.getColumns(); j++)

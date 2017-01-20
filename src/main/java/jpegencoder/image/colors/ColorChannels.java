@@ -15,9 +15,9 @@ public class ColorChannels
     public static YCbCrImage RGBToYCbCr(RGBImage rgbImage)
     {
         long start = System.currentTimeMillis();
-        ColorChannel luminance = new ColorChannel(rgbImage.getHeight(), rgbImage.getWidth());
-        ColorChannel cbChannel = new ColorChannel(rgbImage.getHeight(), rgbImage.getWidth());
-        ColorChannel crChannel = new ColorChannel(rgbImage.getHeight(), rgbImage.getWidth());
+        ColorChannel luminance = new ColorChannel(rgbImage.getWidth(), rgbImage.getHeight());
+        ColorChannel cbChannel = new ColorChannel(rgbImage.getWidth(), rgbImage.getHeight());
+        ColorChannel crChannel = new ColorChannel(rgbImage.getWidth(), rgbImage.getHeight());
         for (int y = 0; y < rgbImage.getHeight(); y++)
         {
             for (int x = 0; x < rgbImage.getWidth(); x++)
@@ -48,7 +48,8 @@ public class ColorChannels
                 128, 128, 128
         });
         DoubleMatrix rgbMatrix = new DoubleMatrix(pixel.getAsArray());
-        DoubleMatrix resultMatrix = prefixMatrix.add((conversionMatrix.mmul(rgbMatrix))).sub(offsetMatrix);
+        DoubleMatrix yCbCrMatrix = prefixMatrix.add(conversionMatrix.mmul(rgbMatrix));
+        DoubleMatrix resultMatrix = yCbCrMatrix.sub(offsetMatrix);
         return new YCbCr((int) resultMatrix.get(0), (int) resultMatrix.get(1), (int) resultMatrix.get(2));
     }
 }

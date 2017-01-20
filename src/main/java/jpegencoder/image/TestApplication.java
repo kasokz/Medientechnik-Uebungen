@@ -112,24 +112,25 @@ public class TestApplication extends Application
 
     private BufferedImage blackAndWhiteColorChannel()
     {
-        ColorChannel channel1 = new ColorChannel(800, 800);
-        ColorChannel channel2 = new ColorChannel(800, 800);
-        ColorChannel channel3 = new ColorChannel(800, 800);
+        ColorChannel channel1 = new ColorChannel(800, 600);
+        ColorChannel channel2 = new ColorChannel(800, 600);
+        ColorChannel channel3 = new ColorChannel(800, 600);
         channel1.fillWithMockData();
         channel2.fillWithMockData();
         channel3.fillWithMockData();
-        YCbCrImage image = ColorChannels.RGBToYCbCr(RGBImage.RGBImageBuilder.from(channel1, channel2, channel3)
-                                                                            .build());
+        RGBImage image = RGBImage.RGBImageBuilder.from(channel1, channel2, channel3).build();
         BufferedImage img = new BufferedImage(image.getWidth(),
                                               image.getHeight(),
-                                              BufferedImage.TYPE_BYTE_GRAY);
-        byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+                                              BufferedImage.TYPE_INT_RGB);
+        int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
         for (int i = 0; i < image.getHeight(); i++)
         {
             for (int j = 0; j < image.getWidth(); j++)
             {
-                double pixel = image.getPixelAt(j, i).getLuminanceChannel();
-                pixels[j + i * image.getWidth()] = (byte) (int) pixel;
+                RGB pixel = image.getRGBAt(j, i);
+                pixels[j + i * image.getWidth()] = pixel.getRed() << 16
+                        | pixel.getGreen() << 8
+                        | pixel.getBlue();
             }
         }
         return img;

@@ -30,9 +30,9 @@ public class JpegEncoderMockTest
     @Before
     public void initImage()
     {
-        ColorChannel channel1 = new ColorChannel(800, 800);
-        ColorChannel channel2 = new ColorChannel(800, 800);
-        ColorChannel channel3 = new ColorChannel(800, 800);
+        ColorChannel channel1 = new ColorChannel(16, 16);
+        ColorChannel channel2 = new ColorChannel(16, 16);
+        ColorChannel channel3 = new ColorChannel(16, 16);
         channel1.fillWithMockData();
         channel2.fillWithMockData();
         channel3.fillWithMockData();

@@ -29,7 +29,7 @@ public class PerformanceCheck
             for (int x = 0; x < picture.getWidth(); x++)
             {
                 int value;
-                value = (x + (y * 8)) % 256;
+                value = (x + (y * 8)) % picture.getHeight();
                 picture.setPixel(y, x, value);
             }
         }

@@ -14,8 +14,7 @@ public class RGBImage extends Image
 {
     public static class RGBImageBuilder
     {
-        private int strideWidth = 8;
-        private int strideHeight = 8;
+        private int stride = 16;
         private int imageWidth;
         private int imageHeight;
         ColorChannel red;
@@ -34,11 +33,20 @@ public class RGBImage extends Image
 
         private RGBImageBuilder(ColorChannel red, ColorChannel green, ColorChannel blue)
         {
-            this.red = red;
-            this.green = green;
-            this.blue = blue;
             this.imageWidth = red.getWidth();
             this.imageHeight = red.getHeight();
+            this.red = new ColorChannel(getRealWidth(), getRealHeight());
+            this.green = new ColorChannel(getRealWidth(), getRealHeight());
+            this.blue = new ColorChannel(getRealWidth(), getRealHeight());
+            for (int i = 0; i < red.getHeight(); i++)
+            {
+                for (int j = 0; j < red.getWidth(); j++)
+                {
+                    this.red.setPixel(j, i, red.getPixel(j, i));
+                    this.green.setPixel(j, i, red.getPixel(j, i));
+                    this.blue.setPixel(j, i, red.getPixel(j, i));
+                }
+            }
         }
 
         private RGBImageBuilder(InputStream is)
@@ -75,9 +83,9 @@ public class RGBImage extends Image
 
         private void initPicture()
         {
-            red = new ColorChannel(getRealHeight(), getRealWidth());
-            green = new ColorChannel(getRealHeight(), getRealWidth());
-            blue = new ColorChannel(getRealHeight(), getRealWidth());
+            red = new ColorChannel(getRealWidth(), getRealHeight());
+            green = new ColorChannel(getRealWidth(), getRealHeight());
+            blue = new ColorChannel(getRealWidth(), getRealHeight());
         }
 
         private void extractMetaInformation(Scanner sc) throws IOException
@@ -103,9 +111,9 @@ public class RGBImage extends Image
         private int getRealHeight()
         {
             int result = imageHeight;
-            if (imageHeight % strideHeight != 0)
+            if (imageHeight % stride != 0)
             {
-                result = ((imageHeight / strideHeight) + 1) * strideHeight;
+                result = (int) Math.ceil((double) imageHeight / stride) * stride;
             }
             return result;
         }
@@ -113,9 +121,9 @@ public class RGBImage extends Image
         private int getRealWidth()
         {
             int result = imageWidth;
-            if (imageWidth % strideWidth != 0)
+            if (imageWidth % stride != 0)
             {
-                result = ((imageWidth / strideWidth) + 1) * strideWidth;
+                result = (int) Math.ceil((double) imageWidth / stride) * stride;
             }
             return result;
         }

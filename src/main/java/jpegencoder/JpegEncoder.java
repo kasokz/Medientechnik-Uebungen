@@ -10,7 +10,6 @@ import jpegencoder.image.Image;
 import jpegencoder.image.colors.ColorChannel;
 import jpegencoder.image.colors.ColorChannels;
 import jpegencoder.image.colors.rgb.RGBImage;
-import jpegencoder.image.colors.ycbcr.YCbCr;
 import jpegencoder.image.colors.ycbcr.YCbCrImage;
 import jpegencoder.segments.SegmentWriter;
 import jpegencoder.segments.app0.APP0Writer;
