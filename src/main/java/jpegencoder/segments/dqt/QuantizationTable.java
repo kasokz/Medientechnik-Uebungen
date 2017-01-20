@@ -12,16 +12,6 @@ import java.io.IOException;
  */
 public class QuantizationTable
 {
-    public static DoubleMatrix QUANTIZATION_MATRIX_LUMINANCE1 = new DoubleMatrix(new double[][]{
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15}
-    });
     public static DoubleMatrix QUANTIZATION_MATRIX_LUMINANCE = new DoubleMatrix(new double[][]{
             {16, 11, 10, 16, 24, 40, 51, 61},
             {12, 12, 14, 19, 26, 58, 60, 55},
@@ -31,16 +21,6 @@ public class QuantizationTable
             {24, 35, 55, 64, 81, 104, 113, 92},
             {49, 64, 78, 87, 103, 121, 120, 101},
             {72, 92, 95, 98, 112, 100, 103, 99}
-    });
-    public static DoubleMatrix QUANTIZATION_MATRIX_CHROMINANCE1 = new DoubleMatrix(new double[][]{
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15},
-            {15, 15, 15, 15, 15, 15, 15, 15}
     });
     public static DoubleMatrix QUANTIZATION_MATRIX_CHROMINANCE = new DoubleMatrix(new double[][]{
             {17, 18, 24, 47, 99, 99, 99, 99},
@@ -65,7 +45,8 @@ public class QuantizationTable
 
     public void writeTable(BitOutputStream bos) throws IOException
     {
-        bos.writeByte((precision << 4) + id);
+        bos.writeBits(precision, 4);
+        bos.writeBits(id, 4);
         zigzagSort(bos);
     }
 

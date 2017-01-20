@@ -25,12 +25,12 @@ public class YCbCr
 
     public int getCbChannel()
     {
-        return y;
+        return cb;
     }
 
     public int getCrChannel()
     {
-        return y;
+        return cr;
     }
 
     @Override
