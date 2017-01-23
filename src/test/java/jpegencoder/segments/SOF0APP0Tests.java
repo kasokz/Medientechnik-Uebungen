@@ -23,7 +23,7 @@ public class SOF0APP0Tests
     public void aufgabe2() throws IOException
     {
         BitOutputStream bos = new BitOutputStream(new FileOutputStream("testImage.jpg"));
-        SOF0Writer sof0Writer = new SOF0Writer(bos, 800, 600);
+        SOF0Writer sof0Writer = new SOF0Writer(bos, 800, 600, 1);
         APP0Writer app0Writer = new APP0Writer(bos, 300, 300);
         app0Writer.writeSegment();
         sof0Writer.writeSegment();

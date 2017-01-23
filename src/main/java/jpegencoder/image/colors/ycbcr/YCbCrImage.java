@@ -59,7 +59,7 @@ public class YCbCrImage extends Image
                         sum += channel.getPixel(blockX, blockY);
                     }
                 }
-                result.setPixel(x, y, (int) ((sum / (double) (factor * factor)) + 0.5));
+                result.setPixel(x, y, (int) Math.round(sum / (double) (factor * factor)));
             }
         }
         return result;
@@ -73,7 +73,7 @@ public class YCbCrImage extends Image
         {
             for (int j = 0; j < getWidth(); j++)
             {
-                sb.append(getPixelAt(i, j).toString())
+                sb.append(getPixelAt(j, i).toString())
                   .append(",");
             }
             sb.append("\n");

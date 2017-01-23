@@ -50,6 +50,8 @@ public class ColorChannels
         DoubleMatrix rgbMatrix = new DoubleMatrix(pixel.getAsArray());
         DoubleMatrix yCbCrMatrix = prefixMatrix.add(conversionMatrix.mmul(rgbMatrix));
         DoubleMatrix resultMatrix = yCbCrMatrix.sub(offsetMatrix);
-        return new YCbCr((int) resultMatrix.get(0), (int) resultMatrix.get(1), (int) resultMatrix.get(2));
+        return new YCbCr((int) Math.round(resultMatrix.get(0)),
+                         (int) Math.round(resultMatrix.get(1)),
+                         (int) Math.round(resultMatrix.get(2)));
     }
 }

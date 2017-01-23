@@ -91,7 +91,7 @@ public class ColorChannel
         {
             for (int x = 0; x < getWidth(); x++)
             {
-                int value = (y + x) % 256;
+                int value = x % 256;
                 setPixel(x, y, value);
             }
         }

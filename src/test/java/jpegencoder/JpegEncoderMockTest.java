@@ -256,7 +256,7 @@ public class JpegEncoderMockTest
     public void testHuffmanTableDcY()
     {
         for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
-                                                             .convertToJpeg().dcYCodeBook.entrySet())
+                                                             .convertToJpeg(2).dcYCodeBook.entrySet())
         {
             System.out.println(entry.getValue().toString());
         }
@@ -267,7 +267,7 @@ public class JpegEncoderMockTest
     public void testHuffmanTableAcCbCr()
     {
         for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
-                                                             .convertToJpeg().acCbCrCodeBook.entrySet())
+                                                             .convertToJpeg(2).acCbCrCodeBook.entrySet())
         {
             System.out.println(entry.getValue().toString());
         }
@@ -278,7 +278,7 @@ public class JpegEncoderMockTest
     public void testHuffmanTableDcCbCr()
     {
         for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
-                                                             .convertToJpeg().dcCbCrCodeBook.entrySet())
+                                                             .convertToJpeg(2).dcCbCrCodeBook.entrySet())
         {
             System.out.println(entry.getValue().toString());
         }
@@ -287,7 +287,7 @@ public class JpegEncoderMockTest
     @Test
     public void testJpegConversion()
     {
-        JpegEncoder.withImage(image).convertToJpeg().writeImageToDisk();
+        JpegEncoder.withImage(image).convertToJpeg(2).writeImageToDisk();
     }
 
     public void print()

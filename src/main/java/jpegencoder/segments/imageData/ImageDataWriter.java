@@ -45,6 +45,33 @@ public class ImageDataWriter extends SegmentWriter
 
     public void writeSegment() throws IOException
     {
+        if (image.getSubSampling() == 1)
+        {
+            writeSegmentWithoutSubsampling();
+        }
+        else
+        {
+            writeSegmentWithSubsampling();
+        }
+    }
+
+    public void writeSegmentWithoutSubsampling() throws IOException
+    {
+        for (int currentY = 0; currentY < image.getChannel1().getHeightInBlocks(); currentY++)
+        {
+            for (int currentX = 0; currentX < image.getChannel1().getWidthInBlocks(); currentX++)
+            {
+                writeAcDcEncodedBlock(image.getChannel1(), currentX, currentY, dcYCodeBook, acYCodeBook);
+                writeAcDcEncodedBlock(image.getChannel2(), currentX, currentY, dcCbCrCodeBook, acCbCrCodeBook);
+                writeAcDcEncodedBlock(image.getChannel3(), currentX, currentY, dcCbCrCodeBook, acCbCrCodeBook);
+            }
+        }
+        os.flush();
+        os.writeByte(0xFF);
+    }
+
+    public void writeSegmentWithSubsampling() throws IOException
+    {
         for (int currentY = 0; currentY < image.getChannel2().getHeightInBlocks(); currentY++)
         {
             for (int currentX = 0; currentX < image.getChannel2().getWidthInBlocks(); currentX++)

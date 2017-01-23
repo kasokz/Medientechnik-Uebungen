@@ -250,7 +250,7 @@ public class JpegEncoderFileTest
     public void testHuffmanTableDcY()
     {
         List<CodeWord> codeWords = new ArrayList<CodeWord>(JpegEncoder.withImage(image)
-                                                                      .convertToJpeg().dcYCodeBook.values());
+                                                                      .convertToJpeg(2).dcYCodeBook.values());
         Collections.sort(codeWords);
         for (CodeWord codeWord : codeWords)
         {
@@ -263,7 +263,7 @@ public class JpegEncoderFileTest
     public void testHuffmanTableAcCbCr()
     {
         List<CodeWord> codeWords = new ArrayList<CodeWord>(JpegEncoder.withImage(image)
-                                                                      .convertToJpeg().acYCodeBook.values());
+                                                                      .convertToJpeg(2).acYCodeBook.values());
         Collections.sort(codeWords);
         for (CodeWord codeWord : codeWords)
         {
@@ -276,7 +276,7 @@ public class JpegEncoderFileTest
     public void testHuffmanTableDcCbCr()
     {
         for (Map.Entry<Integer, CodeWord> entry : JpegEncoder.withImage(image)
-                                                             .convertToJpeg().dcCbCrCodeBook.entrySet())
+                                                             .convertToJpeg(2).dcCbCrCodeBook.entrySet())
         {
             System.out.println(entry.getValue().toString());
         }
@@ -285,7 +285,7 @@ public class JpegEncoderFileTest
     @Test
     public void testJpegConversion()
     {
-        JpegEncoder.withImage(image).convertToJpeg().writeImageToDisk();
+        JpegEncoder.withImage(image).convertToJpeg(2).writeImageToDisk();
     }
 
 }

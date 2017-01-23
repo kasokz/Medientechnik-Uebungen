@@ -1,5 +1,6 @@
 package jpegencoder.segments.sof0;
 
+import jpegencoder.image.Image;
 import jpegencoder.segments.SegmentWriter;
 import jpegencoder.streams.BitOutputStream;
 
@@ -20,23 +21,28 @@ public class SOF0Writer extends SegmentWriter
     private int sampleRate = 8;
     private int yImgSize;
     private int xImgSize;
+    private int subsampling;
     private int numberOfComponents;
     private List<SOF0Component> components;
 
-    public SOF0Writer(BitOutputStream os, int xImgSize, int yImgSize)
+    public SOF0Writer(BitOutputStream os, int xImgSize, int yImgSize, int subsampling)
     {
         super(os);
+        this.xImgSize = xImgSize;
+        this.yImgSize = yImgSize;
+        this.subsampling = subsampling;
         setComponents();
         this.numberOfComponents = components.size();
         this.length = 8 + numberOfComponents * 3;
         this.xImgSize = xImgSize;
         this.yImgSize = yImgSize;
+        this.subsampling = subsampling;
     }
 
     private void setComponents()
     {
         components = new ArrayList<SOF0Component>();
-        components.add(new SOF0Component(0, 2, 2, 0));
+        components.add(new SOF0Component(0, subsampling, subsampling, 0));
         components.add(new SOF0Component(1, 1, 1, 1));
         components.add(new SOF0Component(2, 1, 1, 1));
     }
