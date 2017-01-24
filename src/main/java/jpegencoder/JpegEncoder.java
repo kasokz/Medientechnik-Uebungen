@@ -225,7 +225,10 @@ public class JpegEncoder
             segmentWriters.add(new SOIWriter(bos));
             segmentWriters.add(new APP0Writer(bos, 0x0048, 0x0048));
             segmentWriters.add(new DQTWriter(bos));
-            segmentWriters.add(new SOF0Writer(bos, image.getWidth(), image.getHeight(), image.getSubSampling()));
+            segmentWriters.add(new SOF0Writer(bos,
+                                              image.getOriginalWidth(),
+                                              image.getOriginalHeight(),
+                                              image.getSubSampling()));
             List<HuffmanTable> huffmanTables = new ArrayList<HuffmanTable>();
             huffmanTables.add(getHuffmanTableDCY());
             huffmanTables.add(getHuffmanTableACY());

@@ -12,7 +12,7 @@ public class Application
     {
         try
         {
-            JpegEncoder.withImageFromFile("/Users/longbui/Downloads/series/76.ppm")
+            JpegEncoder.withImageFromFile("/Users/longbui/Downloads/31x31-synth.ppm")
                        .convertToJpeg(1)
                        .writeImageToDisk();
         }

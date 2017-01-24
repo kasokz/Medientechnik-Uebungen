@@ -31,7 +31,11 @@ public class ColorChannels
         System.out.println("Finished RGB to YCbCr conversion in "
                                    + ((System.currentTimeMillis() - start) / 1000d)
                                    + " seconds");
-        return new YCbCrImage(luminance, cbChannel, crChannel);
+        return new YCbCrImage(luminance,
+                              cbChannel,
+                              crChannel,
+                              rgbImage.getOriginalWidth(),
+                              rgbImage.getOriginalHeight());
     }
 
     public static YCbCr convertRGBToYCbCr(RGB pixel)
@@ -53,5 +57,18 @@ public class ColorChannels
         return new YCbCr((int) Math.round(resultMatrix.get(0)),
                          (int) Math.round(resultMatrix.get(1)),
                          (int) Math.round(resultMatrix.get(2)));
+    }
+
+    public static int cap(double num)
+    {
+        if (num < -127)
+        {
+            return -127;
+        }
+        if (num > 128)
+        {
+            return 128;
+        }
+        return 0;
     }
 }

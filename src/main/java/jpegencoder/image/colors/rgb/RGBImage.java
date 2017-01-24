@@ -134,9 +134,6 @@ public class RGBImage extends Image
         }
     }
 
-    private int originalWidth;
-    private int originalHeight;
-
     private RGBImage(ColorChannel r, ColorChannel g, ColorChannel b, int originalWidth, int originalHeight)
     {
         super(r, g, b);
@@ -161,16 +158,6 @@ public class RGBImage extends Image
         return new RGB((int) getChannel1().getPixel(x, y),
                        (int) getChannel2().getPixel(x, y),
                        (int) getChannel3().getPixel(x, y));
-    }
-
-    public int getOriginalWidth()
-    {
-        return originalWidth;
-    }
-
-    public int getOriginalHeight()
-    {
-        return originalHeight;
     }
 
     @Override

@@ -12,10 +12,12 @@ import java.util.ArrayList;
  */
 public class YCbCrImage extends Image
 {
-    public YCbCrImage(ColorChannel luminance, ColorChannel cbChannel, ColorChannel crChannel)
+    public YCbCrImage(ColorChannel luminance, ColorChannel cbChannel, ColorChannel crChannel, int originalWidth,
+                      int originalHeight)
     {
         super(luminance, cbChannel, crChannel);
-
+        this.originalWidth = originalWidth;
+        this.originalHeight = originalHeight;
     }
 
     public int getHeight()

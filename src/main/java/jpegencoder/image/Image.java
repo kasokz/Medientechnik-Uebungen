@@ -11,6 +11,8 @@ public abstract class Image
     protected ColorChannel channel1;
     protected ColorChannel channel2;
     protected ColorChannel channel3;
+    protected int originalHeight;
+    protected int originalWidth;
     protected int subSampling = 1;
 
     public Image(ColorChannel channel1, ColorChannel channel2, ColorChannel channel3)
@@ -48,5 +50,15 @@ public abstract class Image
     public int getSubSampling()
     {
         return subSampling;
+    }
+
+    public int getOriginalHeight()
+    {
+        return originalHeight;
+    }
+
+    public int getOriginalWidth()
+    {
+        return originalWidth;
     }
 }
